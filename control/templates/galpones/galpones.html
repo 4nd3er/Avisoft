@@ -82,8 +82,9 @@
                             <td>{{ dato.fecha }}</td>
                             <td>
                                 <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_galpon' dato.id %}')" role="button">Editar</button>
-                                
+                                {% if user.is_staff %}
                                 <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimGalpon' dato.id %}')" role="button">Eliminar</button>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

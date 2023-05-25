@@ -72,8 +72,10 @@
                                 <td>{{ dato.fecha }}</td>
                                 <td>
                                     <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_mortalidad' dato.id %}')">Editar</button>
-                                    |
-                                    <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimMortalidad' dato.id %}')">Eliminar</button>
+                                    {% if user.is_staff %}
+                                        |
+                                        <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimMortalidad' dato.id %}')">Eliminar</button>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

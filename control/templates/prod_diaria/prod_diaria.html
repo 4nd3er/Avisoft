@@ -74,8 +74,10 @@
                             <td>{{ dato.id_detalle_jornada.fecha }}</td>
                             <td colspan="2">
                                 <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_prod_diaria' dato.id %}')" role="button">Editar</button>
-                                |
-                                <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimProdDiaria' dato.id %}')" role="button">Eliminar</button>
+                                {% if user.is_staff %}
+                                    |
+                                    <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimProdDiaria' dato.id %}')" role="button">Eliminar</button>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

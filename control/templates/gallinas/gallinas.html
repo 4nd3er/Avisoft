@@ -75,8 +75,9 @@
                                 <td>{{ dato.fecha_ingreso }}</td>
                                 <td>
                                     <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_gallinas' dato.id %}')" role="button">Editar</button>
-                                        
-                                    <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimGallinas' dato.id %}')" role="button">Eliminar</button>
+                                    {% if user.is_staff %}
+                                        <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimGallinas' dato.id %}')" role="button">Eliminar</button>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %} 

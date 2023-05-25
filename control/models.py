@@ -217,6 +217,8 @@ class Galpones(models.Model):
     cant_comed = models.IntegerField()
     capac_gall = models.IntegerField()
     cant_gall = models.IntegerField()
+    capac_nidales = models.IntegerField()
+    cant_nidales = models.IntegerField()
 
     def __str__(self):
         return self.nombre_galpon
@@ -250,11 +252,11 @@ class Linea(models.Model):
 
 
 class MortalidadDescarte(models.Model):
-    id = models.AutoField(primary_key = True)
-    fecha = models.DateField(auto_now_add = True)
-    id_galpon = models.ForeignKey(Galpones, on_delete = models.CASCADE, db_column = 'id_galpon')
-    cant_muertas = models.IntegerField()
-    cant_descarte = models.IntegerField()
+    fecha = models.DateField()
+    id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
+    cant_muertas = models.IntegerField(blank=True, null=True)
+    cant_descarte = models.IntegerField(blank=True, null=True)
+    id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte', blank=True, null=True)
     saldo = models.IntegerField()
 
     def __str__(self):
@@ -300,6 +302,13 @@ class TipoAlimento(models.Model):
         managed = False
         db_table = 'tipo_alimento'
 
+
+class TipoDescarte(models.Model):
+    tipo = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'tipo_descarte'
 
 
 class TipoDoc(models.Model):
@@ -387,3 +396,13 @@ class Usuario(AbstractBaseUser):
         ordering = [('-id')]
         managed = False
         db_table = 'usuario'
+
+
+class Vacunas(models.Model):
+    idvacunas = models.AutoField(db_column='Idvacunas', primary_key=True)  # Field name made lowercase.
+    nombrev = models.CharField(db_column='Nombrev', max_length=60)  # Field name made lowercase.
+    presentacion = models.CharField(db_column='Presentacion', max_length=60)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'vacunas'
