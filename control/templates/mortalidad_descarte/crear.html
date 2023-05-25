@@ -10,7 +10,7 @@
                 <div class="row">
                     {% csrf_token %}
                     {% for campo in form %}
-                        {% if campo.label == 'Galpon' %}
+                        {% if campo.label == 'Galpon' or campo.label ==  'Tipo de Descarte'%}
                             <div class="col-6">
                                 <label class="form-label">{{ campo.label }}</label>
                                 <select class="form-select" name="{{ campo.name }}">

@@ -84,6 +84,7 @@ class MortalidadDescarteForm(forms.ModelForm):
             'id_galpon': 'Galpon',
             'cant_muertas': 'Cantidad muertas',
             'cant_descarte': 'Cantidad de descarte',
+            'id_tipo_descarte': 'Tipo de Descarte'
         }
 
 class ProduccionDiariaForm(forms.ModelForm):

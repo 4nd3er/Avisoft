@@ -485,7 +485,7 @@ class crearProdDiaria(CreateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/crear.html'
     form_class = ProduccionDiariaForm
-    success_url = reverse_lazy('crear_prod_diaria')
+    success_url = reverse_lazy('produccion_diaria')
 
     # def get_context_data(self, **kwargs):
     #     contexto = {}
