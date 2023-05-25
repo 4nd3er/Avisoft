@@ -9,8 +9,6 @@
       <div class="modal-body">
         {% csrf_token %}
       <div class="row">
-        {% if user.name == 'password' or user.name == 'is_active' or user.name == 'is_staff'%}
-        {% else %}
           {% for prod in form %}
           {% if prod.label == 'Detalle de Jornada' or prod.label == 'Usuario' or prod.label == 'Tipo de huevo' %}
           <div class="col-6 mb-3">
@@ -37,22 +35,21 @@
             </div> {% endcomment %}
                 {% else %}
                 <div class="col-6 mb-3 order-last">
-                  <label class="form-label">{{ form.cantidad.label }}</label>
+                  <label class="form-label">{{ prod.label }}</label>
                   <input
                   style="display: flex"
-                  type="number"
+                  type="{% if prod.name == "fecha" %}Date{% else %}{{ prod.field.widget.input_type }}{% endif %}"
                   id="cantidadHuevo"
-                  class="form-control cantidadHuevo"
-                  name="{{ form.cantidad.name }}"
+                  class="form-control"
+                  name="{{ prod.name }}"
                   value="{{ prod.value }}"
                   aria-describedby="helpId"
-                  placeholder="{{ form.cantidad.label }}"
+                  placeholder="{{ prod.label }}"
                   >
                   <div class="col-6 help-text"> {{ prod.errors }} </div>
                 </div>
               {% endif %}
           {% endfor %}
-          {% endif %}
       </div>
       <div class="modal-footer">
         <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
