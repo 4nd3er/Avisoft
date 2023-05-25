@@ -71,7 +71,7 @@
                             <td>{{ dato.id_detalle_jornada.rotos }}</td>
                             <td>{{ dato.id_detalle_jornada.descarte }}</td>
                             <td>{{ dato.id_usuario.nombre }}</td>
-                            <td>{{ dato.id_detalle_jornada.fecha }}</td>
+                            <td>{{ dato.fecha }}</td>
                             <td colspan="2">
                                 <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_prod_diaria' dato.id %}')" role="button">Editar</button>
                                 {% if user.is_staff %}
@@ -99,15 +99,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="crear" role="dialog">
+    <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
-    <div class="modal fade" id="editar" role="dialog">
+    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
-    <div class="modal fade" id="eliminar" role="dialog">
+    <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 

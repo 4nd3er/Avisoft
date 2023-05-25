@@ -98,7 +98,6 @@ class AuthUserUserPermissions(models.Model):
 
 class DetalleJornada(models.Model):
     id = models.AutoField(primary_key = True)
-    fecha = models.DateField(auto_now_add = True)
     id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
     id_jornada = models.ForeignKey('Jornada', on_delete = models.CASCADE, db_column = 'id_jornada')
     rotos = models.IntegerField()
@@ -272,6 +271,7 @@ class ProduccionDiaria(models.Model):
     id_tipo_huevo = models.ForeignKey('TiposHuevos', on_delete = models.CASCADE, db_column = 'id_tipo_huevo')
     cantidad = models.IntegerField()
     id_usuario = models.ForeignKey('control.Usuario', on_delete = models.CASCADE, db_column = 'id_usuario')
+    fecha = models.DateField()
 
     def __str__(self):
         return f'id_detalle_jornada: {self.id_detalle_jornada} | id_tipo_huevo: {self.id_tipo_huevo} | cantidad: {self.cantidad} | {self.id_usuario}'

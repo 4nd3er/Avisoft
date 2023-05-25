@@ -54,7 +54,6 @@
                 {% if detalle_jornada %}
                     <thead>
                         <tr>
-                            <th>Fecha</th>
                             <th>Galpon</th>
                             <th>Jornada</th>
                             <th>Rotos</th>
@@ -65,7 +64,6 @@
                     <tbody>
                         {% for dato in detalle_jornada %}
                             <tr>
-                                <td>{{ dato.fecha }}</td>
                                 <td>{{ dato.id_galpon }}</td>
                                 <td>{{ dato.id_jornada }}</td>
                                 <td>{{ dato.rotos }}</td>
@@ -97,15 +95,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="crear" role="dialog">
+    <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
-    <div class="modal fade" id="editar" role="dialog">
+    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
-    <div class="modal fade" id="eliminar" role="dialog">
+    <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
