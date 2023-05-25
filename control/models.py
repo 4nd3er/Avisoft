@@ -260,7 +260,7 @@ class MortalidadDescarte(models.Model):
     saldo = models.IntegerField()
 
     def __str__(self):
-        return str(self.fecha)
+        return  f"{self.id_tipo_descarte} {str(self.fecha)}"
     
     class Meta:
         managed = False
@@ -305,6 +305,9 @@ class TipoAlimento(models.Model):
 
 class TipoDescarte(models.Model):
     tipo = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.tipo
 
     class Meta:
         managed = False
