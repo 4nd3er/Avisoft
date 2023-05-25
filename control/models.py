@@ -14,6 +14,10 @@ class Alimentacion(models.Model):
     fecha = models.DateField(auto_now_add = True)
     id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
     gr_gallina_dia = models.IntegerField(db_column = 'Gr/Gallina/Dia')  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    kg_total = models.IntegerField()
+    bultos_total = models.IntegerField()
+    c_a = models.IntegerField()
+    id_tipo_alimento = models.ForeignKey('TipoAlimento', models.DO_NOTHING, db_column='id_tipo_alimento')
 
     def __str__(self):
         return f'#{self.id}'
@@ -284,6 +288,18 @@ class Rol(models.Model):
     class Meta:
         managed = False
         db_table = 'rol'
+
+
+class TipoAlimento(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        managed = False
+        db_table = 'tipo_alimento'
+
 
 
 class TipoDoc(models.Model):
