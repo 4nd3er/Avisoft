@@ -291,7 +291,6 @@ CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
 
 CREATE TABLE IF NOT EXISTS `detalle_jornada` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fecha` date NOT NULL,
   `id_galpon` int(11) NOT NULL,
   `id_jornada` int(11) NOT NULL,
   `rotos` int(11) NOT NULL,
@@ -305,8 +304,8 @@ CREATE TABLE IF NOT EXISTS `detalle_jornada` (
 -- Volcado de datos para la tabla `detalle_jornada`
 --
 
-INSERT INTO `detalle_jornada` (`id`, `fecha`, `id_galpon`, `id_jornada`, `rotos`, `descarte`) VALUES
-(6, '2023-04-30', 4, 1, 23, 23);
+INSERT INTO `detalle_jornada` (`id`, `id_galpon`, `id_jornada`, `rotos`, `descarte`) VALUES
+(6, 4, 1, 23, 23);
 
 -- --------------------------------------------------------
 
@@ -645,6 +644,7 @@ CREATE TABLE IF NOT EXISTS `produccion_diaria` (
   `id_tipo_huevo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `fecha` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_detalle_jornada` (`id_detalle_jornada`,`id_tipo_huevo`),
   KEY `id_tipo_huevo` (`id_tipo_huevo`),
@@ -655,12 +655,12 @@ CREATE TABLE IF NOT EXISTS `produccion_diaria` (
 -- Volcado de datos para la tabla `produccion_diaria`
 --
 
-INSERT INTO `produccion_diaria` (`id`, `id_detalle_jornada`, `id_tipo_huevo`, `cantidad`, `id_usuario`) VALUES
-(2, 6, 3, 23, 1),
-(3, 6, 4, 23, 1),
-(4, 6, 4, 23, 1),
-(5, 6, 4, 23, 1),
-(9, 6, 2, 12312, 1);
+INSERT INTO `produccion_diaria` (`id`, `id_detalle_jornada`, `id_tipo_huevo`, `cantidad`, `id_usuario`,  `fecha`) VALUES
+(2, 6, 3, 23, 1, 2023-05-02),
+(3, 6, 4, 23, 1, 2023-05-02),
+(4, 6, 4, 23, 1, 2023-05-02),
+(5, 6, 4, 23, 1, 2023-05-02),
+(9, 6, 2, 12312, 1, 2023-05-02);
 
 -- --------------------------------------------------------
 
