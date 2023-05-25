@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Gallinas
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+
+    <div class="col-md my-4 py-2 text-center title"
+        style="border: 2px solid var(--colorsec2); color: var(--colorsec2);">
+        <h3>GALLINAS</h3>
+    </div>
+
+    <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
+        <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
+            <form>
+                <div class="row text-center" style="margin: 2rem 0; align-items: center;">
+                    <div class="col-md col-sm">
+                        <Select class="form-selected p-2" style="border-radius: .5rem;">
+                            <option selected value="1">Seleccione el galpón</option>
+                            <option value="1">Galpón 1</option>
+                            <option value="2">Galpón 2</option>
+                            <option value="3">Galpón 3</option>
+                            <option value="4">Galpón 4</option>
+                        </Select>
+                    </div>
+                    <div class="col-md col-sm">
+                        <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
+                            BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
+            <div class="row text-center" style="margin: 2rem 0;">
+                <div class="col-md col-sm">
+                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrir_modal_crear('{% url 'crear_gallinas' %}')" role="button">
+                        REGISTRAR <i class="fa-solid fa-file-circle-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mb-3 container-fluid" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
+        <div class="table-responsive">
+            <table class="table text-center">
+                {% if gallinas %}
+                    <thead>
+                        <tr>
+                            <th scope="col">Galpon</th>
+                            <th scope="col">Linea</th>
+                            <th scope="col">Cantidad de gallinas</th>
+                            <th scope="col">Peso promedio</th>
+                            <th scope="col">Edad en semanas</th>
+                            <th scope="col">Procedencia</th>
+                            <th scope="col">Fecha ingreso</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dato in gallinas %}
+                            <tr>
+                                <td>{{ dato.id_galpon }}</td>
+                                <td>{{ dato.id_linea }}</td>
+                                <td>{{ dato.cantidad_gallinas }}</td>
+                                <td>{{ dato.peso_promedio }}</td>
+                                <td>{{ dato.edad_sem }}</td>
+                                <td>{{ dato.procedencia }}</td>
+                                <td>{{ dato.fecha_ingreso }}</td>
+                                <td>
+                                    <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_gallinas' dato.id %}')" role="button">Editar</button>
+                                        
+                                    <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimGallinas' dato.id %}')" role="button">Eliminar</button>
+                                </td>
+                            </tr>
+                        {% endfor %} 
+                    </tbody>
+                {% else %}
+                    <tbody>
+                        <h1>No hay datos registrados</h1>
+                    </tbody>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+    <div class="row container-fluid">
+        <div class="col-md col-sm">
+            <a class="btn btn-outline-secondary" style="border: 2px solid" href="">
+                EXPORTAR <i class="fa-solid fa-download"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="modal fade" id="crear" role="dialog">
+
+    </div>
+
+    <div class="modal fade" id="editar" role="dialog">
+
+    </div>
+
+    <div class="modal fade" id="eliminar" role="dialog">
+
+    </div>
+
+{% endblock contenido %}

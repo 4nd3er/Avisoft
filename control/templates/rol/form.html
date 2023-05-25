@@ -1,0 +1,25 @@
+<form enctype="multipart/form-data" method="post">
+
+    {% csrf_token %}
+      <div class="row">
+        {% for rol in formulario %}
+          <label for="" class="col-12 form-label text-center">{{ rol.label }}</label>
+          <div class="col-12 mb-3">
+            <input
+            style="width: 70%"
+            type="{{ rol.field.widget.input_type }}"
+            class="form-control col-12 mx-auto"
+            name="{{ rol.name }}"
+            value="{{ rol.value | default:''}}"
+            aria-describedby="helpId"
+            placeholder="{{ rol.label }}">
+            <div class="col-6 help-text"> {{ rol.errors }} </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+        <div class="text-center">
+        <input name="" id="" class="btn btn-outline-success" type="submit" href="#" role="button" value="Enviar informacion">
+        <a name="" id="" class="btn btn-outline-primary" href="{% url 'rol' %}" role="button">Cancelar</a>
+        </div>
+</form>

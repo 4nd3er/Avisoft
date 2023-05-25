@@ -1,0 +1,33 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'crear_estado' %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Crear estado</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        {% for dato in form %}
+          <div class="form-group mb-3">
+            <label for="" class="form-label">Descripcion</label>
+              {% if dato.field.widget.input_type == 'file' and dato.value %}
+              {% endif %}
+              <input 
+              type="{{ dato.field.widget.input_type}}"
+              class="form-control" 
+              name="{{ dato.name}}" 
+              id=""
+              aria-describedby="helpId"
+              placeholder="ingresa el tipo de estado">
+          </div>
+          <div class="col-4 help-text">{{ dato.errors }}</div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer text-center">
+          <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+          <a role="button" class="btn btn-outline-danger" name="" href="{% url 'estados' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{% url 'editar_gallinas' object.id %}" enctype="multipart/form-data" method="post">
+        <div class="modal-header">
+            {% load static %}
+            <h3 class="modal-title">Editar gallinas</h3>
+            <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+        </div>
+        <div class="modal-body">
+            {% csrf_token %}
+            <div class="row">
+                {% for campo in form %}
+                    {% if campo.label == 'Galpon' or campo.label == 'Linea' %}
+                        <div class="col-6 mb-3">
+                            <label class="form-label">{{ campo.label }}</label>
+                            <select class="form-select" name="{{ campo.name }}">
+                                {% for select in campo %}
+                                    {{ select }}
+                                {% endfor %}
+                            </select>
+                            <div class="col-6 help-text"> {{ campo.errors }} </div>
+                        </div>
+                    {% else %}
+                        <div class="col-6 mb-3">
+                            <label class="form-label">{{ campo.label }}</label>
+                            <input type="{{campo.field.widget.input_type}}"
+                            class=" form-control" name="{{ campo.name }}" id="" aria-describedby="helpId"
+                            placeholder="{{ campo.label }}"
+                            value="{{ campo.value | default:"" }}"/>
+                            <div class="col-6 help-text"> {{ campo.errors }} </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="modal-footer text-center">
+          <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+          <a role="button" class="btn btn-outline-danger" name="" href="{% url 'gallinas' %}">Cancelar</a>
+        </div>
+      </form>
+    </div>
+</div>

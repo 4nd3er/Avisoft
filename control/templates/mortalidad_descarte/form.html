@@ -1,0 +1,33 @@
+<form ectype="multipart/form-data" method="post">
+{% csrf_token %}
+{% for campo in form %}
+  {% if campo.label == 'Galpon' %}
+    <div class="col-6">
+      <label for="" class="form-label">{{ campo.label }}</label>
+      <select class="form-select" name="{{ campo.name }}">
+        {% for select in campo %}
+          {{ select }}
+        {% endfor %}
+      </select>
+      <br/>
+    </div>
+  {% else %}
+    <div class="col-6">
+      <label for="" class="form-label">{{ campo.label }}</label>
+      <input 
+      type="{{campo.field.widget.input_type}}"
+      class="form-control" 
+      name="{{ campo.name }}" 
+      id="" 
+      aria-describedby="" 
+      placeholder="{{ campo.label }}"
+      value="{{campo.value | default:""}}">
+      <br/>
+    </div>
+    <div class="col-12 help-text">{{ campo.errors }}</div>
+  {% endif %}
+{% endfor %}
+
+<input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+<a name="" id="" class="btn btn-outline-danger" href="{% url 'mortalidad' %}" role="button">Cancelar</a>
+</form>

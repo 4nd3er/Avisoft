@@ -1,0 +1,28 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'editar_linea' object.id %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Editar linea</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        {% for campo in form %}
+          <div class="mb-3">
+            <label for="" class="form-label">{{ campo.label }}</label>
+            <input type="{{campo.field.widget.input_type}}"
+            class="form-control" name="{{campo.name}}" aria-describedby="helpId"
+            placeholder="Digite el nombre de la linea"
+            value="{{ campo.value | default:"" }}"/>  
+          </div>
+          <div class="col-12 help-text"> {{ campo.errors }} </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer text-center">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" name="" href="{% url 'lineas' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

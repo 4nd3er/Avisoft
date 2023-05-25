@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Registro de produccion diaria
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+
+    <div class="col-md my-4 py-2 text-center title"
+        style="border: 2px solid var(--colorsec2); color: var(--colorsec2);">
+        <h3>REGISTRO DIARIO</h3>
+    </div>
+
+    <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
+  
+        <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
+            <form>
+                <div class="row text-center" style="margin: 2rem 0; align-items: center;">
+                    <div class="col-md col-sm">
+                        <Select class="form-selected p-2" style="border-radius: .5rem;">
+                            <option selected value="1">Seleccione el galpón</option>
+                            <option value="1">Galpón 1</option>
+                            <option value="2">Galpón 2</option>
+                            <option value="3">Galpón 3</option>
+                            <option value="4">Galpón 4</option>
+                        </Select>
+                    </div>
+                    <div class="col-md col-sm">
+                        <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
+                            BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
+            <div class="row text-center" style="margin: 2rem 0;">
+                <div class="col-md col-sm">
+                    <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
+                        ACTUALIZAR <i class="fa-regular fa-pen-to-square"></i>
+                    </a>
+                </div>
+                <div class="col-md col-sm">
+                    <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
+                        REGISTRAR <i class="fa-solid fa-file-circle-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="card my-4 mx-3">
+        <div class="card-header">
+            <h3>Lista de Roles</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">ID</th>
+                            <th scope="col">Detalle de la jornada</th>
+                            <th scope="col">Tipo de huevo</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Id del usuario</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                  <tbody>
+                      {% for user in prod_diaria %}
+                          <tr class="text-center">
+                              <td>{{ user.id }}</td>
+                              <td>{{ user.id_dellate_jornada }}</td>
+                              <td>{{ user.id_tipo_huevo }}</td>
+                              <td>{{ user.cantidad }}</td>
+                              <td>{{ user.id_usuario }}</td>
+                              <td colspan="2">
+                                  <a name="" id="" class="btn btn-outline-info my-2" href="{% url 'editar_rol' user.id %}" role="button">Editar</a>
+                                  
+                                  <a name="" id="" class="btn btn-outline-danger" href="{% url 'eliminar_rol' user.id %}" role="button">Borrar</a>
+                              </td>
+                          </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+  
+        <div class="row container-fluid">
+            <div class="col-md col-sm">
+                <a class="btn btn-outline-secondary" style="border: 2px solid" href="">
+                    EXPORTAR <i class="fa-solid fa-download"></i>
+                </a>
+            </div>
+        </div>
+
+{% endblock contenido %}

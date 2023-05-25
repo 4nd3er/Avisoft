@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --colorprin: #39A900;
+    --colorsec: #000;
+    --colorsec2: #00324D;
+    --colorsec3: #385C57;
+}
+
+.content {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-rows: 80px 1fr 1fr 1fr 1fr 80px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.header {
+    grid-column: 1 / span 3;
+}
+
+.container-fluid .nav-item {
+    position: absolute;
+}
+
+.container-fluid .nav-item .dropdown-menu {
+    position: absolute;
+}
+
+.container-fluid .nav-item .dropdown-menu .menu {
+    margin-left: .5rem;
+    display: block;
+    width: 90%;
+    color: #000;
+    transition: .3s all ease-in-out;
+    border-radius: .3rem;
+}
+
+.container-fluid .nav-item .dropdown-menu .menu:hover {
+    background: #39aa00;
+    color: white;
+    letter-spacing: 2px;
+}
+
+.container-fluid .col-md a span{
+    color: #000;
+}
+
+body {
+    display: grid;
+    font-family: 'Work Sans', sans-serif;
+    height: 100vh;
+}
+
+div a {
+    text-decoration: none;
+}
+
+.main {
+    grid-row: 2 / 6;
+    grid-column: 1 / span 3;
+}
+
+.col-md-3 {
+    width: 10rem;
+    height: 10rem;
+    transition: .3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col-md-3:hover {
+    letter-spacing: 1.5px;
+    transform: translateY(-.5rem);
+    box-shadow: 3px 7px 7px 1px gray;
+}
+
+.col-md-3:hover a{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer {
+    grid-row: 6 / 7;
+    grid-column: 1 / span 3;
+}

@@ -1,0 +1,17 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <form action="{% url 'eliminarFicha' object.id_ficha %}"  method="post">
+            <div class="modal-body">
+                {% csrf_token %}
+                <div class="col">
+                    {% csrf_token %}
+                    <h5 class="title text-center">Desea eliminar el ficha {{object}}?</h5>
+                    <div class="col text-center">
+                        <input type="submit" class="btn btn-outline-danger" value="confirmar">
+                        <a class="btn btn-outline-success" value="cancelar" href="{% url 'fichas' %}">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group mb-3">
+
+    <label for="num_ficha" class="form-label">Número de ficha:</label>
+    <input type="text" name="num_ficha" value="{{ ficha.num_ficha }}" maxlength="50" required class="form-control rounded"><br>
+
+    <label for="titulacion" class="form-label">Titulación:</label>
+    <input type="text" name="titulacion" value="{{ ficha.titulacion }}" maxlength="50" required class="form-control rounded"><br>
+
+    <label for="estado_ficha" class="form-label">Estado de ficha:</label>
+    <select name="estado_ficha" required class="form-control rounded">
+      <option>Seleccione un estado</option>
+      {% for estado in estados %}
+        <option value="{{ estado.estado }}" {% if ficha.estado_ficha == estado %} selected {% endif %}>{{ estado.descrip }}</option>
+      {% endfor %}
+    </select><br>
+  </div>
+  <div class="col-4 help-text">{{ ficha.errors }}</div>
+  <input name="" id="" class="btn btn-success" type="submit" value="Enviar informacion">
+  <a name="" id="" class="btn btn-primary" href="{% url 'ficha' %}" role="button">Cancelar</a>
+</form>

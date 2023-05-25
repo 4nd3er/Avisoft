@@ -1,0 +1,163 @@
+{% extends 'base_int_admin.html' %}
+{% load static %}
+
+{% block titulo %}
+    Interfaz
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+    <div class="container-fluid text-center mb-4 main">
+        <div class="row justify-content-evenly">
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'galpones' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Galpones</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_galpones.jpeg' %}" alt="Imagen Galpones">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'gallinas' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Gallinas</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_gallinas.jpeg' %}" alt="Imagen Gallinas">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'tipo_doc' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Tipo de documento</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_huevos.jpeg' %}" alt="Imagen Huevos">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'detalle_jornada' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Detalle de la jornada</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_galpones.jpeg' %}" alt="Imagen Galpones">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'estados' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Estados</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_gallinas.jpeg' %}" alt="Imagen Gallinas">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'fichas' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Ficha</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_huevos.jpeg' %}" alt="Imagen Huevos">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'jornadas' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Jornada</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_huevos.jpeg' %}" alt="Imagen Huevos">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+        </div>
+        <div class="row justify-content-evenly">
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'alimentacion' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Alimentación</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_alimentacion.jpeg' %}" alt="Imagen Alimentación">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'mortalidad_descarte' %}">
+                    <div class="col">
+                        <h5 style="color:var(--colorsec3);">Mortalidad y descarte</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_mortalidad.jpeg' %}"
+                        alt="Imagen Mortalidad y descarte"> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'produccion_diaria' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Produccion diaria</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_datos.jpeg' %}"
+                        alt="Imagen Datos Generales"> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'lineas' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Linea</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_alimentacion.jpeg' %}" alt="Imagen Alimentación">
+                    </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'rol' %}">
+                    <div class="col">
+                        <h5 style="color:var(--colorsec3);">Rol</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_mortalidad.jpeg' %}"
+                        alt="Imagen Mortalidad y descarte"> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'tipos_huevos' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Tipos de huevos</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_datos.jpeg' %}"
+                        alt="Imagen Datos Generales"> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 my-4" style="border: 2px solid var(--colorsec3); border-radius: .5rem;">
+                <a href="{% url 'usuarios' %}">
+                    <div class="col">
+                        <h5 style="color: var(--colorsec3);">Usuario</h5>
+                    </div>
+                    {% comment %} <div class="col">
+                        <img style="width: 5rem;" src="{% static 'images/modulos/img_datos.jpeg' %}"
+                        alt="Imagen Datos Generales"> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock contenido %}

@@ -1,0 +1,19 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'editar_tipo_doc' object.id %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Editar tipo de documento</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        {{ form.as_p }}
+      </div>
+      <div class="modal-footer text-center">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" name="" href="{% url 'rol' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

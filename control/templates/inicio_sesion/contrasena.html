@@ -1,0 +1,44 @@
+{% extends 'base_inicio.html' %}
+{% load static %}
+
+{% block titulo %}
+  contraseña
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+
+    <!--form-->
+  <div class="form ">
+    <form>
+      <h2 class="titulo text-center">Recuperar Clave</h2>
+      <div class="container">
+        <div class="row mx-auto text-center contraseña">
+          <div class="col-12 mt-5 mx-auto">
+            <label for="exampleInputEmail1" class="form-label">Numero de Documento</label>
+            <div class="input-group mb-3 mx-auto">
+              <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <label for="exampleInputEmail1" class="form-label">Nueva Contraseña</label>
+            <div class="input-group mb-3 mx-auto">
+              <input type="password" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <label for="exampleInputEmail1" class="form-label">Verificar Contraseña</label>
+            <div class="input-group mb-3 mx-auto">
+              <input type="password" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="boton">
+              <button type="button" class="btn btn-outline-success px-4 py-2">Cambiar</button>
+              |
+              <a class="btn btn-outline-danger px-4 py-2"  href="{% url 'inicio' %}" type="button" value="">Cancelar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!--/form-->
+
+{% endblock contenido %}
+

@@ -1,0 +1,80 @@
+{% extends 'base_int.html' %}
+{% load static %}
+
+{% block titulo %}
+    Interfaz
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+    <div class="container-fluid text-center mb-4 main">
+        <div class="row justify-content-evenly">
+            <div class="col-lg-12 col-md-3 col-sm-5 modulos">
+                <a href="{% url 'galpones' %}">
+                    <div class="col">
+                        <h5>Galpones</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_galpones.jpeg' %}" alt="Imagen Galpones">
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 modulos">
+                <a href="{% url 'gallinas' %}">
+                    <div class="col">
+                        <h5>Gallinas</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_gallinas.jpeg' %}" alt="Imagen Gallinas">
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 modulos">
+                <a href="{% url 'produccion_diaria' %}">
+                    <div class="col">
+                        <h5>Produccion diaria</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_huevos.jpeg' %}" alt="Imagen Huevos">
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row justify-content-evenly">
+            <div class="col-md-3 col-lg-2 col-sm-5 modulos">
+                <a href="{% url 'alimentacion' %}">
+                    <div class="col">
+                        <h5>Alimentación</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_alimentacion.jpeg' %}" alt="Imagen Alimentación">
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 modulos">
+                <a href="{% url 'mortalidad_descarte' %}">
+                    <div class="col">
+                        <h5> Mortalidad y descarte</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_mortalidad.jpeg' %}"
+                        alt="Imagen Mortalidad y descarte">
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-sm-5 modulos">
+                <a href="">
+                    <div class="col">
+                        <h5>Registro diario</h5>
+                    </div>
+                    <div class="col">
+                        <img src="{% static 'images/modulos/img_datos.jpeg' %}"
+                        alt="Imagen Datos Generales">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock contenido %}

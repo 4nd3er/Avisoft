@@ -1,0 +1,34 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'editar_rol' object.id %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Editar rol</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+      <div class="row">
+        {% for rol in form %}
+          <label for="" class="col-12 form-label text-center">{{ rol.label }}</label>
+          <div class="col-12 mb-3">
+            <input
+            style="width: 70%"
+            type="{{ rol.field.widget.input_type }}"
+            class="form-control col-12 mx-auto"
+            name="{{ rol.name }}"
+            value="{{ rol.value | default:''}}"
+            aria-describedby="helpId"
+            placeholder="{{ rol.label }}">
+            <div class="col-6 help-text"> {{ rol.errors }} </div>
+          </div>
+        {% endfor %}
+      </div>
+      </div>
+      <div class="modal-footer text-center">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" name="" href="{% url 'rol' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

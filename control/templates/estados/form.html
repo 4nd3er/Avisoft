@@ -1,0 +1,21 @@
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+    {% for dato in formulario  %}
+    <div class="form-group mb-3">
+      <label for="" class="form-label">Descripcion</label>
+        {% if dato.field.widget.input_type == 'file' and dato.value %}
+        {% endif %}
+        <input 
+        type="{{ dato.field.widget.input_type}}"
+        class="form-control" 
+        name="{{ dato.name}}" 
+        id=""
+        aria-describedby="helpId"
+        placeholder="ingresa el tipo de estado"
+        value="{{ dato.value | default:''}}">
+    </div>
+    <div class="col-4 help-text">{{ dato.errors }}</div>
+  {% endfor %}
+  <input name="" id="" class="btn btn-success" type="submit" value="Enviar informacion">
+  <a name="" id="" class="btn btn-primary" href="{% url 'estados' %}" role="button">Cancelar</a>
+</form>

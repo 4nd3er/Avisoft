@@ -1,0 +1,33 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'crear_ficha' %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Crear ficha</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+          <label for="num_ficha" class="form-label">Número de ficha:</label>
+          <input type="text" name="num_ficha" value="{{ ficha.num_ficha }}" maxlength="50" required class="form-control rounded"><br>
+      
+          <label for="titulacion" class="form-label">Titulación:</label>
+          <input type="text" name="titulacion" value="{{ ficha.titulacion }}" maxlength="50" required class="form-control rounded"><br>
+      
+          <label for="estado_ficha" class="form-label">Estado de ficha:</label>
+          <select name="estado_ficha" required class="form-control rounded">
+            {% for estad in form.estado_ficha %}
+              {{ estad }}
+            {% endfor %}
+          </select><br>
+        </div>
+        <div class="col-4 help-text">{{ ficha.errors }}</div>
+      </div>
+      <div class="modal-footer text-center">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" href="{% url 'fichas' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

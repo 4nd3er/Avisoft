@@ -1,0 +1,49 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'crear_usuario' %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Editar estado</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+      <div class="row">
+        {% for user in form %}
+          <div class="col-6 mb-3">
+            <label for="" class="form-label">{{ user.label }}</label>
+            {% if user.label == 'Ficha' or user.label == 'Tipo de documento' or user.label == 'Rol' %}
+              <select class="form-select" style="width: 80%" name="{{ user.name }}">
+                {% for select in user %}
+                  {{ select }}
+                {% endfor %}
+              </select>
+              {% else %}
+              {% if user.field.widget.input_type == 'file' and user.value %}
+                <br>
+                <img class="my-2 rounded" src="{{ MEDIA_URL }}/imagenes/{{ user.value }}" width="75">
+              {% endif %}
+                <input
+                style="width: 80%"
+                type="{{ user.field.widget.input_type }}"
+                class="form-control"
+                name="{{ user.name }}"
+                value="{{ user.value | default:''}}"
+                aria-describedby="helpId"
+                placeholder="{{ user.label }}"
+                {% if user.field.widget.input_type == 'file' %}
+                  accept=".png, .jpg, .jpeg"
+                {% endif %}>
+            {% endif %}
+            <div class="col-6 help-text"> {{ user.errors }} </div>
+            </div>
+        {% endfor %}
+      </div>
+      </div>
+      <div class="modal-footer text-center">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" name="" href="{% url 'usuarios' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

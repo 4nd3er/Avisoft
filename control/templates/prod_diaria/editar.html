@@ -1,0 +1,60 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form action="{% url 'editar_prod_diaria' object.id %}" enctype="multipart/form-data" method="post">
+      <div class="modal-header">
+        {% load static %}
+        <h3 class="modal-title">Editar Tipo de huevo</h3>
+        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+      <div class="row">
+          {% for prod in form %}
+              {% if prod.label == 'Detalle de Jornada' or prod.name == 'id_usuario' or prod.label == 'Tipo de huevo' %}
+              <div class="col-6 mb-3">
+                <label class="form-label">{{ prod.label }}</label>
+                <select class="form-select" placeholder="{{ prod.label }}" name="{{ prod.name }}" value="{{ prod.value | default:''}}">
+                  {% for select in prod %}
+                    {{ select }}
+                  {% endfor %}
+                </select>
+                <div class="col-6 help-text"> {{ prod.errors }} </div>
+              </div>
+                {% comment %} {% elif prod.label == 'Tipo de huevo' %}
+                <div class="col-6 mb-3">
+                  <label class="form-label">{{ prod.label }}</label>
+                  <div class="col">
+                    {% for huevos in tipos_huevos %}
+                      <div class="col mx-auto">
+                        <input class="form-check-input lista" id="checkboxHuevo" type="checkbox" name="{{ prod.name }}" value="{{ huevos.0 }}"
+                        {% if form.id_tipo_huevo == tipos_huevos %}checked{% endif %}> {{ huevos.1 }}
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <div class="col-6 help-text"> {{ prod.errors }} </div>
+                </div> {% endcomment %}
+                {% else %}
+                <div class="col-6 mb-3 order-last">
+                  <label class="form-label">{{ form.cantidad.label }}</label>
+                  <input
+                  style="display: flex"
+                  type="number"
+                  id="cantidadHuevo"
+                  class="form-control cantidadHuevo"
+                  name="{{ form.cantidad.name }}"
+                  value="{{ prod.value }}"
+                  aria-describedby="helpId"
+                  placeholder="{{ prod.label }}"
+                  >
+                  <div class="col-6 help-text"> {{ prod.errors }} </div>
+                </div>
+              {% endif %}
+          {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <a role="button" class="btn btn-outline-danger" name="" href="{% url 'produccion_diaria' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>

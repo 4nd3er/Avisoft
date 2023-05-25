@@ -1,0 +1,65 @@
+{% extends 'base_registrarse.html' %}
+{% load static %}
+
+{% block titulo %}
+  Inicio de Sesion
+{% endblock titulo %}
+
+{% block contenido %}
+
+    {% load static %}
+
+      <h1 class="titulo">Registrar Datos</h1>
+      <div class="container mt-2">
+              <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                  <div class="row mx-auto">
+                    {% for user in form %}
+                    {% if user.name == 'is_active' %}
+                      <input class="form-check-input" name="{{user.name}}" type="hidden" value="1" checked>
+                    {% endif %}
+                    {% if user.name == 'password' or user.name == 'is_staff' or user.name == 'is_active' %}
+                    {% else %}
+                      <div class="mx-auto col-6 mb-3">
+                        <label for="" class="form-label">{{ user.label }}</label>
+                        {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
+                          <select class="form-select" style="width: 80%" name="{{ user.name }}">
+                            {% if user.name == 'id_rol' %}
+                              <option selected value="2">Aprendiz</option>
+                            {% else %}
+                              {% for select in user %}
+                              {{ select }}
+                              {% endfor %}
+                            {% endif %}
+                          </select readonly>
+                          {% else %}
+                          {% if user.field.widget.input_type == 'file' and user.value %}
+                            <br>
+                            <img class="my-2 rounded" src="{{ MEDIA_URL }}/imagenes/{{ user.value }}" width="75">
+                          {% endif %}
+                            <input
+                            style="width: 80%"
+                            type="{{ user.field.widget.input_type }}"
+                            class="form-control"
+                            name="{{ user.name }}"
+                            value="{{ user.value | default:''}}"
+                            aria-describedby="helpId"
+                            placeholder="{{ user.label }}"
+                            {% if user.field.widget.input_type == 'file' %}
+                              accept=".png, .jpg, .jpeg"
+                            {% endif %}/>
+                        {% endif %}
+                        <div class="col-6 help-text"> {{ user.errors }} </div>
+                      </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+            
+                    <div class="text-center mt-3 card-footer text-muted">
+                      <input class="btn btn-outline-success" type="submit" href="#" role="button" value="Enviar informacion">
+                      <a class="btn btn-outline-danger" href="{% url 'inicio' %}" role="button">Cancelar</a>
+                    </div>
+            </form>
+      </div>
+      
+{% endblock contenido %}
