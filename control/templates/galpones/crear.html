@@ -13,11 +13,14 @@
                     <div class="col-6 mb-3">
                         <label class="form-label">{{ campo.label }}</label>
                         <input
-                        type=""
-                        class="form-control"
+                        onChange="calcuateArea();"
+                        type="{{campo.field.widget.input_type}}"
+                        id="{{campo.name}}"
+                        class="form-control {{campo.name}}"
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
-                        placeholder="{{ campo.label }}">
+                        placeholder="{{ campo.label }}"
+                        {% if campo.name == "area" %}disabled{% endif %}>
                         <div class="col-6 help-text">{{campo.errors}} </div>
                     </div>
                 {% endfor %}
