@@ -12,6 +12,7 @@ class GallinasForm(forms.ModelForm):
             'id_galpon': 'Galpon',
             'id_linea': 'Linea',
             'edad_sem': 'Edad en semanas',
+            'peso_promedio':'Peso Promedio(Kg)',
         }
 
 class LineaForm(forms.ModelForm):
