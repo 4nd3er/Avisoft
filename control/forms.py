@@ -2,6 +2,8 @@ from django import forms
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 
+
+
 class GallinasForm(forms.ModelForm):
     class Meta:
         model = Gallinas
@@ -91,10 +93,13 @@ class ProduccionDiariaForm(forms.ModelForm):
     class Meta:
         model = ProduccionDiaria
         fields = '__all__'
+        #para que no se muestre en el formulario y se establezca automatica en la vista
+        exclude = ['id_usuario']  # Excluir el campo id_usuario del formulario
         labels = {
             'id_detalle_jornada': 'Detalle de Jornada',
             'id_tipo_huevo': 'Tipo de huevo',
             'cantidad': 'Cantidad',
+            'fecha': 'fecha',
             'id_usuario': 'Usuario',
         }
 
