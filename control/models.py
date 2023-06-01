@@ -290,8 +290,8 @@ class Linea(models.Model):
 class MortalidadDescarte(models.Model):
     fecha = models.DateField()
     id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
-    cant_muertas = models.IntegerField(blank=True, null=True)
-    cant_descarte = models.IntegerField(blank=True, null=True)
+    cant_muertas = models.IntegerField()
+    cant_descarte = models.IntegerField()
     id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte', blank=True, null=True)
     saldo = models.IntegerField()
 

@@ -19,12 +19,7 @@
                         class="form-control {{campo.name}}"
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
-                        placeholder="{{ campo.label }}"
-                        {% if campo.name == "area"  %}disabled{% endif %}
-                        {% if campo.name == "capac_bebed"  %}disabled{% endif %}
-                        {% if campo.name == "capac_comed"  %}disabled{% endif %}
-                        {% if campo.name == "capac_gall"  %}disabled{% endif %}
-                        {% if campo.name == "capac_nidales"  %}disabled{% endif %}>
+                        placeholder="{{ campo.label }}">
                         <div class="col-6 help-text">{{campo.errors}} </div>
                     </div>
                 {% endfor %}
