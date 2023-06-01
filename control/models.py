@@ -8,6 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 
 class Alimentacion(models.Model):
     id = models.AutoField(primary_key = True)
@@ -207,17 +208,53 @@ class Gallinas(models.Model):
 class Galpones(models.Model):
     fecha = models.DateField(auto_now_add = True)
     nombre_galpon = models.CharField(max_length = 100)
-    ancho = models.IntegerField()
-    largo = models.IntegerField()
+    ancho = models.IntegerField(
+        validators=[
+            MinValueValidator(0, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
+    largo = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     area = models.IntegerField()
     capac_bebed = models.IntegerField()
-    cant_bebed = models.IntegerField()
+    cant_bebed = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_comed = models.IntegerField()
-    cant_comed = models.IntegerField()
+    cant_comed = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_gall = models.IntegerField()
-    cant_gall = models.IntegerField()
+    cant_gall = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_nidales = models.IntegerField()
-    cant_nidales = models.IntegerField()
+    cant_nidales = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
 
     def __str__(self):
         return self.nombre_galpon
