@@ -13,14 +13,18 @@
                     <div class="col-6 mb-3">
                         <label class="form-label">{{ campo.label }}</label>
                         <input
-                        onChange="calcuateArea();"
+                        onChange="calcuateArea();"  
                         type="{{campo.field.widget.input_type}}"
                         id="{{campo.name}}"
                         class="form-control {{campo.name}}"
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
                         placeholder="{{ campo.label }}"
-                        {% if campo.name == "area" %}disabled{% endif %}>
+                        {% if campo.name == "area"  %}disabled{% endif %}
+                        {% if campo.name == "capac_bebed"  %} onChange="calculateAves()" disabled{% endif %}
+                        {% if campo.name == "capac_comed"  %}disabled{% endif %}
+                        {% if campo.name == "capac_gall"  %}disabled{% endif %}
+                        {% if campo.name == "capac_nidales"  %}disabled{% endif %}>
                         <div class="col-6 help-text">{{campo.errors}} </div>
                     </div>
                 {% endfor %}
