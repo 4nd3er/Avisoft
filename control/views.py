@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 def inicio(request):
@@ -478,12 +480,19 @@ class ProduccionDiariaa(View):
     def post(self, request, *args, **kwargs):
         return render(request, self.DeleteRegister)
 
-class crearProdDiaria(CreateView):
+class crearProdDiaria(LoginRequiredMixin, CreateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/crear.html'
     form_class = ProduccionDiariaForm
     success_url = reverse_lazy('produccion_diaria')
 
+    # se crea el metodo From_valid para poder asignar automaticamente el usuario actual al campo 'id_usuario'
+    # modificacion -> y se excluye el campo 'id_usurio' en forms.py 
+    def form_valid(self, form):
+        form.instance.id_usuario = self.request.user  # Asignar el usuario actual al campo id_usuario
+        return super().form_valid(form)
+    
+    
     # def get_context_data(self, **kwargs):
     #     contexto = {}
     #     contexto['form'] = self.form_class
@@ -495,6 +504,7 @@ class editarProdDiaria(UpdateView):
     template_name = 'prod_diaria/editar.html'
     form_class = ProduccionDiariaForm
     success_url = reverse_lazy('produccion_diaria')
+
 
     # def get_context_data(self, **kwargs):
     #     contexto = {}
