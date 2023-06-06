@@ -176,7 +176,7 @@ class Ficha(models.Model):
     estado_ficha = models.ForeignKey(Estados, on_delete = models.CASCADE, db_column = 'estado_ficha')
 
     def __str__(self):
-        return self.num_ficha
+        return f'{self.num_ficha}: {self.titulacion}'
 
     class Meta:
         managed = False
@@ -368,7 +368,7 @@ class Usuario(AbstractBaseUser):
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.CharField('Numero de documento',max_length = 10, unique = True)
     celular = models.CharField(max_length = 10, null = True, blank = True)
-    correo = models.CharField(max_length = 100, null = True, blank = True)
+    email = models.CharField(max_length = 100, null = True, blank = True, db_column = 'correo')
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)

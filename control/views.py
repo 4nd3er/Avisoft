@@ -30,12 +30,14 @@ def inicio(request):
             elif documento == "" and password == "":
                 messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
             else:
-                messages.warning(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
+                messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
     return render(request, 'inicio_sesion/inicio.html')
 
 
 def registrarse(request):
-    registro = UsuarioForm()
+    # * rol = request.POST.get('rol
+    # * initial={'rol: 'rol}
+    registro = UsuarioForm()# *initial=initial
     if request.method == 'POST':
         # * contraseña = request.POST.get("contraseña")
         registro = UsuarioForm(request.POST, request.FILES)
@@ -53,11 +55,6 @@ def registrarse(request):
 def logout_usuario(request):
     logout(request)
     return redirect('inicio')
-
-def contrasena(request):
-
-    
-    return render(request, 'inicio_sesion/contrasena.html')
 
 def interfaz(request):
     return render(request, 'interfaz/interfaces.html')

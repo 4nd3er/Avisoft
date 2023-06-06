@@ -45,12 +45,10 @@
                         aria-describedby="basic-addon1">
                     </div>
                     {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-warning">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                  {% endif %}
+                      {% for message in messages %}
+                        <p class="alert {{ message.tags }} text-center">{{ message }}</p>
+                      {% endfor %}
+                    {% endif %}
 
                     <div class="row text-center">
                       <div class="col col-lg-12 col-md-12 col-sm-12 mt-5">
@@ -58,22 +56,21 @@
                           <button type="submit" class="btn btn-outline-success">Ingresar</button>
                         
                         <div class="col col-lg-12 col-md-12 col-sm-12 mt-2 mb-4">
-                          <a class="olvidar" href="{% url 'contrasena' %}">¿Olvidaste su Contraseña?</a>
+                          <a class="olvidar" href="{% url 'password_reset' %}">¿Olvidaste su Contraseña?</a>
                         </div>
                       </div>
                       <div style="display: flex; justify-content: center;">
-                        <i
-                          style="width: 80%;height: 2px ;border-bottom: 1px solid rgba(56 56 56 /.3); margin-bottom: 1rem;"></i>
+                        <i style="width: 80%;height: 2px ;border-bottom: 1px solid rgba(56 56 56 /.3); margin-bottom: 1rem;"></i>
                       </div>
                       <div class="col">
                         <a href="{% url 'registrarse' %}">
-                          <button type="button" class="btn btn-outline-success" style="width: 30%;">Registrarse
+                          <button type="button" class="btn btn-outline-success" style="width: 30%;">
+                            Registrarse
                           </button>
                         </a>
                       </div>
                     </div>
                   </div>
-
                 </div>
             </div>
         </form>

@@ -113,11 +113,8 @@ class UsuarioForm(UserCreationForm):
             'nombre': 'Nombre',
             'apellido': 'Apellido',
             'correo': 'Correo',
-            'telefono': 'Teléfono',
-            'direccion': 'Dirección',
         }
         widgets = {
-            'contrasena': forms.PasswordInput(),
             'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
             'apellido': forms.TextInput(attrs = {'class': 'form-control'}),
             'correo': forms.EmailInput(attrs = {'class': 'form-control'}),
@@ -130,3 +127,9 @@ class UsuarioForm(UserCreationForm):
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
     id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
     id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
+    password2 = forms.CharField(label = 'Contraseña de confirmacion', widget = forms.PasswordInput())
+
+class contrasenaForm(forms.ModelForm):
+    template_name = 'registration/password_reset_form.html'
+    fields = '__all__'
+    email = forms.EmailField(label = 'Correo electronicoooo', widget = forms.EmailInput(attrs = {'class': 'form-control'}))

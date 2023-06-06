@@ -50,8 +50,10 @@ body {
     margin: 3rem 0 0 0;
 }
 
-.contraseña{
-    box-shadow: 0px 0px 10px gray;
+form{
+    box-shadow: 0px 0px 10px 1px gray;
+    padding: 1rem;
+    border-radius: .5rem;
 }
 
 p {
