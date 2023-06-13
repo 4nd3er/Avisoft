@@ -133,7 +133,31 @@ class UsuarioForm(UserCreationForm):
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
     id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
     id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
-    password2 = forms.CharField(label = 'Contraseña de confirmacion', widget = forms.PasswordInput())
+    password2 = forms.CharField(label = 'Contraseña de confirmacion', widget = forms.PasswordInput())\
+
+class UsuarioForm2(forms.ModelForm):
+
+    class Meta:
+        model = Usuario
+        fields = '__all__'
+        labels = {
+            'nombre': 'Nombre',
+            'apellido': 'Apellido',
+            'correo': 'Correo',
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs = {'class': 'form-control'}),
+            'correo': forms.EmailInput(attrs = {'class': 'form-control'}),
+            'telefono': forms.TextInput(attrs = {'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs = {'class': 'form-control'}),
+            'id_tipo_doc': forms.Select(attrs = {'class': 'form-control'}),
+            'id_ficha': forms.Select(attrs = {'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(),
+        }
+    id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
+    id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
+    id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
 
 class contrasenaForm(forms.ModelForm):
     template_name = 'registration/password_reset_form.html'

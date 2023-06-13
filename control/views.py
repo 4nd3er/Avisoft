@@ -686,7 +686,7 @@ class crearUsuario(CreateView):
 class EditarUsuario(UpdateView):
     model = Usuario
     template_name = 'usuarios/editar.html'
-    form_class = UsuarioForm
+    form_class = UsuarioForm2
     success_url = reverse_lazy('usuarios')
 
 class confirmarEliminarUsuario(DeleteView):

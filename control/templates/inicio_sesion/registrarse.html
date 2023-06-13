@@ -27,7 +27,7 @@
                 <input type="Text" class="form-control" value="Aprendiz" disabled>
                 <div class="col-6 help-text">{{ user.errors }}</div>
               {% else %}
-                <select class="form-select" name="{{ user.name }}">
+                <select class="form-select" name="{{ user.name }}" required>
                   {% for select in user %}
                     {{ select }}
                   {% endfor %}
@@ -44,6 +44,8 @@
               placeholder="{{ user.label }}"
               {% if user.field.widget.input_type == 'file' %}
                 accept=".png, .jpg, .jpeg"
+              {% else %}
+                required
               {% endif %}/>
               <div class="col-6 help-text">{{ user.errors }}</div>
               {% endif %}
