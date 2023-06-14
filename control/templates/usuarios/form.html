@@ -10,7 +10,7 @@
           <input class="form-check-input" name="{{user.name}}" type="hidden" value="1" checked>
         {% endif %}
         {% if user.name == 'is_staff' %}
-          <input class="form-check-input" id="{{user.name}}" name="{{user.name}}" type="checkbox" value="1" onchange="AdminUser();">
+          <input class="form-check-input" id="{{user.name}}" name="{{user.name}}" type="hidden" value="{{user.value}}" onchange="AdminUser();" {% if form.id_rol.value == 1 %}checked{% endif %}>
         {% endif %}
       {% else %}
         <div class="mx-auto col-6 mb-3">

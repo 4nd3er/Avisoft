@@ -4,9 +4,11 @@ function AdminUser() {
 
     if (rol_value == 'Administrador') {
         admin.checked = true;
+        admin.value = 'true';
     }
     if (rol_value == 'Aprendiz') {
         admin.checked = false;
+        admin.value = 'false';
 
     }
 }
