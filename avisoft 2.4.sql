@@ -782,7 +782,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `correo` varchar(100) DEFAULT NULL,
   `id_ficha` int(11) DEFAULT NULL,
   `id_rol` int(11) DEFAULT NULL,
-  `password` varchar(100) NOT NULL,
+  `password` varchar(100) NULL,
   `imagen` varchar(60) DEFAULT NULL,
   `registro` date DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
