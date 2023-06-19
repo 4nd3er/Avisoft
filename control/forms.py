@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib import messages
 
 
@@ -159,10 +159,9 @@ class UsuarioForm2(forms.ModelForm):
     id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
     id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
 
-class contrasenaForm(forms.ModelForm):
-    template_name = 'registration/password_reset_form.html'
-    fields = '__all__'
-    email = forms.EmailField(label = 'Correo electronicoooo', widget = forms.EmailInput(attrs = {'class': 'form-control'}))
+class contrasenaForm(PasswordResetForm):
+    class Meta:
+        fields = '__all__'
 
 class cambioPasswordForm(forms.Form):
     password1 = forms.CharField(label = 'Contraseña', widget = forms.PasswordInput(attrs = {'class': 'form-control', 'required': 'required'}), empty_value = 'Digite la nueva contraseña')
