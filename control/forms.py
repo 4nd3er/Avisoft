@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
-from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib import messages
 
 
 class GallinasForm(forms.ModelForm):
@@ -163,3 +163,14 @@ class contrasenaForm(forms.ModelForm):
     template_name = 'registration/password_reset_form.html'
     fields = '__all__'
     email = forms.EmailField(label = 'Correo electronicoooo', widget = forms.EmailInput(attrs = {'class': 'form-control'}))
+
+class cambioPasswordForm(forms.Form):
+    password1 = forms.CharField(label = 'Contraseña', widget = forms.PasswordInput(attrs = {'class': 'form-control', 'required': 'required'}), empty_value = 'Digite la nueva contraseña')
+    password2 = forms.CharField(label = 'Confirmacion de contraseña', widget = forms.PasswordInput(attrs = {'class': 'form-control', 'required': 'required'}), empty_value = 'Digite nuevamente la contraseña')
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 != password2:
+            raise forms.ValidationError('Contraseñas no coinciden')
+        return password2
