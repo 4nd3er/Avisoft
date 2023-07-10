@@ -54,6 +54,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Galpon</th>
+                            <th scope="col">Capacidad</th>
                             <th scope="col">Linea</th>
                             <th scope="col">Cantidad de gallinas</th>
                             <th scope="col">Peso promedio</th>
@@ -67,6 +68,7 @@
                         {% for dato in gallinas %}
                             <tr>
                                 <td>{{ dato.id_galpon }}</td>
+                                <td>{{ dato.cantidad_gallinas }}</td>
                                 <td>{{ dato.id_linea }}</td>
                                 <td>{{ dato.cantidad_gallinas }}</td>
                                 <td>{{ dato.peso_promedio }}</td>

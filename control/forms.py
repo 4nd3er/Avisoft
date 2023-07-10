@@ -10,6 +10,7 @@ class GallinasForm(forms.ModelForm):
         fields = '__all__'
         labels = {
             'id_galpon': 'Galpon',
+            'capacidad': 'capacidad',
             'id_linea': 'Linea',
             'edad_sem': 'Edad en semanas',
             'peso_promedio':'Peso Promedio(Kg)',
@@ -31,6 +32,8 @@ class GalponesForm(forms.ModelForm):
             'cant_comed': 'Cantidad comederos',
             'capac_gall': 'Capacidad gallinas',
             'cant_gall': 'Cantidad gallinas',
+            'capac_nidales': 'Capacidad nidales',
+            'cant_nidales': 'Cantidad nidales',
         }
 
 class TiposHuevosForm(forms.ModelForm):
@@ -118,7 +121,7 @@ class UsuarioForm(UserCreationForm):
         labels = {
             'nombre': 'Nombre',
             'apellido': 'Apellido',
-            'correo': 'Correo',
+            'email': 'Correo electronico',
         }
         widgets = {
             'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
@@ -143,7 +146,7 @@ class UsuarioForm2(forms.ModelForm):
         labels = {
             'nombre': 'Nombre',
             'apellido': 'Apellido',
-            'correo': 'Correo',
+            'Email': 'Correo electronico',
         }
         widgets = {
             'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
@@ -153,6 +156,7 @@ class UsuarioForm2(forms.ModelForm):
             'direccion': forms.TextInput(attrs = {'class': 'form-control'}),
             'id_tipo_doc': forms.Select(attrs = {'class': 'form-control'}),
             'id_ficha': forms.Select(attrs = {'class': 'form-control'}),
+            'Email': forms.Select(attrs = {'class': 'form-control'}),
             'is_active': forms.CheckboxInput(),
         }
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
