@@ -10,6 +10,7 @@ class GallinasForm(forms.ModelForm):
         fields = '__all__'
         labels = {
             'id_galpon': 'Galpon',
+            'capacidad': 'capacidad',
             'id_linea': 'Linea',
             'edad_sem': 'Edad en semanas',
             'peso_promedio':'Peso Promedio(Kg)',
