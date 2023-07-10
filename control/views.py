@@ -26,7 +26,7 @@ def inicio(request):
             if user is not None:
                 login(request, user)
                 # if request.user.is_superuser:
-                #     return redirect('interfaz_admin')
+                # return redirect('interfaz_admin')
                 # else:
                 return redirect('interfaz')
             elif documento == "" and password == "":

@@ -188,11 +188,11 @@ class Gallinas(models.Model):
     id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
     id_linea = models.ForeignKey('Linea', on_delete = models.CASCADE, db_column = 'id_linea')
     fecha_ingreso = models.DateField(auto_now_add = True)
-    cantidad_gallinas = models.IntegerField()
-    peso_promedio = models.IntegerField()
-    edad_sem = models.IntegerField()
+    cantidad_gallinas = models.PositiveIntegerField()
+    peso_promedio = models.PositiveIntegerField()
+    edad_sem = models.PositiveIntegerField()
     procedencia = models.CharField(max_length = 50)
-
+    
     class Meta:
         managed = False
         db_table = 'gallinas'
