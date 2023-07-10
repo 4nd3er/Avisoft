@@ -16,7 +16,7 @@
           <input type="text" name="titulacion" value="{{ ficha.titulacion }}" maxlength="50" required class="form-control rounded"><br>
       
           <label for="estado_ficha" class="form-label">Estado de ficha:</label>
-          <select name="estado_ficha" required class="form-control rounded">
+          <select name="estado_ficha" required class="form-select rounded">
             {% for estad in form.estado_ficha %}
               {{ estad }}
             {% endfor %}
