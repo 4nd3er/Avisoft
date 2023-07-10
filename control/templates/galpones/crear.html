@@ -7,39 +7,7 @@
           <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
         </div>
         <div class="modal-body">
-          {% csrf_token %}
-            <div class="row">
-                {% for campo in form %}
-                {% if campo.name == "area" %}
-                <div class="col-6 mb-3">
-                  <label class="form-label">{{ campo.label }} mt2</label>
-                        <input
-                        onChange="calcuateArea();"
-                        type="{{campo.field.widget.input_type}}"
-                        id="{{campo.name}}"
-                        class="form-control {{campo.name}}"
-                        name="{{ campo.name }}"
-                        aria-describedby="helpId"
-                        placeholder="{{ campo.label }}"
-                        readonly>
-                        <div class="col-6 help-text">{{campo.errors}} </div>
-                </div>
-                  {% else %}
-                    <div class="col-6 mb-3">
-                        <label class="form-label">{{ campo.label }}</label>
-                        <input
-                        onChange="calcuateArea();"
-                        type="{{campo.field.widget.input_type}}"
-                        id="{{campo.name}}"
-                        class="form-control {{campo.name}}"
-                        name="{{ campo.name }}"
-                        aria-describedby="helpId"
-                        placeholder="{{ campo.label }}">
-                        <div class="col-6 help-text">{{campo.errors}} </div>
-                        
-                    </div>
-                    {%endif%}
-                {% endfor %}
+          {% include 'galpones/form.html' %}
             </div>
         </div>
         <div class="modal-footer text-center">

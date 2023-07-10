@@ -32,6 +32,8 @@ class GalponesForm(forms.ModelForm):
             'cant_comed': 'Cantidad comederos',
             'capac_gall': 'Capacidad gallinas',
             'cant_gall': 'Cantidad gallinas',
+            'capac_nidales': 'Capacidad nidales',
+            'cant_nidales': 'Cantidad nidales',
         }
 
 class TiposHuevosForm(forms.ModelForm):
