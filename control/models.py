@@ -8,6 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 
 class Alimentacion(models.Model):
     id = models.AutoField(primary_key = True)
@@ -176,7 +177,7 @@ class Ficha(models.Model):
     estado_ficha = models.ForeignKey(Estados, on_delete = models.CASCADE, db_column = 'estado_ficha')
 
     def __str__(self):
-        return self.num_ficha
+        return f'{self.num_ficha}: {self.titulacion}'
 
     class Meta:
         managed = False
@@ -207,17 +208,53 @@ class Gallinas(models.Model):
 class Galpones(models.Model):
     fecha = models.DateField(auto_now_add = True)
     nombre_galpon = models.CharField(max_length = 100)
-    ancho = models.IntegerField()
-    largo = models.IntegerField()
+    ancho = models.IntegerField(
+        validators=[
+            MinValueValidator(0, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
+    largo = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     area = models.IntegerField()
     capac_bebed = models.IntegerField()
-    cant_bebed = models.IntegerField()
+    cant_bebed = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_comed = models.IntegerField()
-    cant_comed = models.IntegerField()
+    cant_comed = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_gall = models.IntegerField()
-    cant_gall = models.IntegerField()
+    cant_gall = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
     capac_nidales = models.IntegerField()
-    cant_nidales = models.IntegerField()
+    cant_nidales = models.IntegerField(
+        validators=[
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
+            MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
+            RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
+        ]
+    )
 
     def __str__(self):
         return self.nombre_galpon
@@ -253,8 +290,8 @@ class Linea(models.Model):
 class MortalidadDescarte(models.Model):
     fecha = models.DateField()
     id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
-    cant_muertas = models.IntegerField(blank=True, null=True)
-    cant_descarte = models.IntegerField(blank=True, null=True)
+    cant_muertas = models.IntegerField()
+    cant_descarte = models.IntegerField()
     id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte', blank=True, null=True)
     saldo = models.IntegerField()
 
@@ -368,7 +405,7 @@ class Usuario(AbstractBaseUser):
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.CharField('Numero de documento',max_length = 10, unique = True)
     celular = models.CharField(max_length = 10, null = True, blank = True)
-    correo = models.CharField(max_length = 100, null = True, blank = True)
+    email = models.CharField(max_length = 100, null = True, blank = True, db_column = 'correo')
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)

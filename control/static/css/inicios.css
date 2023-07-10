@@ -43,10 +43,24 @@ body {
     grid-column: 1 / span 3;
 }
 
+.formPswrd {
+    box-shadow: 0px 0px 10px 1px gray;
+    padding: 1rem;
+    border-radius: .5rem;
+    width: 50%;
+}
+
 .form-control:focus,
 .form-control:active {
     box-shadow: none;
     border: 1px solid rgba(0, 0, 0, .1);
+}
+
+.form-password {
+    width: 50%;
+    box-shadow: 0px 0px 10px 1px gray;
+    padding: 1rem;
+    border-radius: .5rem;
 }
 
 .input-group-text {

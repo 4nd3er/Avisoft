@@ -8,7 +8,6 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
 # Create your views here.
 def inicio(request):
     if request.user.is_authenticated:
@@ -32,12 +31,14 @@ def inicio(request):
             elif documento == "" and password == "":
                 messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
             else:
-                messages.warning(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
+                messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
     return render(request, 'inicio_sesion/inicio.html')
 
 
 def registrarse(request):
-    registro = UsuarioForm()
+    # * rol = request.POST.get('rol
+    # * initial={'rol: 'rol}
+    registro = UsuarioForm()# *initial=initial
     if request.method == 'POST':
         # * contraseña = request.POST.get("contraseña")
         registro = UsuarioForm(request.POST, request.FILES)
@@ -56,10 +57,30 @@ def logout_usuario(request):
     logout(request)
     return redirect('inicio')
 
-def contrasena(request):
+class contrasena(LoginRequiredMixin, View):
+    template_name = 'usuarios/cambioPswrd/password.html'
+    form_class = cambioPasswordForm
+    success_url = reverse_lazy('interfaz')
 
-    
-    return render(request, 'inicio_sesion/contrasena.html')
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form': self.form_class})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = Usuario.objects.filter(id = request.user.id)
+            if user.exists():
+                user = user.first()
+                user.set_password(form.cleaned_data.get('password1'))
+                user.save()
+                logout(request)
+                return redirect(self.success_url)
+            return redirect(self.success_url)
+        else:
+            form = self.form_class(request.POST)
+            messages.error(request, 'Las contraseñas no coinciden')
+            return render(request, self.template_name, {'form': form})
+            
 
 def interfaz(request):
     return render(request, 'interfaz/interfaces.html')
@@ -72,7 +93,6 @@ def interfaz_admin(request):
 class Alimentacionn(View):
     model = Alimentacion
     template_name = 'alimentacion/alimentacion.html'
-    DeleteRegister = 'alimentacion/alimentacion_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -84,9 +104,7 @@ class Alimentacionn(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearAlimentacion(CreateView):
     model = Alimentacion
@@ -105,6 +123,9 @@ class confirmarEliminarAlimentacion(DeleteView):
     template_name = 'alimentacion/alimentacion_confirm_delete.html'
     success_url = reverse_lazy('alimentacion')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarAlimentacion(request, id):
     eliminar = Alimentacion.objects.get(id = id)
     eliminar.delete()
@@ -116,7 +137,6 @@ def eliminarAlimentacion(request, id):
 class DetalleJornadaa(View):
     model = DetalleJornada
     template_name = 'detalle_jornada/detalle_jornada.html'
-    DeleteRegister = 'detalle_jornada/detalle_jornada_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -128,9 +148,7 @@ class DetalleJornadaa(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearDetalle(CreateView):
     model = DetalleJornada
@@ -149,6 +167,9 @@ class confirmarEliminarDetalle(DeleteView):
     template_name = 'detalle_jornada/detalle_jornada_confirm_delete.html'
     success_url = reverse_lazy('detalle_jornada')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarDetalle(request, id):
     eliminar = DetalleJornada.objects.get(id = id)
     eliminar.delete()
@@ -159,7 +180,6 @@ def eliminarDetalle(request, id):
 class Estadoss(View):
     model = Estados
     template_name = 'estados/estados.html'
-    DeleteRegister = 'estados/estados_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -171,9 +191,7 @@ class Estadoss(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearEstado(CreateView):
     model = Estados
@@ -192,6 +210,9 @@ class confirmarEliminarEstado(DeleteView):
     template_name = 'estados/estados_confirm_delete.html'
     success_url = reverse_lazy('estados')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarEstado(request, estado):
     eliminar = Estados.objects.get(estado = estado)
     eliminar.delete()
@@ -203,7 +224,6 @@ def eliminarEstado(request, estado):
 class Fichass(View):
     model = Ficha
     template_name = 'fichas/fichas.html'
-    DeleteRegister = 'fichas/fichas_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -215,9 +235,7 @@ class Fichass(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearFicha(CreateView):
     model = Ficha
@@ -236,6 +254,9 @@ class confirmarEliminarFicha(DeleteView):
     template_name = 'fichas/fichas_confirm_delete.html'
     success_url = reverse_lazy('fichas')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarFicha(request, id_ficha):
     eliminar = Ficha.objects.get(id_ficha = id_ficha)
     eliminar.delete()
@@ -247,7 +268,6 @@ def eliminarFicha(request, id_ficha):
 class Gallinass(View):
     model = Gallinas
     template_name = 'gallinas/gallinas.html'
-    DeleteRegister = 'gallinas/gallinas_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -259,9 +279,7 @@ class Gallinass(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearGallinas(CreateView):
     model = Gallinas
@@ -280,6 +298,9 @@ class confirmarEliminarGallinas(DeleteView):
     template_name = 'gallinas/gallinas_confirm_delete.html'
     success_url = reverse_lazy('gallinas')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarGallinas(request, id):
     eliminar = Gallinas.objects.get(id = id)
     eliminar.delete()
@@ -291,7 +312,6 @@ def eliminarGallinas(request, id):
 class Galponess(View):
     model = Galpones
     template_name = 'galpones/galpones.html'
-    DeleteRegister = 'galpones/galpones_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -303,9 +323,7 @@ class Galponess(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearGalpon(CreateView):
     model = Galpones
@@ -324,6 +342,9 @@ class confirmarEliminarGalpon(DeleteView):
     template_name = 'galpones/galpones_confirm_delete.html'
     success_url = reverse_lazy('galpones')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarGalpon(request, id):
     eliminar = Galpones.objects.get(id = id)
     eliminar.delete()
@@ -335,7 +356,6 @@ def eliminarGalpon(request, id):
 class Jornadass(View):
     model = Jornada
     template_name = 'jornadas/jornadas.html'
-    DeleteRegister = 'jornadas/jornadas_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -347,9 +367,7 @@ class Jornadass(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearJornada(CreateView):
     model = Jornada
@@ -368,6 +386,9 @@ class confirmarEliminarJornada(DeleteView):
     template_name = 'jornadas/jornadas_confirm_delete.html'
     success_url = reverse_lazy('jornadas')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarJornada(request, id):
     eliminar = Jornada.objects.get(id = id)
     eliminar.delete()
@@ -379,7 +400,6 @@ def eliminarJornada(request, id):
 class Lineass(View):
     model = Linea
     template_name = 'lineas/lineas.html'
-    DeleteRegister = 'lineas/lineas_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -391,9 +411,7 @@ class Lineass(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearLinea(CreateView):
     model = Linea
@@ -412,6 +430,9 @@ class confirmarEliminarLinea(DeleteView):
     template_name = 'lineas/lineas_confirm_delete.html'
     success_url = reverse_lazy('lineas')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarLinea(request, id):
     eliminar = Linea.objects.get(id = id)
     eliminar.delete()
@@ -423,7 +444,6 @@ def eliminarLinea(request, id):
 class Mortalidadd(View):
     model = MortalidadDescarte
     template_name = 'mortalidad_descarte/mortalidad_descarte.html'
-    DeleteRegister = 'mortalidad_descarte/mortalidad_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -435,9 +455,7 @@ class Mortalidadd(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearMortalidad(CreateView):
     model = MortalidadDescarte
@@ -456,6 +474,9 @@ class confirmarEliminarMortalidad(DeleteView):
     template_name = 'mortalidad_descarte/mortalidad_confirm_delete.html'
     success_url = reverse_lazy('mortalidad_descarte')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarMortalidad(request, id):
     eliminar = MortalidadDescarte.objects.get(id = id)
     eliminar.delete()
@@ -466,7 +487,6 @@ def eliminarMortalidad(request, id):
 class ProduccionDiariaa(View):
     model = ProduccionDiaria
     template_name = 'prod_diaria/prod_diaria.html'
-    DeleteRegister = 'prod_diaria/prod_diaria_confirm_delete.html'
 
     def get_queryset(self):
         query = self.model.objects.all()
@@ -479,9 +499,7 @@ class ProduccionDiariaa(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearProdDiaria(LoginRequiredMixin, CreateView):
     model = ProduccionDiaria
@@ -521,6 +539,9 @@ class confirmarEliminarProdDiaria(DeleteView):
     template_name = 'prod_diaria/prod_diaria_confirm_delete.html'
     success_url = reverse_lazy('produccion_diaria')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarProdDiaria(request, id):
     eliminar = ProduccionDiaria.objects.get(id = id)
     eliminar.delete()
@@ -532,7 +553,6 @@ def eliminarProdDiaria(request, id):
 class Roll(View):
     model = Rol
     template_name = 'rol/rol.html'
-    DeleteRegister = 'rol/rol_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -544,9 +564,7 @@ class Roll(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearRol(CreateView):
     model = Rol
@@ -565,6 +583,9 @@ class confirmarEliminarRol(DeleteView):
     template_name = 'rol/rol_confirm_delete.html'
     success_url = reverse_lazy('rol')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarRol(request, id):
     eliminar = Rol.objects.get(id = id)
     eliminar.delete()
@@ -576,7 +597,6 @@ def eliminarRol(request, id):
 class TipoDocc(View):
     model = TipoDoc
     template_name = 'tipo_doc/tipo_doc.html'
-    DeleteRegister = 'tipo_doc/tipo_doc_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -587,10 +607,7 @@ class TipoDocc(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+        return render(request, self.template_name, self.get_context_data()) 
 
 class crearTipoDoc(CreateView):
     model = TipoDoc
@@ -609,6 +626,9 @@ class confirmarEliminarTipoDoc(DeleteView):
     template_name = 'tipo_doc/tipo_doc_confirm_delete.html'
     success_url = reverse_lazy('tipo_doc')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarTipoDoc(request, id):
     eliminar = TipoDoc.objects.get(id = id)
     eliminar.delete()
@@ -620,7 +640,6 @@ def eliminarTipoDoc(request, id):
 class TiposHuevoss(View):
     model = TiposHuevos
     template_name = 'tipos_huevos/tipos_huevos.html'
-    DeleteRegister = 'tipos_huevos/tipos_huevos_confirm_delete.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -632,9 +651,7 @@ class TiposHuevoss(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
-    
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
+
 
 class crearTipoHuevo(CreateView):
     model = TiposHuevos
@@ -653,6 +670,9 @@ class confirmarEliminarTipoHuevo(DeleteView):
     template_name = 'tipos_huevos/tipos_huevos_confirm_delete.html'
     success_url = reverse_lazy('tipos_huevos')
 
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
 def eliminarTipoHuevo(request, id):
     eliminar = TiposHuevos.objects.get(id = id)
     eliminar.delete()
@@ -664,7 +684,6 @@ def eliminarTipoHuevo(request, id):
 class Usuarioss(View):
     model = Usuario
     template_name = 'usuarios/usuarios.html'
-    DeleteRegister = 'usuarios/usuarios_confirm_delete_register.html'
 
     def get_queryset(self):
         return self.model.objects.all()
@@ -677,9 +696,6 @@ class Usuarioss(View):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
 
-    def post(self, request, *args, **kwargs):
-        return render(request, self.DeleteRegister)
-
 class crearUsuario(CreateView):
     model = Usuario
     template_name = 'usuarios/crear.html'
@@ -689,13 +705,16 @@ class crearUsuario(CreateView):
 class EditarUsuario(UpdateView):
     model = Usuario
     template_name = 'usuarios/editar.html'
-    form_class = UsuarioForm
+    form_class = UsuarioForm2
     success_url = reverse_lazy('usuarios')
 
 class confirmarEliminarUsuario(DeleteView):
     model = Usuario
     template_name = 'usuarios/usuarios_confirm_delete.html'
     success_url = reverse_lazy('usuarios')
+
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
 
 def eliminarUsuario(request, id):
     eliminar = Usuario.objects.get(id = id)

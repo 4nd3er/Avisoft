@@ -85,7 +85,7 @@
                                 <td>{{ dato.id_tipo_doc }}</td>
                                 <td>{{ dato.documento }}</td>
                                 <td>{{ dato.celular }}</td>
-                                <td>{{ dato.correo }}</td>
+                                <td>{{ dato.email }}</td>
                                 <td>{{ dato.id_ficha }}</td>
                                 <td>{{ dato.id_rol }}</td>
                                 <td>{{ dato.registro }}</td>
@@ -126,5 +126,7 @@
     <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
+    
+    <script src="{% static 'Js/formUsuario.js' %}"></script>
 
 {% endblock contenido %}

@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <div class="content">
+<div class="content">
         <div class="header">
             <!--navbar-->
             <nav class="navbar navbar-expand-lg navbar-dark">
@@ -73,8 +73,9 @@
                                 <span>Perfil</span>
                             {% endif %}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                            <li><a class="menu" href="#">Configuracion</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="menu" onclick="abrir_modal_editar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a></li>
+                            <li><a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="menu" href="{% url 'logout' %}">Cerrar sesion</a></li>
                         </ul>
@@ -101,6 +102,10 @@
         </div>
     </div>
 
+    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    </div>
+
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
@@ -109,7 +114,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   {% load static %}
   <script src="{% static 'Js/modal_editar.js' %}"></script>
 </body>
