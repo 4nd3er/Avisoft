@@ -118,7 +118,7 @@ class UsuarioForm(UserCreationForm):
         labels = {
             'nombre': 'Nombre',
             'apellido': 'Apellido',
-            'correo': 'Correo',
+            'email': 'Correo electronico',
         }
         widgets = {
             'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
@@ -143,7 +143,7 @@ class UsuarioForm2(forms.ModelForm):
         labels = {
             'nombre': 'Nombre',
             'apellido': 'Apellido',
-            'correo': 'Correo',
+            'Email': 'Correo electronico',
         }
         widgets = {
             'nombre': forms.TextInput(attrs = {'class': 'form-control'}),
@@ -153,6 +153,7 @@ class UsuarioForm2(forms.ModelForm):
             'direccion': forms.TextInput(attrs = {'class': 'form-control'}),
             'id_tipo_doc': forms.Select(attrs = {'class': 'form-control'}),
             'id_ficha': forms.Select(attrs = {'class': 'form-control'}),
+            'Email': forms.Select(attrs = {'class': 'form-control'}),
             'is_active': forms.CheckboxInput(),
         }
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')

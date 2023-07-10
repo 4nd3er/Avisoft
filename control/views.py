@@ -190,7 +190,11 @@ class Estadoss(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearEstado(CreateView):
@@ -234,7 +238,11 @@ class Fichass(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearFicha(CreateView):
@@ -366,7 +374,11 @@ class Jornadass(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearJornada(CreateView):
@@ -410,7 +422,11 @@ class Lineass(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearLinea(CreateView):
@@ -563,7 +579,11 @@ class Roll(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearRol(CreateView):
@@ -607,7 +627,11 @@ class TipoDocc(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data()) 
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 class crearTipoDoc(CreateView):
     model = TipoDoc
@@ -650,7 +674,11 @@ class TiposHuevoss(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 
 class crearTipoHuevo(CreateView):
@@ -694,7 +722,11 @@ class Usuarioss(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            return render(request, self.template_name, self.get_context_data())
+        else:
+            return redirect('interfaz')
 
 class crearUsuario(CreateView):
     model = Usuario
@@ -706,7 +738,10 @@ class EditarUsuario(UpdateView):
     model = Usuario
     template_name = 'usuarios/editar.html'
     form_class = UsuarioForm2
-    success_url = reverse_lazy('usuarios')
+    if User.is_staff:
+        success_url = reverse_lazy('usuarios')
+    else:
+        success_url = reverse_lazy('interfaz')
 
 class confirmarEliminarUsuario(DeleteView):
     model = Usuario

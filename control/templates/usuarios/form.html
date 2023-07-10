@@ -16,10 +16,15 @@
         <div class="mx-auto col-6 mb-3">
           <label for="" class="form-label">{{ user.label }}</label>
           {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
+            {% if user.name == 'id_rol' and form.is_staff.value == 0 %}
+              <input class="form-control" type="input" value="Aprendiz" readonly disabled>
+              <input class="form-control" name="id_rol" type="hidden" value="{{form.id_rol.value}}">
+            {% else %}
             <select class="form-select" name="{{ user.name }}" id="{{user.name}}" onchange="AdminUser();">
-              {% for select in user %}
-                {{ select }}
-              {% endfor %}
+                {% for select in user %}
+                  {{ select }}
+                {% endfor %}
+              {% endif %}
             </select>
             <div class="col-6 help-text">{{ user.errors }}</div>
         {% else %}
