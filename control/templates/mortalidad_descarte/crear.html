@@ -1,3 +1,4 @@
+
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <form action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="post">
@@ -21,6 +22,20 @@
                                 <div class="col-6 help-text">{{ campo.errors }}</div>
                             </div>
                         {% else %}
+                        {% if campo.label == 'Fecha' %}
+                        <div class="col-6">
+                            <label class="form-label">{{ campo.label }}</label>
+                            <input
+                            type="Date"
+                            class="form-control"
+                            name="{{ campo.name }}" 
+                            aria-describedby="" 
+                            placeholder="{{ campo.label }}"
+                            value="{{campo.value}}">
+                            <br/>
+                            <div class="col-6 help-text">{{ campo.errors }}</div>
+                        </div>
+                        {% else %}
                             <div class="col-6">
                                 <label class="form-label">{{ campo.label }}</label>
                                 <input
@@ -33,6 +48,7 @@
                                 <br/>
                                 <div class="col-6 help-text">{{ campo.errors }}</div>
                             </div>
+                                {% endif %} 
                         {% endif %}
                     {% endfor %}
                 </div>
