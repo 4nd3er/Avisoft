@@ -1,7 +1,7 @@
 {% csrf_token %}
 <div class="row">
     {% for campo in form %}
-    {% if campo.name == "area" %}
+    {% if campo.name == "area"%}
     <div class="col-6 mb-3">
       <label class="form-label">{{ campo.label }} mt2</label>
             <input
@@ -16,19 +16,35 @@
             <div class="col-6 help-text">{{campo.errors}} </div>
     </div>
       {% else %}
-        <div class="col-6 mb-3">
+        {% if campo.name == "capac_bebed" or campo.name == "capac_comed" or campo.name == "capac_gall" or campo.name == "capac_nidales"%}
+          <div class="col-6 mb-3">
+              <label class="form-label">{{ campo.label }}</label>
+              <input
+              onChange="calcuateArea();"
+              type="text"
+              id="{{campo.name}}"
+              class="form-control {{campo.name}}"
+              name="{{ campo.name }}"
+              aria-describedby="helpId"
+              placeholder="{{ campo.label }}"
+              value="{{ campo.value | default:''}}"
+              readonly>
+              <div class="col-6 help-text">{{campo.errors}} </div>   
+          </div>
+          {% else %}
+          <div class="col-6 mb-3">
             <label class="form-label">{{ campo.label }}</label>
             <input
             onChange="calcuateArea();"
-            type="{{campo.field.widget.input_type}}"
+            type="text"
             id="{{campo.name}}"
             class="form-control {{campo.name}}"
             name="{{ campo.name }}"
             aria-describedby="helpId"
             placeholder="{{ campo.label }}"
             value="{{ campo.value | default:''}}">
-            <div class="col-6 help-text">{{campo.errors}} </div>
-            
+            <div class="col-6 help-text">{{campo.errors}} </div>   
         </div>
+        {% endif %}
         {%endif%}
     {% endfor %}
