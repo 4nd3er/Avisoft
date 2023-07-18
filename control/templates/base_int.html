@@ -31,8 +31,10 @@
                         <div class="nav-item dropdown">
                             <div class="col-md col-sm justify-content-end text-center" style="display: grid;">
                                 <a href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {% if not user.imagen == '' %}
-                                    <img src="{{user.imagen.url}}" style="width: 3rem; border-radius: 50%;">
+                                    {% if user.imagen != '' %}
+                                    <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
+                                        <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                                    </div>
                                     {% else %}
                                     <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
                                     {% endif %}

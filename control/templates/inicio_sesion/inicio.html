@@ -37,12 +37,12 @@
                     <div class="input-group mb-3 mx-auto col-lg-12 col-md col-sm-12">
                       <span class="input-group-text" id="basic-addon1"></span>
                       <input type="text" class="form-control" placeholder="Numero de Documento" aria-label="Documento" name="documento"
-                        aria-describedby="basic-addon1">
+                        aria-describedby="basic-addon1" value="{{request.POST.documento}}">
                     </div>
                     <div class="input-group mb-3 mx-auto col-lg-12 col-md col-sm-12">
                       <span class="input-group-text" id="basic-addon1"></span>
                       <input type="password" class="form-control" placeholder="Contraseña" aria-label="Password" name="password"
-                        aria-describedby="basic-addon1">
+                        aria-describedby="basic-addon1" value="{{request.POST.password}}">
                     </div>
                     {% if messages %}
                       {% for message in messages %}

@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .forms import *
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -536,6 +537,22 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
     #     contexto['tipos_huevos'] = TiposHuevos.objects.values_list('id', 'tipos_huevos')
     #     return contexto
 
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form': self.form_class, 'form2' : DetalleJornadaForm})
+
+    def post(self, request, *args, **kwargs):
+        form1 = self.form_class(request.POST)
+        form2 = DetalleJornadaForm(request.POST)
+        if form1.is_valid() and form2.is_valid():
+            usuario = request.POST.get('id_usuario')
+            usuario = self.form_valid(form1)
+            form1.save()
+            form2.save()
+            return redirect('produccion_diaria')
+        else:
+            return render(request, self.template_name, {'form': self.form_class, 'form2' : DetalleJornadaForm})
+
+
 class editarProdDiaria(UpdateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/editar.html'
@@ -714,7 +731,22 @@ class Usuarioss(View):
     template_name = 'usuarios/usuarios.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        busqueda = self.request.GET.get("buscar")
+
+        if busqueda:
+            usuarios = self.model.objects.filter(
+                Q(nombre__icontains = busqueda) |
+                Q(apellido__icontains = busqueda) |
+                Q(id_tipo_doc__tipo_doc__icontains = busqueda) |
+                Q(documento__icontains = busqueda) |
+                Q(celular__icontains = busqueda) |
+                Q(id_ficha__num_ficha__icontains = busqueda) |
+                Q(id_rol__tipo_rol__icontains = busqueda) |
+                Q(email__icontains = busqueda)
+                ).distinct()
+        else:
+            usuarios = self.model.objects.all()
+        return usuarios
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -722,6 +754,7 @@ class Usuarioss(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
+
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
             return render(request, self.template_name, self.get_context_data())

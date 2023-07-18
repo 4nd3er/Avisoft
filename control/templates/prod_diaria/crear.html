@@ -8,7 +8,9 @@
       </div>
       <div class="modal-body">
         {% csrf_token %}
-      <div class="row">
+        {% comment %} TODO Fase de prueba {% endcomment %}
+        {% comment %} ! NO TOCAR {% endcomment %}
+      {% comment %} <div class="row">
           {% for prod in form %}
           {% if prod.label == 'Detalle de Jornada' or prod.label == 'Usuario' or prod.label == 'Tipo de huevo' %}
           <div class="col-6 mb-3">
@@ -32,7 +34,7 @@
                 {% endfor %}
               </div>
               <div class="col-6 help-text"> {{ prod.errors }} </div>
-            </div> {% endcomment %}
+            </div>
                 {% else %}
                 <div class="col-6 mb-3 order-last">
                   <label class="form-label">{{ prod.label }}</label>
@@ -49,7 +51,11 @@
                   <div class="col-6 help-text"> {{ prod.errors }} </div>
                 </div>
               {% endif %}
-          {% endfor %}
+          {% endfor %} {% endcomment %}
+          {{form.as_p}}
+          {{form2.as_p}}
+        {% comment %} ! NO TOCAR {% endcomment %}
+        {% comment %} TODO Fase de prueba {% endcomment %}
       </div>
       <div class="modal-footer">
         <input class="btn btn-outline-success" type="submit" value="Enviar informacion">

@@ -17,21 +17,15 @@
     <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
   
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
-            <form>
+            <form method="GET">
                 <div class="row text-center" style="margin: 2rem 0; align-items: center;">
                     <div class="col-md col-sm">
-                        <Select class="form-selected p-2" style="border-radius: .5rem;">
-                            <option selected value="1">Seleccione el galpón</option>
-                            <option value="1">Galpón 1</option>
-                            <option value="2">Galpón 2</option>
-                            <option value="3">Galpón 3</option>
-                            <option value="4">Galpón 4</option>
-                        </Select>
+                        <input class="form-control" type="text" name="buscar" placeholder="Digite para buscar" value="{{ request.GET.buscar }}" />
                     </div>
-                    <div class="col-md col-sm">
-                        <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
+                    <div class="col-md-3 col-sm-3">
+                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">
                             BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </form>
