@@ -32,6 +32,8 @@ class GalponesForm(forms.ModelForm):
             'cant_comed': 'Cantidad comederos',
             'capac_gall': 'Capacidad gallinas',
             'cant_gall': 'Cantidad gallinas',
+            'capac_nidales': 'Capacidad nidales',
+            'cant_nidales': 'Cantidad nidales',
         }
 
 class TiposHuevosForm(forms.ModelForm):
@@ -64,6 +66,10 @@ class AlimentacionForm(forms.ModelForm):
         labels = {
             'id_galpon': 'Galpon',
             'gr_gallina_dia': 'Gr/Gallina/Dia',
+            'id_tipo_alimento' : 'Tipo alimento',
+            'kg_total' : 'Kg Totales',
+            'c_a' : 'Conversion Alimenticia',
+            'bultos_total' : 'Bulto(s) Total(es)'
         }
 
 class DetalleJornadaForm(forms.ModelForm):

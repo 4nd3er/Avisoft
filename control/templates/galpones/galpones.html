@@ -56,12 +56,14 @@
                             <th scope="col">Ancho</th>
                             <th scope="col">Largo</th>
                             <th scope="col">Area</th>
-                            <th scope="col">Capacidad bebederos</th>
-                            <th scope="col">Cantidad bebederos</th>
-                            <th scope="col">Capacidad comederos</th>
-                            <th scope="col">Cantidad comederos</th>
-                            <th scope="col">Capacidad gallinas</th>
-                            <th scope="col">Cantidad gallinas</th>
+                            <th scope="col">Capac. bebederos</th>
+                            <th scope="col">cant. bebederos</th>
+                            <th scope="col">Capac. comederos</th>
+                            <th scope="col">cant. comederos</th>
+                            <th scope="col">Capac. gallinas</th>
+                            <th scope="col">cant. gallinas</th>
+                            <th scope="col">Capac. nidos</th>
+                            <th scope="col">cant. nidos</th>
                             <th scope="col">fecha</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -79,6 +81,8 @@
                             <td>{{ dato.cant_comed }}</td>
                             <td>{{ dato.capac_gall }}</td>
                             <td>{{ dato.cant_gall }}</td>
+                            <td>{{ dato.capac_nidales }}</td>
+                            <td>{{ dato.cant_nidales }}</td>
                             <td>{{ dato.fecha }}</td>
                             <td>
                                 <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_galpon' dato.id %}')" role="button">Editar</button>
