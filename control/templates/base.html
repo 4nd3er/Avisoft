@@ -58,10 +58,12 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="justify-content-end text-center perfil" style="display: grid;">
+                    <div class=" col-md col-sm justify-content-end text-center perfil" style="display: grid;">
                         <a href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {% if not user.imagen == '' %}
-                            <img src="{{user.imagen.url}}" style="width: 3rem; border-radius: 50%;">
+                            <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
+                                <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                            </div>
                             {% else %}
                             <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
                             {% endif %}
@@ -87,7 +89,7 @@
     
 
         <div class="main">
-        {% block contenido %} {% endblock contenido %}
+            {% block contenido %} {% endblock contenido %}
         </div>
 
         <div class="footer">

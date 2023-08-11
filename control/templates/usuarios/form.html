@@ -1,44 +1,44 @@
 <div class="modal-body">
   {% csrf_token %}
   <div class="row mx-auto">
-    {% for user in form %}
-      {% if user.name == 'password' or user.name == 'is_staff' or user.name == 'is_active' %}
-        {% if user.name == 'password' %}
-          <input class="form-control" type="hidden" name="{{user.name}}" value="{{user.value}}">
+    {% for users in form %}
+      {% if users.name == 'password' or users.name == 'is_staff' or users.name == 'is_active' %}
+        {% if users.name == 'password' %}
+          <input class="form-control" type="hidden" name="{{users.name}}" value="{{users.value}}">
         {% endif %}
-        {% if user.name == 'is_active' %}
-          <input class="form-check-input" name="{{user.name}}" type="hidden" value="1" checked>
+        {% if users.name == 'is_active' %}
+          <input class="form-check-input" name="{{users.name}}" type="hidden" value="1" checked>
         {% endif %}
-        {% if user.name == 'is_staff' %}
-          <input class="form-check-input" id="{{user.name}}" name="{{user.name}}" type="hidden" value="{{user.value}}" onchange="AdminUser();" {% if form.id_rol.value == 1 %}checked{% endif %}>
+        {% if users.name == 'is_staff' %}
+          <input class="form-check-input" id="{{users.name}}" name="{{users.name}}" type="hidden" value="{{users.value}}" onchange="AdminUser();" {% if form.id_rol.value == 1 %}checked{% endif %}>
         {% endif %}
       {% else %}
         <div class="mx-auto col-6 mb-3">
-          <label for="" class="form-label">{{ user.label }}</label>
-          {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
-            {% if user.name == 'id_rol' and form.is_staff.value == 0 %}
+          <label class="form-label">{{ users.label }}</label>
+          {% if users.name == 'id_ficha' or users.name == 'id_tipo_doc' or users.name == 'id_rol' %}
+            {% if users.name == 'id_rol' and user.is_staff == 0 %}
               <input class="form-control" type="input" value="Aprendiz" readonly disabled>
               <input class="form-control" name="id_rol" type="hidden" value="{{form.id_rol.value}}">
             {% else %}
-            <select class="form-select" name="{{ user.name }}" id="{{user.name}}" onchange="AdminUser();">
-                {% for select in user %}
+            <select class="form-select" name="{{ users.name }}" id="{{users.name}}" onchange="AdminUser();">
+                {% for select in users %}
                   {{ select }}
                 {% endfor %}
               {% endif %}
             </select>
-            <div class="col-6 help-text">{{ user.errors }}</div>
+            <div class="col-6 help-text">{{ users.errors }}</div>
         {% else %}
           <input
-          type="{{ user.field.widget.input_type }}"
+          type="{{ users.field.widget.input_type }}"
           class="form-control"
-          name="{{ user.name }}"
-          value="{{ user.value | default:''}}"
+          name="{{ users.name }}"
+          value="{{ users.value | default:''}}"
           aria-describedby="helpId"
-          placeholder="{{ user.label }}"
-          {% if user.field.widget.input_type == 'file' %}
+          placeholder="{{ users.label }}"
+          {% if users.field.widget.input_type == 'file' %}
             accept=".png, .jpg, .jpeg"
           {% endif %}/>
-          <div class="col-6 help-text">{{ user.errors }}</div>
+          <div class="col-6 help-text">{{ users.errors }}</div>
           {% endif %}
       </div>
       {% endif %}

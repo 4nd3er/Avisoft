@@ -35,6 +35,7 @@ a {
 
 .container-fluid .perfil .dropdown-menu {
     position: absolute;
+    left: 87%;
 }
 
 .container-fluid .perfil .dropdown-menu .menu {
