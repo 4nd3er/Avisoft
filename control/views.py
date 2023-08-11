@@ -7,6 +7,9 @@ from django.views.generic import View, TemplateView, ListView, UpdateView, Creat
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import Galpones
 
 # Create your views here.
 def inicio(request):
@@ -467,6 +470,7 @@ class Mortalidadd(View):
     def get_context_data(self, **kwargs):
         contexto = {}
         contexto["mortalidad_descarte"] = self.get_queryset()
+        contexto["data"] = Galpones.objects.all()
         return contexto
     
     def get(self, request, *args, **kwargs):
@@ -478,6 +482,16 @@ class crearMortalidad(CreateView):
     template_name = 'mortalidad_descarte/crear.html'
     form_class = MortalidadDescarteForm
     success_url = reverse_lazy('mortalidad_descarte')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Realizar la consulta a la base de datos
+        consulta_resultados = Galpones.objects.all()
+
+        context['data'] = consulta_resultados
+
+        return context
 
 class editarMortalidad(UpdateView):
     model = MortalidadDescarte
@@ -498,6 +512,7 @@ def eliminarMortalidad(request, id):
     eliminar.delete()
     return redirect('mortalidad_descarte')
 # ! Modulo de mortalidad y descarte
+
 
 # ! Modulo de produccion diaria
 class ProduccionDiariaa(View):

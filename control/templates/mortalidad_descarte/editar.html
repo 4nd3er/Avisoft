@@ -8,33 +8,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    {% csrf_token %}
-                    {% for campo in form %}
-                        {% if campo.label == 'Galpon' %}
-                            <div class="col-6">
-                                <label class="form-label">{{ campo.label }}</label>
-                                <select class="form-select" name="{{ campo.name }}">
-                                    {% for select in campo %}
-                                        {{ select }}
-                                    {% endfor %}
-                                </select>
-                                <div class="col-6 help-text">{{ campo.errors }}</div>
-                            </div>
-                        {% else %}
-                            <div class="col-6">
-                                <label class="form-label">{{ campo.label }}</label>
-                                <input
-                                type="{{campo.field.widget.input_type}}"
-                                class="form-control" 
-                                name="{{ campo.name }}" 
-                                aria-describedby="" 
-                                placeholder="{{ campo.label }}"
-                                value="{{campo.value | default:""}}">
-                                <br/>
-                                <div class="col-6 help-text">{{ campo.errors }}</div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    {% include 'mortalidad_descarte/form.html' %}
                 </div>
             </div>
             <div class="modal-footer text-center">
