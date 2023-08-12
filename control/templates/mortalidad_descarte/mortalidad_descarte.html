@@ -15,7 +15,6 @@
     </div>
 
     <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
-  
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             {% include 'search.html' %}
         </div>
@@ -89,5 +88,6 @@
     <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
-    <script src="{% static 'Js/saldomor.js' %}"></script>
+    {% load static %}
+    
 {% endblock contenido %}

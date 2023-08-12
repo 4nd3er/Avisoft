@@ -1,0 +1,43 @@
+{% csrf_token %}
+{% for campo in form %}
+    {% if campo.label == 'Galpon' or campo.label ==  'Tipo de Descarte'%}
+        <div class="col-6">
+            <label class="form-label">{{ campo.label }}</label>
+            <select class="form-select selectGalpon" name="{{ campo.name }}" id="{{campo.name}}">
+                {% for select in campo %}
+                    {{ select }}
+                {% endfor %}
+            </select>
+            <div class="col-6 help-text">{{ campo.errors }}</div>
+        </div>
+    {% else %}
+    {% if campo.name == 'fecha' %}
+    <div class="col-6">
+        <label class="form-label">{{ campo.label }}</label>
+        <input
+        type="Date"
+        class="form-control"
+        name="{{ campo.name }}" 
+        aria-describedby="" 
+        placeholder="{{ campo.label }}"
+        value="{{campo.value}}">
+        <br/>
+        <div class="col-6 help-text">{{ campo.errors }}</div>
+    </div>
+    {% else %}
+        <div class="col-6">
+            <label class="form-label">{{ campo.label }}</label>
+            <input
+            id="{{campo.name}}"
+            type="{{campo.field.widget.input_type}}"
+            class="form-control {{campo.name}}" 
+            name="{{ campo.name }}" 
+            aria-describedby="" 
+            placeholder="{{ campo.label }}"
+            value="">
+            <br/>
+            <div class="col-6 help-text">{{ campo.errors }}</div>
+        </div>
+            {% endif %} 
+    {% endif %}
+{% endfor %}
