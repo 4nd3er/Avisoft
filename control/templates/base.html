@@ -22,104 +22,105 @@
 
 <body>
 <div class="content">
-        <div class="header">
-            <!--navbar-->
-            <nav class="navbar navbar-expand-lg navbar-dark">
-                <div class="row container-fluid">
-                    <div class="col-md-1 col-sm-3 logo_sena">
-                        <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
-                            alt="Logo Sena" style="width: 4rem"></a>
-                    </div>
-                    <div class="col-md-1 col-sm menu_prin" style="display:flex; justify-content: end;">
-                        <button class="navbar-toggler m-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div class="col-md-10 collapse navbar-collapse text-center" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'gallinas' %}">Gallinas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Registro diario</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class=" col-md col-sm justify-content-end text-center perfil" style="display: grid;">
-                        <a href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if not user.imagen == '' %}
-                            <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
-                                <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
-                            </div>
-                            {% else %}
-                            <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
-                            {% endif %}
-                        </a>
-                        <a href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if user %}
-                                <span>{{user.nombre}}</span>
-                            {% else %}
-                                <span>Perfil</span>
-                            {% endif %}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="menu" onclick="abrir_modal_editar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a></li>
-                            <li><a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="menu" href="{% url 'logout' %}">Cerrar sesion</a></li>
-                        </ul>
-                    </div>
+    <div class="header">
+        <!--navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="row container-fluid">
+                <div class="col-md-1 col-sm-3 logo_sena">
+                    <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
+                        alt="Logo Sena" style="width: 4rem">
+                    </a>
                 </div>
-            </nav>
-        </div>
-
-    
-
-        <div class="main">
-            {% block contenido %} {% endblock contenido %}
-        </div>
-
-        <div class="footer">
-            <div class="col-md" style="background-color: var(--colorprin); color: white;">
-                <div class="col-md pt-3">
-                    <span>Centro Agropecuario Regional Cauca</span>
+                <div class="col-md-1 col-sm menu_prin" style="display:flex; justify-content: end;">
+                    <button class="navbar-toggler m-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
-                <div class="col-md pb-3">
-                    <span>Proyecto Avicola 2023 Vr 3<span>
+                <div class="col-md-10 collapse navbar-collapse text-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'gallinas' %}">Gallinas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Registro diario</a>
+                        </li>
+                    </ul>
                 </div>
+                <div class="col-md col-sm justify-content-end text-center perfil" style="display: grid;">
+                    <a href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if not user.imagen == '' %}
+                        <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
+                            <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                        </div>
+                        {% else %}
+                        <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
+                        {% endif %}
+                    </a>
+                    <a href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user %}
+                            <span>{{user.nombre}}</span>
+                        {% else %}
+                            <span>Perfil</span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="menu" onclick="abrir_modal_editar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a></li>
+                        <li><a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="menu" href="{% url 'logout' %}">Cerrar sesion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+    <div class="main">
+        {% block contenido %} {% endblock contenido %}
+    </div>
+
+    <div class="footer">
+        <div class="col-md" style="background-color: var(--colorprin); color: white;">
+            <div class="col-md pt-3">
+                <span>Centro Agropecuario Regional Cauca</span>
+            </div>
+            <div class="col-md pb-3">
+                <span>Proyecto Avicola 2023 Vr 3<span>
             </div>
         </div>
     </div>
+</div>
 
     <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
     </div>
 
-  <!-- Bootstrap JavaScript Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-  </script>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-  </script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  {% load static %}
-  <script src="{% static 'Js/modal_editar.js' %}"></script>
-  <script src="{% static 'Js/formUsuario.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    {% load static %}
+    <script src="{% static 'Js/modal_editar.js' %}"></script>
+    <script src="{% static 'Js/formUsuario.js' %}"></script>
 </body>
 
 </html>

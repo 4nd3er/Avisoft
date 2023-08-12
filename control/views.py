@@ -323,7 +323,24 @@ class Galponess(View):
     template_name = 'galpones/galpones.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        busqueda = self.request.GET.get("buscar")
+
+        if busqueda:
+            query = self.model.objects.filter(
+                Q(nombre_galpon__icontains = busqueda) |
+                Q(area__icontains = busqueda) |
+                Q(capac_bebed__icontains = busqueda) |
+                Q(cant_bebed__icontains = busqueda) |
+                Q(capac_comed__icontains = busqueda) |
+                Q(cant_comed__icontains = busqueda) |
+                Q(capac_gall__icontains = busqueda) |
+                Q(cant_gall__icontains = busqueda) |
+                Q(capac_nidales__icontains = busqueda) |
+                Q(cant_nidales__icontains = busqueda)
+                ).distinct()
+        else:
+            query = 0
+        return query
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -463,7 +480,19 @@ class Mortalidadd(View):
     template_name = 'mortalidad_descarte/mortalidad_descarte.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        busqueda = self.request.GET.get("buscar")
+
+        if busqueda:
+            query = self.model.objects.filter(
+                Q(id_galpon__nombre_galpon__icontains = busqueda) |
+                Q(cant_muertas__icontains = busqueda) |
+                Q(cant_descarte__icontains = busqueda) |
+                Q(id_tipo_descarte__tipo__icontains = busqueda) |
+                Q(saldo__icontains = busqueda)
+                ).distinct()
+        else:
+            query = 0
+        return query
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -506,7 +535,16 @@ class ProduccionDiariaa(View):
     template_name = 'prod_diaria/prod_diaria.html'
 
     def get_queryset(self):
-        query = self.model.objects.all()
+        busqueda = self.request.GET.get("buscar")
+
+        if busqueda:
+            query = self.model.objects.filter(
+                # Q(id_detalle_jornada__id_galpon__nombre_galpon__icontains = busqueda) |
+                Q(id_tipo_huevo__tipos_huevos__icontains = busqueda) |
+                Q(id_usuario__nombre__icontains = busqueda)
+                ).distinct()
+        else:
+            query = 0
         return query
 
     def get_context_data(self, **kwargs):
@@ -734,7 +772,7 @@ class Usuarioss(View):
         busqueda = self.request.GET.get("buscar")
 
         if busqueda:
-            usuarios = self.model.objects.filter(
+            query = self.model.objects.filter(
                 Q(nombre__icontains = busqueda) |
                 Q(apellido__icontains = busqueda) |
                 Q(id_tipo_doc__tipo_doc__icontains = busqueda) |
@@ -745,8 +783,8 @@ class Usuarioss(View):
                 Q(email__icontains = busqueda)
                 ).distinct()
         else:
-            usuarios = self.model.objects.all()
-        return usuarios
+            query = 0
+        return query
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -754,7 +792,6 @@ class Usuarioss(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
             return render(request, self.template_name, self.get_context_data())

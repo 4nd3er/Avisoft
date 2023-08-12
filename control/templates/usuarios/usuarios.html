@@ -17,18 +17,7 @@
     <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
   
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
-            <form method="GET">
-                <div class="row text-center" style="margin: 2rem 0; align-items: center;">
-                    <div class="col-md col-sm">
-                        <input class="form-control" type="text" name="buscar" placeholder="Digite para buscar" value="{{ request.GET.buscar }}" />
-                    </div>
-                    <div class="col-md-3 col-sm-3">
-                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">
-                            BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
+            {% include 'search.html' %}
         </div>
 
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
@@ -45,23 +34,23 @@
     <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
         <div class="table-responsive">
             <table class="table table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Tipo de documento</th>
+                        <th scope="col">Documento</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Ficha</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Registro</th>
+                        <th scope="col">Conexion</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
                 {% if usuarios %}
-                    <thead>
-                        <tr class="text-center">
-                            <th scope="col">Imagen</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Tipo de documento</th>
-                            <th scope="col">Documento</th>
-                            <th scope="col">Celular</th>
-                            <th scope="col">Correo</th>
-                            <th scope="col">Ficha</th>
-                            <th scope="col">Rol</th>
-                            <th scope="col">Registro</th>
-                            <th scope="col">Conexion</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         {% for dato in usuarios %}
                             <tr class="text-center">
@@ -94,7 +83,7 @@
                     </tbody>
                 {% else %}
                     <tbody class="text-center mx-auto">
-                        <h1>No hay datos registrados</h1>
+                        
                     </tbody>
                 {% endif %}
             </table>

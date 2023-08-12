@@ -1,0 +1,14 @@
+{% block searchInput %}
+    <form method="GET">
+        <div class="row text-center" style="margin: 2rem 0; align-items: center;">
+            <div class="col-md col-sm">
+                <input class="form-control" type="text" name="buscar" placeholder="Digite para buscar" value="{{ request.GET.buscar }}" />
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">
+                    BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock searchInput %}

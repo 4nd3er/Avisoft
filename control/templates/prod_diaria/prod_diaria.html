@@ -13,24 +13,7 @@
 
     <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
-            <form>
-                <div class="row text-center" style="margin: 2rem 0; align-items: center;">
-                    <div class="col-md col-sm">
-                        <Select class="form-selected p-2" style="border-radius: .5rem;">
-                            <option selected value="1">Seleccione el galpón</option>
-                            <option value="1">Galpón 1</option>
-                            <option value="2">Galpón 2</option>
-                            <option value="3">Galpón 3</option>
-                            <option value="4">Galpón 4</option>
-                        </Select>
-                    </div>
-                    <div class="col-md col-sm">
-                        <a class="btn btn-outline-secondary my-3" style="border: 2px solid" href="">
-                            BUSCAR <i class="fa-solid fa-magnifying-glass"></i>
-                        </a>
-                    </div>
-                </div>
-            </form>
+            {% include 'search.html' %}
         </div>
 
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
@@ -47,7 +30,6 @@
     <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
         <div class="table-responsive">
             <table class="table text-center">
-                {% if produccion_diaria %}
                 <thead>
                     <tr>
                         <th scope="col">Galpon</th>
@@ -61,31 +43,30 @@
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for dato in produccion_diaria %}
-                        <tr>
-                            <td>{{ dato.id_detalle_jornada.id_galpon }}</td>
-                            <td>{{ dato.id_detalle_jornada.id_jornada }}</td>
-                            <td>{{ dato.id_tipo_huevo }}</td>
-                            <td>{{ dato.cantidad }}</td>
-                            <td>{{ dato.id_detalle_jornada.rotos }}</td>
-                            <td>{{ dato.id_detalle_jornada.descarte }}</td>
-                            <td>{{ dato.id_usuario.nombre }}</td>
-                            <td>{{ dato.fecha }}</td>
-                            <td colspan="2">
-                                <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_prod_diaria' dato.id %}')" role="button">Editar</button>
-                                {% if user.is_staff %}
-                                    |
-                                    <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimProdDiaria' dato.id %}')" role="button">Eliminar</button>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
+                {% if produccion_diaria %}
+                    <tbody>
+                        {% for dato in produccion_diaria %}
+                            <tr>
+                                <td>{{ dato.id_detalle_jornada.id_galpon }}</td>
+                                <td>{{ dato.id_detalle_jornada.id_jornada }}</td>
+                                <td>{{ dato.id_tipo_huevo }}</td>
+                                <td>{{ dato.cantidad }}</td>
+                                <td>{{ dato.id_detalle_jornada.rotos }}</td>
+                                <td>{{ dato.id_detalle_jornada.descarte }}</td>
+                                <td>{{ dato.id_usuario.nombre }}</td>
+                                <td>{{ dato.fecha }}</td>
+                                <td colspan="2">
+                                    <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_prod_diaria' dato.id %}')" role="button">Editar</button>
+                                    {% if user.is_staff %}
+                                        |
+                                        <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimProdDiaria' dato.id %}')" role="button">Eliminar</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 {% else %}
-                <tbody class="text-center mx-auto">
-                    <h1>No hay datos registrados</h1>
-                </tbody>
+                    <tbody class="text-center mx-auto"></tbody>
                 {% endif %}
             </table>
         </div>
