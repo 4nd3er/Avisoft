@@ -46,7 +46,7 @@
             placeholder="{{ campo.label }}"
             value="{{ campo.value | default:''}}"
             required
-            {% if campo.name != "nombre_galpon" %}min="1" max="900" step="1" onkeypress='onlyNumber();'{% endif %}>
+            {% if campo.name != "nombre_galpon" %}min="1" max="900" step="1" onkeypress="return onlyNumber(event);"{% endif %}>
         </div>
         {% endif %}
         {%endif%}
