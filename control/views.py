@@ -342,7 +342,7 @@ class Galponess(View):
                 Q(cant_nidales__icontains = busqueda)
                 ).distinct()
         else:
-            query = 0
+            query = self.model.objects.all()
         return query
 
     def get_context_data(self, **kwargs):
@@ -494,7 +494,7 @@ class Mortalidadd(View):
                 Q(saldo__icontains = busqueda)
                 ).distinct()
         else:
-            query = 0
+            query = self.model.objects.all()
         return query
 
     def get_context_data(self, **kwargs):

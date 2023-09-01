@@ -1,11 +1,11 @@
 function calcuateArea() {
-ancho = document.getElementById('ancho').value;
-largo = document.getElementById('largo').value;
-area = document.getElementById('area');
-capac_gall = document.getElementById('capac_gall');
-capac_bebed = document.getElementById('capac_bebed');
-capac_nidales = document.getElementById('capac_nidales');
-capac_comed = document.getElementById('capac_comed');
+    let ancho = document.getElementById('ancho').value || 0;
+    let largo = document.getElementById('largo').value || 0;
+    let area = document.getElementById('area');
+    let capac_gall = document.getElementById('capac_gall');
+    let capac_bebed = document.getElementById('capac_bebed');
+    let capac_nidales = document.getElementById('capac_nidales');
+    let capac_comed = document.getElementById('capac_comed');
     resultado = ancho * largo;
     area.value = resultado;
     resultado2 = resultado * 6;
@@ -15,6 +15,8 @@ capac_comed = document.getElementById('capac_comed');
     resultado4 = resultado2 / 5;
     capac_nidales.value = Math.round(resultado4);
     capac_comed.value = Math.round(resultado3);
+}; // ? Funcion para calcular el area y demas cosas en vivo
 
-    
-};
+const onlyNumber = () => {
+    return event.charCode >= 48 && event.charCode <= 57;
+}; // ? Funcion que solo permite numeros en el input

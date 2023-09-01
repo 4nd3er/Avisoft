@@ -262,6 +262,7 @@ class Galpones(models.Model):
     class Meta:
         managed = False
         db_table = 'galpones'
+        ordering = [('-id')]
 
 
 class Jornada(models.Model):
