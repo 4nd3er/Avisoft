@@ -124,4 +124,9 @@ body {
         left: 0;
         right: 0;
     }
+
+    .menu_prin {
+        position: absolute;
+        right: 1rem;
+    }
 }
