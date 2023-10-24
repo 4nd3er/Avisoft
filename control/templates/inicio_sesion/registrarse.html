@@ -23,8 +23,8 @@
             <label for="" class="form-label">{{ user.label }}</label>
             {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
               {% if user.name == 'id_rol' %}
-                <input type="hidden" name="{{user.name}}" value="2">
-                <input type="Text" class="form-control" value="Aprendiz" disabled>
+                <input type="hidden" name="{{user.name}}" value="2" />
+                <input type="Text" class="form-control" value="Aprendiz" disabled />
                 <div class="col-6 help-text">{{ user.errors }}</div>
               {% else %}
                 <select class="form-select" name="{{ user.name }}" required>
@@ -46,7 +46,7 @@
                 accept=".png, .jpg, .jpeg"
               {% else %}
                 required
-              {% endif %}/>
+              {% endif %} />
               <div class="col-6 help-text">{{ user.errors }}</div>
               {% endif %}
           </div>
