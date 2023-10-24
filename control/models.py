@@ -97,21 +97,6 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
-class DetalleJornada(models.Model):
-    id = models.AutoField(primary_key = True)
-    id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
-    id_jornada = models.ForeignKey('Jornada', on_delete = models.CASCADE, db_column = 'id_jornada')
-    rotos = models.IntegerField()
-    descarte = models.IntegerField()
-
-    def __str__(self):
-        return f'{self.id_galpon} | jornada: {self.id_jornada} | rotos: {self.rotos} | descarte: {self.descarte}'
-
-    class Meta:
-        managed = False
-        db_table = 'detalle_jornada'
-
-
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -305,10 +290,13 @@ class MortalidadDescarte(models.Model):
 
 
 class ProduccionDiaria(models.Model):
-    id_detalle_jornada = models.ForeignKey(DetalleJornada, on_delete = models.CASCADE, db_column = 'id_detalle_jornada')
-    id_tipo_huevo = models.ForeignKey('TiposHuevos', on_delete = models.CASCADE, db_column = 'id_tipo_huevo')
+    id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
+    id_jornada = models.ForeignKey(Jornada, models.DO_NOTHING, db_column='id_jornada')
+    id_tipo_huevo = models.ForeignKey('TiposHuevos', models.DO_NOTHING, db_column='id_tipo_huevo')
     cantidad = models.IntegerField()
-    id_usuario = models.ForeignKey('control.Usuario', on_delete = models.CASCADE, db_column = 'id_usuario')
+    rotos = models.IntegerField()
+    descarte = models.IntegerField()
+    id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario', blank=True, null=True)
     fecha = models.DateField()
 
     def __str__(self):

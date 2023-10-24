@@ -72,15 +72,6 @@ class AlimentacionForm(forms.ModelForm):
             'bultos_total' : 'Bulto(s) Total(es)'
         }
 
-class DetalleJornadaForm(forms.ModelForm):
-    class Meta:
-        model = DetalleJornada
-        fields = '__all__'
-        labels = {
-            'id_galpon': 'Galpon',
-            'id_jornada': 'Jornada',
-        }
-
 class JornadaForm(forms.ModelForm):
     class Meta:
         model = Jornada
@@ -101,7 +92,7 @@ class ProduccionDiariaForm(forms.ModelForm):
     class Meta:
         model = ProduccionDiaria
         fields = '__all__'
-        #para que no se muestre en el formulario y se establezca automatica en la vista
+        # Para que no se muestre en el formulario y se establezca automatica en la vista
         exclude = ['id_usuario']  # Excluir el campo id_usuario del formulario
         labels = {
             'id_detalle_jornada': 'Detalle de Jornada',
@@ -109,6 +100,8 @@ class ProduccionDiariaForm(forms.ModelForm):
             'cantidad': 'Cantidad',
             'fecha': 'fecha',
             'id_usuario': 'Usuario',
+            'id_galpon': 'Galpon',
+            'id_jornada': 'Jornada',
         }
 
 class RolForm(forms.ModelForm):

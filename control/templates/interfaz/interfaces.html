@@ -111,16 +111,6 @@
                     </a>
                 </div>
                 <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'detalle_jornada' %}">
-                        <div class="col">
-                            <h5>Detalle de la jornada</h5>
-                        </div>
-                        <div class="col">
-                            <img src="{% static 'images/modulos/detalle_jornada.png' %}" alt="Imagen Galpones">
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
                     <a href="{% url 'estados' %}">
                         <div class="col">
                             <h5>Estados</h5>
@@ -147,6 +137,16 @@
                         </div>
                         <div class="col">
                             <img src="{% static 'images/modulos/jornada.png' %}" alt="Imagen Huevos">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
+                    <a href="{% url 'lineas' %}">
+                        <div class="col">
+                            <h5>Linea</h5>
+                        </div>
+                        <div class="col">
+                            <img src="{% static 'images/modulos/linea.png' %}" alt="Imagen Alimentación">
                         </div>
                     </a>
                 </div>
@@ -179,18 +179,8 @@
                             <h5>Produccion diaria</h5>
                         </div>
                         <div class="col">
-                            <img src="{% static 'images/modulos/img_datos.png' %}"
+                            <img src="{% static 'images/modulos/img_huevos.png' %}"
                             alt="Imagen Datos Generales">
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'lineas' %}">
-                        <div class="col">
-                            <h5>Linea</h5>
-                        </div>
-                        <div class="col">
-                            <img src="{% static 'images/modulos/linea.png' %}" alt="Imagen Alimentación">
                         </div>
                     </a>
                 </div>

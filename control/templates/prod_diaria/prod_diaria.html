@@ -47,12 +47,12 @@
                     <tbody>
                         {% for dato in produccion_diaria %}
                             <tr>
-                                <td>{{ dato.id_detalle_jornada.id_galpon }}</td>
-                                <td>{{ dato.id_detalle_jornada.id_jornada }}</td>
+                                <td>{{ dato.id_galpon }}</td>
+                                <td>{{ dato.id_jornada }}</td>
                                 <td>{{ dato.id_tipo_huevo }}</td>
                                 <td>{{ dato.cantidad }}</td>
-                                <td>{{ dato.id_detalle_jornada.rotos }}</td>
-                                <td>{{ dato.id_detalle_jornada.descarte }}</td>
+                                <td>{{ dato.rotos }}</td>
+                                <td>{{ dato.descarte }}</td>
                                 <td>{{ dato.id_usuario.nombre }}</td>
                                 <td>{{ dato.fecha }}</td>
                                 <td colspan="2">

@@ -28,15 +28,6 @@ urlpatterns = [
     # ! Modulo de alimentacion
 
 
-    # ! Modulo de detalle de jornada
-    path('detalle_jornada/', login_required(views.DetalleJornadaa.as_view(), login_url = 'inicio'), name="detalle_jornada"),
-    path('crear_detalle/', login_required(views.crearDetalle.as_view(), login_url = 'inicio'), name="crear_detalle"),
-    path('editar_detalle/<int:pk>', login_required(views.editarDetalle.as_view(), login_url = 'inicio'), name="editar_detalle"),
-    path('confirmElimDetalle/<int:pk>', login_required(views.confirmarEliminarDetalle.as_view(), login_url = 'inicio'), name="confirmElimDetalle"),
-    path('eliminarDetalle/<int:id>', login_required(views.eliminarDetalle), name="eliminarDetalle"),
-    # ! Modulo de detalle de jornada
-
-
     # ! Modulo de estados
     path('estados/', login_required(views.Estadoss.as_view(), login_url = 'inicio'), name="estados"),
     path('crear_estado/', login_required(views.crearEstado.as_view(), login_url = 'inicio'), name="crear_estado"),

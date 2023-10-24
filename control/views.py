@@ -48,7 +48,7 @@ def registrarse(request):
         registro = UsuarioForm(request.POST, request.FILES)
         
         if registro.is_valid():
-            registro.is_active = 1
+            registro.is_active = 1 # TODO comprobar si sirve
             registro.save()
             messages.success(request,'Te has registrado exitosamente')
             return redirect('inicio')
@@ -136,49 +136,6 @@ def eliminarAlimentacion(request, id):
     return redirect('alimentacion')
 # ! Modulo de alimentacion
 
-
-# ! Modulo de detalle de jornada
-class DetalleJornadaa(View):
-    model = DetalleJornada
-    template_name = 'detalle_jornada/detalle_jornada.html'
-
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get_context_data(self, **kwargs):
-        contexto = {}
-        contexto["detalle_jornada"] = self.get_queryset()
-        return contexto
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
-
-
-class crearDetalle(CreateView):
-    model = DetalleJornada
-    template_name = 'detalle_jornada/crear.html'
-    form_class = DetalleJornadaForm
-    success_url = reverse_lazy('detalle_jornada')
-
-class editarDetalle(UpdateView):
-    model = DetalleJornada
-    template_name = 'detalle_jornada/editar.html'
-    form_class = DetalleJornadaForm
-    success_url = reverse_lazy('detalle_jornada')
-
-class confirmarEliminarDetalle(DeleteView):
-    model = DetalleJornada
-    template_name = 'detalle_jornada/detalle_jornada_confirm_delete.html'
-    success_url = reverse_lazy('detalle_jornada')
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-def eliminarDetalle(request, id):
-    eliminar = DetalleJornada.objects.get(id = id)
-    eliminar.delete()
-    return redirect('detalle_jornada')
-# ! Modulo de detalle de jornada
 
 # ! Modulo de estados
 class Estadoss(View):
@@ -589,22 +546,6 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
     #     contexto['form'] = self.form_class
     #     contexto['tipos_huevos'] = TiposHuevos.objects.values_list('id', 'tipos_huevos')
     #     return contexto
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'form': self.form_class, 'form2' : DetalleJornadaForm})
-
-    def post(self, request, *args, **kwargs):
-        form1 = self.form_class(request.POST)
-        form2 = DetalleJornadaForm(request.POST)
-        if form1.is_valid() and form2.is_valid():
-            usuario = request.POST.get('id_usuario')
-            usuario = self.form_valid(form1)
-            form1.save()
-            form2.save()
-            return redirect('produccion_diaria')
-        else:
-            return render(request, self.template_name, {'form': self.form_class, 'form2' : DetalleJornadaForm})
-
 
 class editarProdDiaria(UpdateView):
     model = ProduccionDiaria
