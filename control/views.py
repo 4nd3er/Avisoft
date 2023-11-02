@@ -10,14 +10,10 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from .models import Galpones
 
 # Create your views here.
 def inicio(request):
     if request.user.is_authenticated:
-        # if request.user.is_superuser:
-        #     return redirect('interfaz_admin')
-        # else:
         return redirect('interfaz')
     else:
         if request.method == 'POST':
@@ -26,14 +22,18 @@ def inicio(request):
 
             user = authenticate(request, documento = documento, password = password)
 
+            if documento == "" and password == "":
+                messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
+                return render(request, 'inicio_sesion/inicio.html')
+
+            userFilter = Usuario.objects.filter(documento=documento).values_list('is_active', flat=True)
             if user is not None:
                 login(request, user)
-                # if request.user.is_superuser:
-                # return redirect('interfaz_admin')
-                # else:
                 return redirect('interfaz')
-            elif documento == "" and password == "":
-                messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
+            elif not userFilter:
+                messages.error(request, 'Usuario no registrado en la pagina web, registrate para iniciar sesion')
+            elif not userFilter[0]:
+                messages.error(request, 'Usuario bloqueado, comunicate con el administrador')
             else:
                 messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
     return render(request, 'inicio_sesion/inicio.html')

@@ -25,14 +25,22 @@
               {% if user.name == 'id_rol' %}
                 <input type="hidden" name="{{user.name}}" value="2" />
                 <input type="Text" class="form-control" value="Aprendiz" disabled />
-                <div class="col-6 help-text">{{ user.errors }}</div>
+                {% if user.errors %}
+                  <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
+                    {{ user.errors }}
+                  </div>
+                {% endif %}
               {% else %}
                 <select class="form-select" name="{{ user.name }}" required>
                   {% for select in user %}
                     {{ select }}
                   {% endfor %}
                 </select>
-                <div class="col-6 help-text">{{ user.errors }}</div>
+                {% if user.errors %}
+                  <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
+                    {{ user.errors }}
+                  </div>
+                {% endif %}
               {% endif %}
             {% else %}
               <input
@@ -47,7 +55,11 @@
               {% else %}
                 required
               {% endif %} />
-              <div class="col-6 help-text">{{ user.errors }}</div>
+              {% if user.errors %}
+                <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
+                  {{ user.errors }}
+                </div>
+              {% endif %}
               {% endif %}
           </div>
           {% endif %}
