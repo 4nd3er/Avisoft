@@ -82,6 +82,7 @@ form{
     border: 2px solid var(--colorsec3);
     border-radius: .5rem;
     transition: .3s ease-in-out;
+    user-select: none;
 }
 
 .modulos_admin {
