@@ -8,7 +8,7 @@ from django.views.generic import View, TemplateView, ListView, UpdateView, Creat
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import HttpResponse,JsonResponse
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.
@@ -726,7 +726,6 @@ class Usuarioss(View):
 
     def get_queryset(self):
         busqueda = self.request.GET.get("buscar")
-
         if busqueda:
             query = self.model.objects.filter(
                 Q(nombre__icontains = busqueda) |

@@ -19,7 +19,7 @@
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0; align-items: center;">
                 <div class="col-md col-sm">
-                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrir_modal_crear('{% url 'crear_linea' %}')">
+                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_linea' %}')">
                         REGISTRAR <i class="fa-solid fa-file-circle-plus"></i>
                     </button>
                 </div>
@@ -42,9 +42,9 @@
                         <tr>
                             <td>{{ dato.nombre }}</td>
                             <td>
-                                <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_linea' dato.id %}')" role="button">Editar</button>
+                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_linea' dato.id %}')" role="button">Editar</button>
                                 |
-                                <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimLinea' dato.id %}')" role="button">Eliminar</button>
+                                <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimLinea' dato.id %}')" role="button">Eliminar</button>
                             </td>
                         </tr>
                         {% endfor %} 
