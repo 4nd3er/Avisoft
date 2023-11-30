@@ -1,14 +1,17 @@
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form action="{% url 'editar_usuario' object.id %}" enctype="multipart/form-data" method="post">
-      <div class="modal-header">
-        {% load static %}
-        <h3 class="modal-title">Editar Usuario</h3>
-        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+    <div class="modal-header">
+      {% load static %}
+      <h3 class="modal-title">Editar Usuario {{object.nombre}}</h3>
+      <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+    </div>
+    <form id="formEdicion" action="{% url 'editar_usuario' object.id %}" enctype="multipart/form-data" method="POST">
+      <div id="erroresEditar">
+					
       </div>
       {% include 'usuarios/form.html' %}
       <div class="modal-footer text-center">
-        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
         <a role="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</a>
       </div>
     </form>

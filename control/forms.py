@@ -131,7 +131,7 @@ class UsuarioForm(UserCreationForm):
             'is_active': forms.CheckboxInput(),
         }
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
-    id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
+    id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.filter(estado_ficha = True), label = 'Ficha')
     id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
     password2 = forms.CharField(label = 'Contraseña de confirmacion', widget = forms.PasswordInput())\
 
@@ -157,7 +157,7 @@ class UsuarioForm2(forms.ModelForm):
             'is_active': forms.CheckboxInput(),
         }
     id_tipo_doc = forms.ModelChoiceField(queryset = TipoDoc.objects.all(), label = 'Tipo de documento')
-    id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.all(), label = 'Ficha')
+    id_ficha = forms.ModelChoiceField(queryset = Ficha.objects.filter(estado_ficha = True), label = 'Ficha')
     id_rol = forms.ModelChoiceField(queryset = Rol.objects.all(), label = 'Rol')
 
 class contrasenaForm(PasswordResetForm):

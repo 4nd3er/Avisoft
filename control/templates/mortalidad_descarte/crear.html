@@ -1,4 +1,3 @@
-
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <form action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="post">
@@ -9,10 +8,10 @@
             </div>
             
             <div class="modal-body">
-                <div class="galpones" style="display: none;">
+                <div class="galpones">
                     <input type="hidden" value="" id="idGalpon">
                     {%for galpon in data%}
-                    <input type="hidden" class="galpon" data-id="{{galpon.id}}" value="{{galpon.cant_gall}}">
+                    <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
                     {% endfor %}
                 </div>
 
@@ -70,9 +69,9 @@
 
                 </script>
             </div>
-            <div class="modal-footer text-center">
+            <div class="modal-footer hidden-center">
                 <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
-                <a role="button" class="btn btn-outline-danger" onclick="cerrarModal();">Cancelar</a>
+                <a role="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</a>
             </div>
         </form>
     </div>

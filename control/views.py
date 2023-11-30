@@ -1,15 +1,20 @@
+import json
 from django.shortcuts import render, HttpResponse, redirect
 from django.shortcuts import get_object_or_404
 from .models import *
 from .forms import *
+from django.core.serializers import serialize
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 # Create your views here.
 def inicio(request):
@@ -457,7 +462,7 @@ class Mortalidadd(View):
     def get_context_data(self, **kwargs):
         contexto = {}
         contexto["mortalidad_descarte"] = self.get_queryset()
-        contexto["data"] = Galpones.objects.all()
+        contexto["data"] = Galpones.objects.all().values_list("id", "cant_gall")
         return contexto
     
     def get(self, request, *args, **kwargs):
@@ -474,7 +479,7 @@ class crearMortalidad(CreateView):
         context = super().get_context_data(**kwargs)
 
         # Realizar la consulta a la base de datos
-        consulta_resultados = Galpones.objects.all()
+        consulta_resultados = Galpones.objects.all().values_list("id", "cant_gall")
 
         context['data'] = consulta_resultados
 
@@ -720,7 +725,7 @@ def eliminarTipoHuevo(request, id):
 
 
 # ! Modulo de usuario
-class Usuarioss(View):
+class Usuarioss(ListView):
     model = Usuario
     template_name = 'usuarios/usuarios.html'
 
@@ -738,7 +743,7 @@ class Usuarioss(View):
                 Q(email__icontains = busqueda)
                 ).distinct()
         else:
-            query = 0
+            query = self.model.objects.all()
         return query
 
     def get_context_data(self, **kwargs):
@@ -749,7 +754,10 @@ class Usuarioss(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name)
         else:
             return redirect('interfaz')
 
@@ -759,6 +767,25 @@ class crearUsuario(CreateView):
     form_class = UsuarioForm
     success_url = reverse_lazy('usuarios')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('usuarios')
+
 class EditarUsuario(UpdateView):
     model = Usuario
     template_name = 'usuarios/editar.html'
@@ -767,6 +794,26 @@ class EditarUsuario(UpdateView):
         success_url = reverse_lazy('usuarios')
     else:
         success_url = reverse_lazy('interfaz')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('usuarios')
+
 
 class confirmarEliminarUsuario(DeleteView):
     model = Usuario

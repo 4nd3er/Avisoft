@@ -159,7 +159,7 @@ class Ficha(models.Model):
     fecha_regis = models.DateField(auto_now_add = True)
     num_ficha = models.CharField(max_length = 50)
     titulacion = models.CharField(max_length = 50)
-    estado_ficha = models.ForeignKey(Estados, on_delete = models.CASCADE, db_column = 'estado_ficha')
+    estado_ficha = models.IntegerField()
 
     def __str__(self):
         return f'{self.num_ficha}: {self.titulacion}'

@@ -48,7 +48,11 @@
                     <tr>
                         <td>{{dato.titulacion}}</td>
                         <td>{{dato.num_ficha}}</td>
-                        <td>{{dato.estado_ficha.descrip}}</td>
+                        {% if dato.estado_ficha == 1 %}
+                            <td>Activo</td>
+                        {% else %}
+                            <td>Inactivo</td>
+                        {% endif %}
                         <td>{{dato.fecha_regis}}</td>
                         <td>
                             <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_ficha' dato.id_ficha %}')" role="button">Editar</button>
@@ -82,4 +86,5 @@
 
     </div>
 
+    <script src="{% static 'Js/formFicha.js' %}"></script>
 {% endblock contenido %}
