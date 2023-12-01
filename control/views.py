@@ -532,7 +532,10 @@ class ProduccionDiariaa(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        if is_ajax(request=request):
+            return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+        else:
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
 
 
 class crearProdDiaria(LoginRequiredMixin, CreateView):
@@ -547,6 +550,24 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
         form.instance.id_usuario = self.request.user  # Asignar el usuario actual al campo id_usuario
         return super().form_valid(form)
     
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('usuarios')
     
     # def get_context_data(self, **kwargs):
     #     contexto = {}
@@ -560,6 +581,24 @@ class editarProdDiaria(UpdateView):
     form_class = ProduccionDiariaForm
     success_url = reverse_lazy('produccion_diaria')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('usuarios')
 
     # def get_context_data(self, **kwargs):
     #     contexto = {}

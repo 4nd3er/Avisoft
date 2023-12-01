@@ -8,7 +8,7 @@
     <form action="{% url 'editar_prod_diaria' object.id %}" enctype="multipart/form-data" method="post">
       {% include "prod_diaria/form.html" %}
       <div class="modal-footer">
-        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
+        <input class="btn btn-outline-success" type="button" value="Enviar informacion">
         <a role="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</a>
       </div>
     </form>

@@ -10,7 +10,9 @@
           {{ select }}
         {% endfor %}
       </select>
-      <div class="col-6 help-text"> {{ prod.errors }} </div>
+      <div id="errores{{prod.name}}">
+
+      </div>
     </div>
       {% else %}
         <div class="col-6 mb-3 order-last">
@@ -25,7 +27,9 @@
           aria-describedby="helpId"
           placeholder="{{ prod.label }}"
           >
-          <div class="col-6 help-text"> {{ prod.errors }} </div>
+          <div id="errores{{prod.name}}">
+            
+          </div>
         </div>
       {% endif %}
     {% endfor %}

@@ -53,6 +53,28 @@ const registrar = () => {
     })
 };
 
+const registrarProdDiaria = () => {
+    $.ajax({
+        data: $('#formCreacionProdDiaria').serialize(),
+        url: $('#formCreacionProdDiaria').attr('action'),
+        type: $('#formCreacionProdDiaria').attr('method'),
+        success: function (response) {
+            notificacionSuccess(response.mensaje);
+            setTimeout(() => {
+                cerrarModalCrear();
+            }, 1100);
+        },
+        error: function (error) {
+            notificacionError(error.responseJSON.mensaje);
+            mostrarErroresCrear(error);
+            setTimeout(() => {
+                mostrarErroresCrear('');
+            }, 5000);
+        }
+    })
+};
+
+
 const editar = () => {
     $.ajax({
         data: $('#formEdicion').serialize(),
@@ -60,10 +82,6 @@ const editar = () => {
         type: $('#formEdicion').attr('method'),
         success: function (response) {
             notificacionSuccess(response.mensaje);
-            setTimeout(() => {
-                cerrarModalEditar();
-                window.location.reload();
-            }, 1100);
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
@@ -91,7 +109,7 @@ const mostrarErroresEditar = (errores) => {
         error = '<div class="m-2" style="font-size: .75rem; width: auto; color: #dc3545"><strong>' + errores.responseJSON.error[item] + '</strong></div>'
         $(`#errores${item}`).html(error);
     }
-    $('#erroresEditar').append(error);
+    $('#erroresEditar ').append(error);
 }
 
 function notificacionError(mensaje) {
@@ -106,7 +124,7 @@ function notificacionError(mensaje) {
 function notificacionSuccess(mensaje) {
     Swal.fire({
         icon: 'success',
-        title: 'Usuario Registrado!',
+        title: 'Bien hecho!',
         text: mensaje,
         timer: 1000,
         timerProgressBar: true,
