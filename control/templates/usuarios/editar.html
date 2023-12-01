@@ -6,13 +6,13 @@
       <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
     </div>
     <form id="formEdicion" action="{% url 'editar_usuario' object.id %}" enctype="multipart/form-data" method="POST">
-      <div id="erroresEditar">
+      <div id="erroresEditar" class="row">
 					
       </div>
       {% include 'usuarios/form.html' %}
       <div class="modal-footer text-center">
-        <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
-        <a role="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</a>
+        <button type="button" class="btn btn-outline-success" onclick="editar();">Confirmar</button>
+        <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</button>
       </div>
     </form>
   </div>

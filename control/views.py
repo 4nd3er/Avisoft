@@ -516,10 +516,12 @@ class ProduccionDiariaa(View):
 
         if busqueda:
             query = self.model.objects.filter(
-                # Q(id_detalle_jornada__id_galpon__nombre_galpon__icontains = busqueda) |
-                Q(id_tipo_huevo__tipos_huevos__icontains = busqueda) |
-                Q(id_usuario__nombre__icontains = busqueda)
-                ).distinct()
+                Q(id_galpon__nombre_galpon__icontains = busqueda) |
+                Q(id_jornada__jornada__icontains = busqueda) |
+                Q(id_tipo_huevo__tipos_huevos__startswith = busqueda) & ~Q(id_tipo_huevo__tipos_huevos__iendswith = busqueda) |
+                Q(id_usuario__nombre__icontains = busqueda) |
+                Q(fecha__icontains = busqueda)
+                ).distinct().order_by('-id')
         else:
             query = 0
         return query
@@ -741,9 +743,9 @@ class Usuarioss(ListView):
                 Q(id_ficha__num_ficha__icontains = busqueda) |
                 Q(id_rol__tipo_rol__icontains = busqueda) |
                 Q(email__icontains = busqueda)
-                ).distinct()
+                ).distinct().order_by('-id')
         else:
-            query = self.model.objects.all()
+            query = 0
         return query
 
     def get_context_data(self, **kwargs):
@@ -757,7 +759,7 @@ class Usuarioss(ListView):
             if is_ajax(request=request):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
             else:
-                return render(request, self.template_name)
+                return render(request, self.template_name, {'usuarios': self.get_queryset()})
         else:
             return redirect('interfaz')
 

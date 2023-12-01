@@ -30,18 +30,18 @@ const cerrarModalEliminar = () => {
     $('#editar').modal('hide');
 };
 
+// ----------------------------AJAX------------------------------------
 const registrar = () => {
     $.ajax({
         data: $('#formCreacion').serialize(),
         url: $('#formCreacion').attr('action'),
         type: $('#formCreacion').attr('method'),
         success: function (response) {
-            console.log(response);
             notificacionSuccess(response.mensaje);
             setTimeout(() => {
                 cerrarModalCrear();
                 window.location.reload();
-            }, 1600);
+            }, 1100);
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
@@ -59,12 +59,11 @@ const editar = () => {
         url: $('#formEdicion').attr('action'),
         type: $('#formEdicion').attr('method'),
         success: function (response) {
-            console.log(response);
             notificacionSuccess(response.mensaje);
             setTimeout(() => {
                 cerrarModalEditar();
                 window.location.reload();
-            }, 1600);
+            }, 1100);
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
@@ -79,17 +78,18 @@ const editar = () => {
 const mostrarErroresCrear = (errores) => {
     $('#errores').html("");
     let error = "";
-    for (let i in errores.responseJSON.error) {
-        error += '<div class="alert alert-danger"><strong>' + errores.responseJSON.error[i] + '</strong></div>'
+    for (let item in errores.responseJSON.error) {
+        error = '<div class="m-2" style="font-size: .75rem; width: auto; color: #dc3545"><strong>' + errores.responseJSON.error[item] + '</strong></div>'
+        $(`#errores${item}`).html(error);
     }
-    $('#errores').append(error);
 }
 
 const mostrarErroresEditar = (errores) => {
     $('#erroresEditar').html("");
     let error = "";
-    for (let i in errores.responseJSON.error) {
-        error += '<div class="alert alert-danger"><strong>' + errores.responseJSON.error[i] + '</strong></div>'
+    for (let item in errores.responseJSON.error) {
+        error = '<div class="m-2" style="font-size: .75rem; width: auto; color: #dc3545"><strong>' + errores.responseJSON.error[item] + '</strong></div>'
+        $(`#errores${item}`).html(error);
     }
     $('#erroresEditar').append(error);
 }
@@ -108,7 +108,7 @@ function notificacionSuccess(mensaje) {
         icon: 'success',
         title: 'Usuario Registrado!',
         text: mensaje,
-        timer: 1500,
+        timer: 1000,
         timerProgressBar: true,
     })
 }
