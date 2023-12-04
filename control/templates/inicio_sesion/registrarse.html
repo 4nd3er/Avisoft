@@ -25,20 +25,17 @@
               {% if user.name == 'id_rol' %}
                 <input type="hidden" name="{{user.name}}" value="2" />
                 <input type="Text" class="form-control" value="Aprendiz" disabled />
-                {% if user.errors %}
-                  <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
-                    {{ user.errors }}
-                  </div>
-                {% endif %}
               {% else %}
-                <select class="form-select" name="{{ user.name }}" required>
+                <select class="form-select" name="{{ user.name }}">
                   {% for select in user %}
                     {{ select }}
                   {% endfor %}
                 </select>
                 {% if user.errors %}
-                  <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
-                    {{ user.errors }}
+                  <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
+                    {% for error in user.errors %}
+                      {{ error }}
+                    {% endfor %}
                   </div>
                 {% endif %}
               {% endif %}
@@ -52,12 +49,12 @@
               placeholder="{{ user.label }}"
               {% if user.field.widget.input_type == 'file' %}
                 accept=".png, .jpg, .jpeg"
-              {% else %}
-                required
               {% endif %} />
               {% if user.errors %}
-                <div class="col-12 mt-2 help-text alert alert-danger text-center p-0 list-none">
-                  {{ user.errors }}
+                <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
+                  {% for error in user.errors %}
+                    {{ error }}
+                  {% endfor %}
                 </div>
               {% endif %}
               {% endif %}
