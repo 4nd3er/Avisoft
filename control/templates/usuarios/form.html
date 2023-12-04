@@ -26,19 +26,24 @@
                 {% endfor %}
               {% endif %}
             </select>
-            <div class="col-6 help-text">{{ users.errors }}</div>
-        {% else %}
-          <input
-          type="{{ users.field.widget.input_type }}"
-          class="form-control"
-          name="{{ users.name }}"
-          value="{{ users.value | default:''}}"
-          aria-describedby="helpId"
-          placeholder="{{ users.label }}"
-          {% if users.field.widget.input_type == 'file' %}
-            accept=".png, .jpg, .jpeg"
-          {% endif %}/>
-          <div class="col-6 help-text">{{ users.errors }}</div>
+            <div id="errores{{users.name}}">
+
+            </div>
+            {% else %}
+            <input
+              type="{{ users.field.widget.input_type }}"
+              class="form-control"
+              name="{{ users.name }}"
+              value="{{ users.value | default:''}}"
+              aria-describedby="helpId"
+              placeholder="{{ users.label }}"
+              {% if users.field.widget.input_type == 'file' %}
+                accept=".png, .jpg, .jpeg"
+              {% endif %}
+            />
+          <div id="errores{{users.name}}">
+
+          </div>
           {% endif %}
       </div>
       {% endif %}

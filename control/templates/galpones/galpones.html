@@ -22,8 +22,8 @@
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0;">
                 <div class="col-md col-sm">
-                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrir_modal_crear('{% url 'crear_galpon' %}')" role="button">
-                        REGISTRAR <i class="fa-solid fa-file-circle-plus"></i>
+                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_galpon' %}')" role="button">
+                        REGISTRAR <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
             </div>
@@ -69,9 +69,9 @@
                             <td>{{ dato.cant_nidales }}</td>
                             <td>{{ dato.fecha }}</td>
                             <td>
-                                <button class="btn btn-outline-success my-1" onclick="abrir_modal_editar('{% url 'editar_galpon' dato.id %}')" role="button">Editar</button>
+                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_galpon' dato.id %}')" role="button">Editar</button>
                                 {% if user.is_staff %}
-                                <button class="btn btn-outline-danger my-1" onclick="abrir_modal_eliminar('{% url 'confirmElimGalpon' dato.id %}')" role="button">Eliminar</button>
+                                <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimGalpon' dato.id %}')" role="button">Eliminar</button>
                                 {% endif %}
                             </td>
                         </tr>
@@ -86,7 +86,7 @@
         <div class="row container-fluid">
             <div class="col-md col-sm text-end">
                 <a class="btn btn-outline-secondary" style="border: 2px solid" href="">
-                    EXPORTAR <i class="fa-solid fa-download"></i>
+                    EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i>
                 </a>
             </div>
         </div>

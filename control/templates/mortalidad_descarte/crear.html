@@ -1,78 +1,26 @@
-
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-        <form action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="post">
-            <div class="modal-header">
-                {% load static %}
-                <h3 class="modal-title">Crear registro mortalidad y/o descarte</h3>
-                <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
-            </div>
-            
+        <div class="modal-header">
+            {% load static %}
+            <h3 class="modal-title">Crear registro mortalidad y/o descarte</h3>
+            <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+        </div>
+        <form class="formCrear" action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="post">
             <div class="modal-body">
-                <div class="galpones" style="display: none;">
+                <div class="galpones">
                     <input type="hidden" value="" id="idGalpon">
                     {%for galpon in data%}
-                    <input type="hidden" class="galpon" data-id="{{galpon.id}}" value="{{galpon.cant_gall}}">
+                    <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
                     {% endfor %}
                 </div>
-
                 <div class="row">
                     {% include 'mortalidad_descarte/form.html' %}                    
                 </div>
-                <script>
-                    //Galpon actual
-                    const selectGalpon = document.querySelector(".selectGalpon");
-                    //Id galpon seleccionado
-                    const idGalpon = document.getElementById("idGalpon")
-                    //Galpones
-                    const Galpones = document.querySelectorAll(".galpon")
-                    let cantGall = 0;
-
-                    //Cada que cambie de galpon
-                    selectGalpon.addEventListener("change", function(){
-
-                        //Idgalpon es igual al valor del galpon seleccionado
-                        idGalpon.value = selectGalpon.value
-
-                        //Para cada galpon comparar el idgalpon
-                        Galpones.forEach(function (galpon){
-                            const dataId = galpon.getAttribute("data-id"); 
-
-                            //Traer la cant_gall del data-id que coincida con idgalpon
-                            if (dataId == idGalpon.value) {
-                                cantGall = parseFloat(galpon.value) || 0;
-                            }
-                        });
-
-                    });
-
-                    //Calcular saldo
-    
-                    const cantMuertas = document.querySelector(".cant_muertas");
-                    const cantDesc = document.querySelector(".cant_descarte");
-                    const Saldo = document.getElementById("saldo");
-
-                    function actualizarSuma(){
-                        var valor1 = parseFloat(cantMuertas.value) || 0;
-                        var valor2 = parseFloat(cantDesc.value) || 0;
-                        var suma = parseFloat(cantGall) - (valor1 + valor2)
-                        if (valor1 > 0 && valor2 > 0){                          
-                            Saldo.value = suma
-                        }
-                    }
-
-                    //Cada que escriba algo el saldo se actualiza
-                    cantMuertas.addEventListener("input", actualizarSuma);
-                    cantDesc.addEventListener("input", actualizarSuma)
-
-                    //Actualizar saldo
-                    
-
-                </script>
+                <script src="{% static "Js/mortaDescar.js" %}"></script>
             </div>
-            <div class="modal-footer text-center">
-                <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
-                <a role="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</a>
+            <div class="modal-footer hidden-center">
+                <button class="btn btn-outline-success" type="button" onclick="registrar();">Confirmar</button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</button>
             </div>
         </form>
     </div>

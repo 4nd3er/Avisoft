@@ -1,52 +1,36 @@
-<form enctype="multipart/form-data" method="post">
-
-    {% csrf_token %}
-  
-      <div class="row">
-        {% for prod in formulario %}
-            {% if prod.label == 'Detalle de Jornada' or prod.label == 'Usuario' %}
-            <div class="col-6 mb-3">
-              <label for="" class="form-label">{{ prod.label }}</label>
-              <select class="form-select" style="width: 70%" placeholder="{{ prod.label }}" name="{{ prod.name }}" value="{{ prod.value | default:''}}">
-                {% for select in prod %}
-                  {{ select }}
-                {% endfor %}
-              </select>
-              <div class="col-6 help-text"> {{ prod.errors }} </div>
-            </div>
-              {% elif prod.label == 'Tipo de huevo' %}
-              <div class="col-6 mb-3">
-                <label for="" class="form-label">{{ prod.label }}</label>
-                <div class="row">
-                  {% for huevos in tipos_huevos %}
-                    <div class="col mx-auto">
-                      <input class="form-check-input lista" id="checkboxHuevo" type="checkbox" name="{{ formulario.id_tipo_huevo.name }}" value="{{ huevos.0 }}" {% if huevos.0 == formulario.id_tipo_huevo.value %}checked{% endif %}>
-                      {{ huevos.1 }}
-                    </div>
-                  {% endfor %}
-                </div>
-                <div class="col-6 help-text"> {{ prod.errors }} </div>
-              </div>
-              <div class="col-6 mb-3 order-last">
-                    <label for="" class="form-label">{{ formulario.cantidad.label }}</label>
-                    <input
-                    style="width: 80%; display: flex"
-                    type="number"
-                    id="cantidadHuevo"
-                    class="form-control cantidadHuevo"
-                    name="{{ formulario.cantidad.name }}"
-                    value="{{ formulario.cantidad.value }}"
-                    aria-describedby="helpId"
-                    placeholder="{{ formulario.cantidad.label }}"
-                    {% if huevos.0 == formulario.id_tipo_huevo.value or formulario.id_tipo_huevo %}{% else %}disabled{% endif %}>
-                  <div class="col-6 help-text"> {{ prod.errors }} </div>
-                </div>
-            {% endif %}
+<div class="modal-body">
+  {% csrf_token %}
+  <div class="row">
+    {% for prod in form %}
+    {% if prod.label == 'Detalle de Jornada' or prod.label == 'Usuario' or prod.label == 'Tipo de huevo' or prod.label == 'Galpon' or prod.label == 'Jornada' %}
+    <div class="col-6 mb-3">
+      <label class="form-label">{{ prod.label }}</label>
+      <select id="{{ prod.name }}" class="form-select" placeholder="{{ prod.label }}" name="{{ prod.name }}" value="{{ prod.value | default:''}}" {% if prod.name == 'id_jornada' %}onchange="selectJornada();"{% endif %}>
+        {% for select in prod %}
+          {{ select }}
         {% endfor %}
-      </div>
+      </select>
+      <div id="errores{{prod.name}}">
 
-        <div class="text-center">
-          <input name="" id="" class="btn btn-outline-success" type="submit" href="#" role="button" value="Enviar informacion">
-          <a name="" id="" class="btn btn-outline-primary" href="{% url 'prod_diaria' %}" role="button">Cancelar</a>
+      </div>
+    </div>
+      {% else %}
+        <div class="col-6 mb-3 order-last">
+          <label class="form-label">{{ prod.label }}</label>
+          <input
+          style="display: flex"
+          type="{% if prod.name == "fecha" %}Date{% else %}{{ prod.field.widget.input_type }}{% endif %}"
+          id="{{ prod.name }}"
+          class="form-control"
+          name="{{ prod.name }}"
+          value="{{ prod.value | default:'' }}"
+          aria-describedby="helpId"
+          placeholder="{{ prod.label }}"
+          >
+          <div id="errores{{prod.name}}">
+            
+          </div>
         </div>
-</form>
+      {% endif %}
+    {% endfor %}
+</div>

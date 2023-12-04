@@ -3,7 +3,6 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Alimentacion)
-admin.site.register(Estados)
 admin.site.register(Ficha)
 admin.site.register(Gallinas)
 admin.site.register(Galpones)

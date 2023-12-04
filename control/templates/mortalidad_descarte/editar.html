@@ -1,20 +1,27 @@
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-        <form action="{% url 'editar_mortalidad' object.id %}" enctype="multipart/form-data" method="post">
-            <div class="modal-header">
-                {% load static %}
-                <h3 class="modal-title">Editar registro mortalidad y/o descarte</h3>
-                <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
-            </div>
+        <div class="modal-header">
+            {% load static %}
+            <h3 class="modal-title">Editar registro mortalidad y/o descarte</h3>
+            <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+        </div>
+        <form class="formEditar" action="{% url 'editar_mortalidad' object.id %}" enctype="multipart/form-data" method="post">
             <div class="modal-body">
-                <div class="row">
-                    {% include 'mortalidad_descarte/form.html' %}
+                <div class="galpones">
+                    <input type="hidden" value="" id="idGalpon">
+                    {%for galpon in data%}
+                    <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
+                    {% endfor %}
                 </div>
+                <div class="row">
+                    {% include 'mortalidad_descarte/form.html' %}                    
+                </div>
+                <script src="{% static "Js/mortaDescar.js" %}"></script>
             </div>
             <div class="modal-footer text-center">
-            <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
-            <a role="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</a>
+            <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
+            <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</button>
             </div>
         </form>
     </div>
-  </div>
+</div>

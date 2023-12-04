@@ -142,24 +142,12 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Estados(models.Model):
-    estado = models.AutoField(primary_key = True)
-    descrip = models.CharField(max_length = 30)
-
-    def __str__(self):
-        return self.descrip
-
-    class Meta:
-        managed = False
-        db_table = 'estados'
-
-
 class Ficha(models.Model):
     id_ficha = models.AutoField(primary_key = True)
     fecha_regis = models.DateField(auto_now_add = True)
     num_ficha = models.CharField(max_length = 50)
     titulacion = models.CharField(max_length = 50)
-    estado_ficha = models.ForeignKey(Estados, on_delete = models.CASCADE, db_column = 'estado_ficha')
+    estado_ficha = models.IntegerField()
 
     def __str__(self):
         return f'{self.num_ficha}: {self.titulacion}'
@@ -278,7 +266,7 @@ class MortalidadDescarte(models.Model):
     id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
     cant_muertas = models.IntegerField()
     cant_descarte = models.IntegerField()
-    id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte', blank=True, null=True)
+    id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte')
     saldo = models.IntegerField()
 
     def __str__(self):
@@ -297,7 +285,7 @@ class ProduccionDiaria(models.Model):
     rotos = models.IntegerField()
     descarte = models.IntegerField()
     id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario', blank=True, null=True)
-    fecha = models.DateField()
+    fecha = models.DateField(auto_now_add = True)
 
     def __str__(self):
         return f'id_detalle_jornada: {self.id_detalle_jornada} | id_tipo_huevo: {self.id_tipo_huevo} | cantidad: {self.cantidad} | {self.id_usuario}'
@@ -393,8 +381,8 @@ class Usuario(AbstractBaseUser):
     apellido = models.CharField(max_length = 100)
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.CharField('Numero de documento',max_length = 10, unique = True)
-    celular = models.CharField(max_length = 10, null = True, blank = True)
-    email = models.CharField(max_length = 100, null = True, blank = True, db_column = 'correo')
+    celular = models.CharField(max_length = 10)
+    email = models.CharField(max_length = 100, db_column = 'correo')
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)
