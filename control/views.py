@@ -126,7 +126,7 @@ class crearAlimentacion(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -215,7 +215,7 @@ class crearFicha(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -300,7 +300,7 @@ class crearGallinas(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -402,7 +402,7 @@ class crearGalpon(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -491,7 +491,7 @@ class crearJornada(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -580,7 +580,7 @@ class crearLinea(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -688,7 +688,7 @@ class crearMortalidad(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -791,8 +791,9 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
     
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
+                form.instance.id_usuario = self.request.user
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
@@ -816,7 +817,7 @@ class editarProdDiaria(UpdateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'
@@ -880,7 +881,7 @@ class crearRol(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -968,7 +969,7 @@ class crearTipoDoc(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -1057,7 +1058,7 @@ class crearTipoHuevo(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
