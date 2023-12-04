@@ -3,11 +3,15 @@
   <div class="form-group mb-3">
     <label for="num_ficha" class="form-label">Número de ficha:</label>
     <input type="text" name="num_ficha" value="{{ form.num_ficha.value  | default:''}}" maxlength="50" required class="form-control rounded"><br>
-    <div class="col-6 help-text">{{ form.num_ficha.errors }}</div>
+    <div id="errores{{ form.num_ficha.name }}">
+      
+    </div>
     
     <label for="titulacion" class="form-label">Titulación:</label>
     <input type="text" name="titulacion" value="{{ form.titulacion.value  | default:''}}" maxlength="50" required class="form-control rounded"><br>
-    <div class="col-6 help-text">{{ form.titulacion.errors }}</div>
+    <div id="errores{{ form.titulacion.name }}">
+      
+    </div>
     
     <label for="select_estado_ficha" class="form-label">Estado de ficha:</label>
     <select id="select_estado_ficha" name="select_estado_ficha" required class="form-select rounded" onchange="stateFicha();">
@@ -16,6 +20,8 @@
       <option value="Activo" {% if form.estado_ficha.value == 1 %}selected{% endif %}>Activo</option>
     </select>
     <input id="estado_ficha" value="{{ form.estado_ficha.value | default:'' }}" type="hidden" name="estado_ficha" onchange="stateFicha();">
-    <div class="col-6 help-text">{{ form.estado_ficha.errors }}</div>
+    <div id="errores{{ form.estado_ficha.name }}">
+      
+    </div>
   </div>
 </div>

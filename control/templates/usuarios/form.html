@@ -20,7 +20,7 @@
               <input class="form-control" type="input" value="Aprendiz" readonly disabled>
               <input class="form-control" name="id_rol" type="hidden" value="{{form.id_rol.value}}">
             {% else %}
-            <select class="form-select" name="{{ users.name }}" id="{{users.name}}" onchange="AdminUser();" required>
+            <select class="form-select" name="{{ users.name }}" id="{{users.name}}" onchange="AdminUser();">
                 {% for select in users %}
                   {{ select }}
                 {% endfor %}
@@ -31,16 +31,16 @@
             </div>
             {% else %}
             <input
-            type="{{ users.field.widget.input_type }}"
-            class="form-control"
-            name="{{ users.name }}"
-          value="{{ users.value | default:''}}"
-          aria-describedby="helpId"
-          placeholder="{{ users.label }}"
-          {% if users.field.widget.input_type == 'file' %}
-          accept=".png, .jpg, .jpeg"
-          {% endif %}
-          required/>
+              type="{{ users.field.widget.input_type }}"
+              class="form-control"
+              name="{{ users.name }}"
+              value="{{ users.value | default:''}}"
+              aria-describedby="helpId"
+              placeholder="{{ users.label }}"
+              {% if users.field.widget.input_type == 'file' %}
+                accept=".png, .jpg, .jpeg"
+              {% endif %}
+            />
           <div id="errores{{users.name}}">
 
           </div>

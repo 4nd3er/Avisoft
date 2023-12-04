@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form class="formulario" action="{% url 'crear_galpon' %}" enctype="multipart/form-data" method="post">
+    <form class="formCrear" class="formulario" action="{% url 'crear_galpon' %}" enctype="multipart/form-data" method="post">
       <div class="modal-header">
         {% load static %}
         <h3 class="modal-title">Registrar galpon</h3>
@@ -10,8 +10,8 @@
         {% include 'galpones/form.html' %}
       </div>
       <div class="modal-footer text-center">
-        <input class="btn btn-outline-success" type="submit" value="Enviar informacion">
-        <a role="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</a>
+        <button class="btn btn-outline-success" type="button" onclick="registrar();">Confirmar</button>
+        <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</button>
       </div>
     </form>
   </div>

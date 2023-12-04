@@ -28,15 +28,6 @@ urlpatterns = [
     # ! Modulo de alimentacion
 
 
-    # ! Modulo de estados
-    path('estados/', login_required(views.Estadoss.as_view(), login_url = 'inicio'), name="estados"),
-    path('crear_estado/', login_required(views.crearEstado.as_view(), login_url = 'inicio'), name="crear_estado"),
-    path('editar_estado/<int:pk>', login_required(views.editarEstado.as_view(), login_url = 'inicio'), name="editar_estado"),
-    path('confirmElimEstado/<int:pk>', login_required(views.confirmarEliminarEstado.as_view(), login_url = 'inicio'), name="confirmElimEstado"),
-    path('eliminarEstado/<int:estado>', login_required(views.eliminarEstado), name="eliminarEstado"),
-    # ! Modulo de estados
-
-
     # ! Modulo de Fichas
     path('fichas/', login_required(views.Fichass.as_view(), login_url = 'inicio'), name="fichas"),
     path('crear_ficha/', login_required(views.crearFicha.as_view(), login_url = 'inicio'), name="crear_ficha"),

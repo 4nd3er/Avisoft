@@ -8,22 +8,25 @@
                     {{ select }}
                 {% endfor %}
             </select>
-            <div class="col-6 help-text">{{ campo.errors }}</div>
+            <div id="errores{{campo.name}}">
+
+            </div>
         </div>
     {% else %}
     {% if campo.name == 'fecha' %}
-    <div class="col-6">
-        <label class="form-label">{{ campo.label }}</label>
-        <input
-        type="Date"
-        class="form-control"
-        name="{{ campo.name }}" 
-        aria-describedby="" 
-        placeholder="{{ campo.label }}"
-        value="{{campo.value}}">
-        <br/>
-        <div class="col-6 help-text">{{ campo.errors }}</div>
-    </div>
+        <div class="col-6">
+            <label class="form-label">{{ campo.label }}</label>
+            <input
+            type="Date"
+            class="form-control"
+            name="{{ campo.name }}" 
+            aria-describedby="" 
+            placeholder="{{ campo.label }}"
+            value="{{campo.value}}">
+            <div id="errores{{campo.name}}">
+
+            </div>
+        </div>
     {% else %}
         <div class="col-6">
             <label class="form-label">{{ campo.label }}</label>
@@ -34,9 +37,10 @@
             name="{{ campo.name }}" 
             aria-describedby="" 
             placeholder="{{ campo.label }}"
-            value="">
-            <br/>
-            <div class="col-6 help-text">{{ campo.errors }}</div>
+            value="{{ campo.value |default:'' }}">
+            <div id="errores{{campo.name}}">
+
+            </div>
         </div>
             {% endif %} 
     {% endif %}

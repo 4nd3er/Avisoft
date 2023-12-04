@@ -1,0 +1,31 @@
+<div class="modal-body">
+    {% csrf_token %}
+    <div class="row">
+        {% for campo in form %}
+            {% if campo.label == 'Galpon' or campo.label == 'Linea' %}
+                <div class="col-6 mb-3">
+                    <label class="form-label">{{ campo.label }}</label>
+                    <select class="form-select" name="{{ campo.name }}">
+                        {% for select in campo %}
+                            {{ select }}
+                        {% endfor %}
+                    </select>
+                    <div id="errores{{campo.name}}">
+
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-6 mb-3">
+                    <label class="form-label">{{ campo.label }}</label>
+                    <input type="{{campo.field.widget.input_type}}"
+                    class=" form-control" name="{{ campo.name }}" id="" aria-describedby="helpId"
+                    placeholder="{{ campo.label }}"
+                    value="{{ campo.value | default:"" }}"/>
+                    <div id="errores{{campo.name}}">
+
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

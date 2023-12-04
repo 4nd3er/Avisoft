@@ -8,6 +8,9 @@ const abrirModalCrear = (url) => {
 
 const cerrarModalCrear = () => {
     $('#crear').modal('hide');
+    setTimeout(() => {
+        window.location.reload();
+    }, 100);
 };
 
 const abrirModalEditar = (url) => {
@@ -18,6 +21,9 @@ const abrirModalEditar = (url) => {
 
 const cerrarModalEditar = () => {
     $('#editar').modal('hide');
+    setTimeout(() => {
+        window.location.reload();
+    }, 100);
 };
 
 const abrirModalEliminar = (url) => {
@@ -28,20 +34,24 @@ const abrirModalEliminar = (url) => {
 
 const cerrarModalEliminar = () => {
     $('#editar').modal('hide');
+    setTimeout(() => {
+        window.location.reload();
+    }, 100);
 };
 
 // ----------------------------AJAX------------------------------------
+
 const registrar = () => {
     $.ajax({
-        data: $('#formCreacion').serialize(),
-        url: $('#formCreacion').attr('action'),
-        type: $('#formCreacion').attr('method'),
+        data: $('.formCrear').serialize(),
+        url: $('.formCrear').attr('action'),
+        type: $('.formCrear').attr('method'),
         success: function (response) {
             notificacionSuccess(response.mensaje);
             setTimeout(() => {
                 cerrarModalCrear();
                 window.location.reload();
-            }, 1100);
+            }, 1600);
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
@@ -52,36 +62,18 @@ const registrar = () => {
         }
     })
 };
-
-const registrarProdDiaria = () => {
-    $.ajax({
-        data: $('#formCreacionProdDiaria').serialize(),
-        url: $('#formCreacionProdDiaria').attr('action'),
-        type: $('#formCreacionProdDiaria').attr('method'),
-        success: function (response) {
-            notificacionSuccess(response.mensaje);
-            setTimeout(() => {
-                cerrarModalCrear();
-            }, 1100);
-        },
-        error: function (error) {
-            notificacionError(error.responseJSON.mensaje);
-            mostrarErroresCrear(error);
-            setTimeout(() => {
-                mostrarErroresCrear('');
-            }, 5000);
-        }
-    })
-};
-
 
 const editar = () => {
     $.ajax({
-        data: $('#formEdicion').serialize(),
-        url: $('#formEdicion').attr('action'),
-        type: $('#formEdicion').attr('method'),
+        data: $('.formEditar').serialize(),
+        url: $('.formEditar').attr('action'),
+        type: $('.formEditar').attr('method'),
         success: function (response) {
             notificacionSuccess(response.mensaje);
+            setTimeout(() => {
+                cerrarModalEditar();
+                window.location.reload();
+            }, 1600);
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
@@ -91,6 +83,55 @@ const editar = () => {
             }, 5000);
         }
     })
+};
+
+const registrarProdDiaria = () => {
+    $.ajax({
+        data: $('#formCrearProdDiaria').serialize(),
+        url: $('#formCrearProdDiaria').attr('action'),
+        type: $('#formCrearProdDiaria').attr('method'),
+        success: function (response) {
+            notificacionSuccess(response.mensaje);
+            $('#id_tipo_huevo').val('');
+            $('#cantidad').val('');
+        },
+        error: function (error) {
+            notificacionError(error.responseJSON.mensaje);
+            mostrarErroresCrear(error);
+            setTimeout(() => {
+                mostrarErroresCrear('');
+            }, 5000);
+        }
+    })
+};
+
+const EditarProdDiaria = () => {
+    $.ajax({
+        data: $('#formEditarProdDiaria').serialize(),
+        url: $('#formEditarProdDiaria').attr('action'),
+        type: $('#formEditarProdDiaria').attr('method'),
+        success: function (response) {
+            notificacionSuccess(response.mensaje);
+            setTimeout(() => {
+                cerrarModalEditar();
+                window.location.reload();
+            }, 1600);
+        },
+        error: function (error) {
+            notificacionError(error.responseJSON.mensaje);
+            mostrarErroresCrear(error);
+            setTimeout(() => {
+                mostrarErroresCrear('');
+            }, 5000);
+        }
+    })
+};
+
+const selectJornada = () => {
+    if ($('#id_jornada').val() != '') {
+        $('#rotos').val('');
+        $('#descarte').val('');
+    }
 };
 
 const mostrarErroresCrear = (errores) => {
@@ -112,21 +153,22 @@ const mostrarErroresEditar = (errores) => {
     $('#erroresEditar ').append(error);
 }
 
+function notificacionSuccess(mensaje) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Bien hecho!',
+        text: mensaje,
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+    })
+}
+
 function notificacionError(mensaje) {
     Swal.fire({
         icon: 'error',
         title: 'Error!',
         text: mensaje,
         confirmButtonColor: "#C00",
-    })
-}
-
-function notificacionSuccess(mensaje) {
-    Swal.fire({
-        icon: 'success',
-        title: 'Bien hecho!',
-        text: mensaje,
-        timer: 1000,
-        timerProgressBar: true,
     })
 }

@@ -5,10 +5,7 @@
 			<h3 class="modal-title">Crear usuario</h3>
 			<img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
 		</div>
-		<form id="formCreacion" action="{% url 'crear_usuario' %}" enctype="multipart/form-data" method="POST">
-				<div id="errores" class="row mx-auto" style="width: 100%;">
-					
-				</div>
+		<form class="formCrear" action="{% url 'crear_usuario' %}" enctype="multipart/form-data" method="POST">
       {% include 'usuarios/form.html' %}
       <div class="modal-footer text-center">
         <button type="button" class="btn btn-outline-success" onclick="registrar();">Confirmar</button>

@@ -40,11 +40,9 @@ class TiposHuevosForm(forms.ModelForm):
     class Meta:
         model = TiposHuevos
         fields ='__all__'
-
-class EstadosForm(forms.ModelForm):
-    class Meta:
-        model = Estados
-        fields = ['descrip']
+        labels = {
+            'tipos_huevos': 'Tipo de huevo'
+        }
 
 class TipoDocForm(forms.ModelForm):
     class Meta:

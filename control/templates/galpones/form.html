@@ -1,53 +1,63 @@
 {% csrf_token %}
 <div class="row">
-    {% for campo in form %}
+  {% for campo in form %}
     {% if campo.name == "area" %}
     <div class="col-6 mb-3">
       <label class="form-label">{{ campo.label }} mt2</label>
       <input
-      type="number"
-      style="background-color: rgba(0,0,0,0.1)"
-      onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-      type="{{campo.field.widget.input_type}}"
-      id="{{campo.name}}"
-      class="form-control {{campo.name}}"
-      name="{{ campo.name }}"
-      aria-describedby="helpId"
-      placeholder="{{ campo.label }}"
-      value="{{ campo.value }}"
-      readonly required>
-      {% comment %} <div class="col-6 help-text">{{campo.errors}} </div> {% endcomment %}
+        type="number"
+        style="background-color: rgba(0,0,0,0.1)"
+        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+        type="{{campo.field.widget.input_type}}"
+        id="{{campo.name}}"
+        class="form-control {{campo.name}}"
+        name="{{ campo.name }}"
+        aria-describedby="helpId"
+        placeholder="{{ campo.label }}"
+        value="{{ campo.value }}"
+        readonly 
+      />
+      <div id="errores{{campo.name}}">
+  
+      </div>
     </div>
-      {% else %}
-        {% if campo.name == "capac_bebed" or campo.name == "capac_comed" or campo.name == "capac_gall" or campo.name == "capac_nidales"%}
-          <div class="col-6 mb-3">
-            <label class="form-label">{{ campo.label }}</label>
-            <input
-            style="background-color: rgba(0,0,0,0.1)"
-            type="number"
-            id="{{campo.name}}"
-            class="form-control {{campo.name}}"
-            name="{{ campo.name }}"
-            aria-describedby="helpId"
-            placeholder="{{ campo.label }}"
-            value="{{ campo.value | default:''}}"
-            readonly required>
-          </div>
-          {% else %}
-          <div class="col-6 mb-3">
-            <label class="form-label">{{ campo.label }}</label>
-            <input
-            {% if campo.name == "ancho" or campo.name == "largo" %}onInput="calcuateArea();"{% endif %}
-            type="{% if campo.name == "nombre_galpon" %}text{% else %}number{% endif %}"
-            id="{{campo.name}}"
-            class="form-control {{campo.name}}"
-            name="{{ campo.name }}"
-            aria-describedby="helpId"
-            placeholder="{{ campo.label }}"
-            value="{{ campo.value | default:''}}"
-            required
-            {% if campo.name != "nombre_galpon" %}min="1" max="900" step="1" onkeypress="return onlyNumber(event);"{% endif %}>
-        </div>
+    {% else %}
+    {% if campo.name == "capac_bebed" or campo.name == "capac_comed" or campo.name == "capac_gall" or campo.name == "capac_nidales"%}
+    <div class="col-6 mb-3">
+      <label class="form-label">{{ campo.label }}</label>
+      <input
+        style="background-color: rgba(0,0,0,0.1)"
+        type="number"
+        id="{{campo.name}}"
+        class="form-control {{campo.name}}"
+        name="{{ campo.name }}"
+        aria-describedby="helpId"
+        placeholder="{{ campo.label }}"
+        value="{{ campo.value | default:''}}"
+        readonly 
+      />
+      <div id="errores{{campo.name}}">
+  
+      </div>
+    </div>
+    {% else %}
+    <div class="col-6 mb-3">
+      <label class="form-label">{{ campo.label }}</label>
+      <input
+        {% if campo.name == "ancho" or campo.name == "largo" %}onInput="calcuateArea();"{% endif %}
+        type="{% if campo.name == "nombre_galpon" %}text{% else %}number{% endif %}"
+        id="{{campo.name}}"
+        class="form-control {{campo.name}}"
+        name="{{ campo.name }}"
+        aria-describedby="helpId"
+        placeholder="{{ campo.label }}"
+        value="{{ campo.value | default:''}}"
+        {% if campo.name != "nombre_galpon" %}min="1" max="900" step="1" onkeypress="return onlyNumber(event);"{% endif %}
+      />
+      <div id="errores{{campo.name}}">
+  
+      </div>
+    </div>
         {% endif %}
         {%endif%}
-    {% endfor %}
+  {% endfor %}

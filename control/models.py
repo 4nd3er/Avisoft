@@ -142,18 +142,6 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Estados(models.Model):
-    estado = models.AutoField(primary_key = True)
-    descrip = models.CharField(max_length = 30)
-
-    def __str__(self):
-        return self.descrip
-
-    class Meta:
-        managed = False
-        db_table = 'estados'
-
-
 class Ficha(models.Model):
     id_ficha = models.AutoField(primary_key = True)
     fecha_regis = models.DateField(auto_now_add = True)
@@ -278,7 +266,7 @@ class MortalidadDescarte(models.Model):
     id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
     cant_muertas = models.IntegerField()
     cant_descarte = models.IntegerField()
-    id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte', blank=True, null=True)
+    id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte')
     saldo = models.IntegerField()
 
     def __str__(self):

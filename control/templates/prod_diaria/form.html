@@ -5,7 +5,7 @@
     {% if prod.label == 'Detalle de Jornada' or prod.label == 'Usuario' or prod.label == 'Tipo de huevo' or prod.label == 'Galpon' or prod.label == 'Jornada' %}
     <div class="col-6 mb-3">
       <label class="form-label">{{ prod.label }}</label>
-      <select class="form-select" placeholder="{{ prod.label }}" name="{{ prod.name }}" value="{{ prod.value | default:''}}">
+      <select id="{{ prod.name }}" class="form-select" placeholder="{{ prod.label }}" name="{{ prod.name }}" value="{{ prod.value | default:''}}" {% if prod.name == 'id_jornada' %}onchange="selectJornada();"{% endif %}>
         {% for select in prod %}
           {{ select }}
         {% endfor %}
@@ -20,7 +20,7 @@
           <input
           style="display: flex"
           type="{% if prod.name == "fecha" %}Date{% else %}{{ prod.field.widget.input_type }}{% endif %}"
-          id="cantidadHuevo"
+          id="{{ prod.name }}"
           class="form-control"
           name="{{ prod.name }}"
           value="{{ prod.value | default:'' }}"

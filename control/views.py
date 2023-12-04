@@ -6,7 +6,7 @@ from .forms import *
 from django.core.serializers import serialize
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView, ListView
+from django.views.generic import ListView, TemplateView, ListView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -66,7 +66,7 @@ def logout_usuario(request):
     logout(request)
     return redirect('inicio')
 
-class contrasena(LoginRequiredMixin, View):
+class contrasena(LoginRequiredMixin, ListView):
     template_name = 'usuarios/cambioPswrd/password.html'
     form_class = cambioPasswordForm
     success_url = reverse_lazy('interfaz')
@@ -99,7 +99,7 @@ def interfaz_admin(request):
 
 
 # ! Modulo de alimentacion
-class Alimentacionn(View):
+class Alimentacionn(ListView):
     model = Alimentacion
     template_name = 'alimentacion/alimentacion.html'
 
@@ -112,7 +112,10 @@ class Alimentacionn(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+        else:
+            return render(request, self.template_name, {'alimentacion': self.get_queryset()})
 
 
 class crearAlimentacion(CreateView):
@@ -121,11 +124,49 @@ class crearAlimentacion(CreateView):
     form_class = AlimentacionForm
     success_url = reverse_lazy('alimentacion')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('alimentacion')
+
 class editarAlimentacion(UpdateView):
     model = Alimentacion
     template_name = 'alimentacion/editar.html'
     form_class = AlimentacionForm
     success_url = reverse_lazy('alimentacion')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('alimentacion')
 
 class confirmarEliminarAlimentacion(DeleteView):
     model = Alimentacion
@@ -142,56 +183,8 @@ def eliminarAlimentacion(request, id):
 # ! Modulo de alimentacion
 
 
-# ! Modulo de estados
-class Estadoss(View):
-    model = Estados
-    template_name = 'estados/estados.html'
-
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get_context_data(self, **kwargs):
-        contexto = {}
-        contexto["estados"] = self.get_queryset()
-        return contexto
-
-    def get(self, request, *args, **kwargs):
-        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
-        if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
-        else:
-            return redirect('interfaz')
-
-
-class crearEstado(CreateView):
-    model = Estados
-    template_name = 'estados/crear.html'
-    form_class = EstadosForm
-    success_url = reverse_lazy('estados')
-
-class editarEstado(UpdateView):
-    model = Estados
-    template_name = 'estados/editar.html'
-    form_class = EstadosForm
-    success_url = reverse_lazy('estados')
-
-class confirmarEliminarEstado(DeleteView):
-    model = Estados
-    template_name = 'estados/estados_confirm_delete.html'
-    success_url = reverse_lazy('estados')
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-def eliminarEstado(request, estado):
-    eliminar = Estados.objects.get(estado = estado)
-    eliminar.delete()
-    return redirect('estados')
-# ! Modulo de estados
-
-
 # ! Modulo de fichas
-class Fichass(View):
+class Fichass(ListView):
     model = Ficha
     template_name = 'fichas/fichas.html'
 
@@ -206,7 +199,10 @@ class Fichass(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'fichas': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -217,11 +213,49 @@ class crearFicha(CreateView):
     form_class = FichaForm
     success_url = reverse_lazy('fichas')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('fichas')
+
 class editarFicha(UpdateView):
     model = Ficha
     template_name = 'fichas/editar.html'
     form_class = FichaForm
     success_url = reverse_lazy('fichas')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('fichas')
 
 class confirmarEliminarFicha(DeleteView):
     model = Ficha
@@ -239,7 +273,7 @@ def eliminarFicha(request, id_ficha):
 
 
 # ! Modulo de gallinas
-class Gallinass(View):
+class Gallinass(ListView):
     model = Gallinas
     template_name = 'gallinas/gallinas.html'
 
@@ -252,7 +286,10 @@ class Gallinass(View):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+        else:
+            return render(request, self.template_name, {'gallinas': self.get_queryset()})
 
 
 class crearGallinas(CreateView):
@@ -261,11 +298,49 @@ class crearGallinas(CreateView):
     form_class = GallinasForm
     success_url = reverse_lazy('gallinas')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('gallinas')
+
 class editarGallinas(UpdateView):
     model = Gallinas
     template_name = 'gallinas/editar.html'
     form_class = GallinasForm
     success_url = reverse_lazy('gallinas')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('gallinas')
 
 class confirmarEliminarGallinas(DeleteView):
     model = Gallinas
@@ -283,7 +358,7 @@ def eliminarGallinas(request, id):
 
 
 # ! Modulo de galpones
-class Galponess(View):
+class Galponess(ListView):
     model = Galpones
     template_name = 'galpones/galpones.html'
 
@@ -313,7 +388,10 @@ class Galponess(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+        else:
+            return render(request, self.template_name, {'galpones': self.get_queryset()})
 
 
 class crearGalpon(CreateView):
@@ -322,11 +400,49 @@ class crearGalpon(CreateView):
     form_class = GalponesForm
     success_url = reverse_lazy('galpones')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('galpones')
+
 class editarGalpon(UpdateView):
     model = Galpones
     template_name = 'galpones/editar.html'
     form_class = GalponesForm
     success_url = reverse_lazy('galpones')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('galpones')
 
 class confirmarEliminarGalpon(DeleteView):
     model = Galpones
@@ -344,7 +460,7 @@ def eliminarGalpon(request, id):
 
 
 # ! Modulo de jornadas
-class Jornadass(View):
+class Jornadass(ListView):
     model = Jornada
     template_name = 'jornadas/jornadas.html'
 
@@ -359,7 +475,10 @@ class Jornadass(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'jornadas': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -370,11 +489,49 @@ class crearJornada(CreateView):
     form_class = JornadaForm
     success_url = reverse_lazy('jornadas')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('jornadas')
+
 class editarJornada(UpdateView):
     model = Jornada
     template_name = 'jornadas/editar.html'
     form_class = JornadaForm
     success_url = reverse_lazy('jornadas')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('jornadas')
 
 class confirmarEliminarJornada(DeleteView):
     model = Jornada
@@ -392,7 +549,7 @@ def eliminarJornada(request, id):
 
 
 # ! Modulo de lineas
-class Lineass(View):
+class Lineass(ListView):
     model = Linea
     template_name = 'lineas/lineas.html'
 
@@ -407,7 +564,10 @@ class Lineass(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'lineas': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -418,11 +578,49 @@ class crearLinea(CreateView):
     form_class = LineaForm
     success_url = reverse_lazy('lineas')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('lineas')
+
 class editarLinea(UpdateView):
     model = Linea
     template_name = 'lineas/editar.html'
     form_class = LineaForm
     success_url = reverse_lazy('lineas')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('lineas')
 
 class confirmarEliminarLinea(DeleteView):
     model = Linea
@@ -440,7 +638,7 @@ def eliminarLinea(request, id):
 
 
 # ! Modulo de mortalidad y descarte
-class Mortalidadd(View):
+class Mortalidadd(ListView):
     model = MortalidadDescarte
     template_name = 'mortalidad_descarte/mortalidad_descarte.html'
 
@@ -466,7 +664,10 @@ class Mortalidadd(View):
         return contexto
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, self.get_context_data())
+        if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+        else:
+            return render(request, self.template_name, {'mortalidad_descarte': self.get_queryset()})
 
 
 class crearMortalidad(CreateView):
@@ -485,11 +686,49 @@ class crearMortalidad(CreateView):
 
         return context
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('mortalidad_descarte')
+
 class editarMortalidad(UpdateView):
     model = MortalidadDescarte
     template_name = 'mortalidad_descarte/editar.html'
     form_class = MortalidadDescarteForm
     success_url = reverse_lazy('mortalidad_descarte')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('mortalidad_descarte')
 
 class confirmarEliminarMortalidad(DeleteView):
     model = MortalidadDescarte
@@ -507,7 +746,7 @@ def eliminarMortalidad(request, id):
 
 
 # ! Modulo de produccion diaria
-class ProduccionDiariaa(View):
+class ProduccionDiariaa(ListView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/prod_diaria.html'
 
@@ -561,19 +800,13 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                 response.status_code = 201
                 return response
             else:
-                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                mensaje = f'{self.model.__name__} no se pudo registrar'
                 error = form.errors
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
                 return response
         else:
-            return redirect('usuarios')
-    
-    # def get_context_data(self, **kwargs):
-    #     contexto = {}
-    #     contexto['form'] = self.form_class
-    #     contexto['tipos_huevos'] = TiposHuevos.objects.values_list('id', 'tipos_huevos')
-    #     return contexto
+            return redirect('produccion_diaria')
 
 class editarProdDiaria(UpdateView):
     model = ProduccionDiaria
@@ -586,26 +819,19 @@ class editarProdDiaria(UpdateView):
             form = self.form_class(request.POST, request.FILES or None)
             if form.is_valid():
                 form.save()
-                mensaje = f'{self.model.__name__} registrado correctamente!'
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
                 error = 'no hay error'
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 201
                 return response
             else:
-                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
                 error = form.errors
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
                 return response
         else:
-            return redirect('usuarios')
-
-    # def get_context_data(self, **kwargs):
-    #     contexto = {}
-    #     contexto['form'] = self.form_class
-    #     contexto['tipos_huevos'] = TiposHuevos.objects.values_list('id', 'tipos_huevos')
-    #     contexto['object'] = self.get_object()
-    #     return contexto
+            return redirect('produccion_diaria')
 
 class confirmarEliminarProdDiaria(DeleteView):
     model = ProduccionDiaria
@@ -623,7 +849,7 @@ def eliminarProdDiaria(request, id):
 
 
 # ! Modulo de rol
-class Roll(View):
+class Roll(ListView):
     model = Rol
     template_name = 'rol/rol.html'
 
@@ -638,7 +864,10 @@ class Roll(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'rol': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -649,11 +878,49 @@ class crearRol(CreateView):
     form_class = RolForm
     success_url = reverse_lazy('rol')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('rol')
+
 class editarRol(UpdateView):
     model = Rol
     template_name = 'rol/editar.html'
     form_class = RolForm
     success_url = reverse_lazy('rol')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('rol')
 
 class confirmarEliminarRol(DeleteView):
     model = Rol
@@ -671,7 +938,7 @@ def eliminarRol(request, id):
 
 
 # ! Modulo de tipo de documento
-class TipoDocc(View):
+class TipoDocc(ListView):
     model = TipoDoc
     template_name = 'tipo_doc/tipo_doc.html'
 
@@ -686,7 +953,10 @@ class TipoDocc(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'tipo_doc': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -696,11 +966,49 @@ class crearTipoDoc(CreateView):
     form_class = TipoDocForm
     success_url = reverse_lazy('tipo_doc')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('tipo_doc')
+
 class editarTipoDoc(UpdateView):
     model = TipoDoc
     template_name = 'tipo_doc/editar.html'
     form_class = TipoDocForm
     success_url = reverse_lazy('tipo_doc')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('tipo_doc')
 
 class confirmarEliminarTipoDoc(DeleteView):
     model = TipoDoc
@@ -718,7 +1026,7 @@ def eliminarTipoDoc(request, id):
 
 
 # ! Modulo de tipos de huevos
-class TiposHuevoss(View):
+class TiposHuevoss(ListView):
     model = TiposHuevos
     template_name = 'tipos_huevos/tipos_huevos.html'
 
@@ -733,7 +1041,10 @@ class TiposHuevoss(View):
     def get(self, request, *args, **kwargs):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
-            return render(request, self.template_name, self.get_context_data())
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'tipos_huevos': self.get_queryset()})
         else:
             return redirect('interfaz')
 
@@ -744,11 +1055,49 @@ class crearTipoHuevo(CreateView):
     form_class = TiposHuevosForm
     success_url = reverse_lazy('tipos_huevos')
 
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, request.FILES or None)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('tipos_huevos')
+
 class editarTipoHuevo(UpdateView):
     model = TiposHuevos
     template_name = 'tipos_huevos/editar.html'
     form_class = TiposHuevosForm
     success_url = reverse_lazy('tipos_huevos')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('tipos_huevos')
 
 class confirmarEliminarTipoHuevo(DeleteView):
     model = TiposHuevos
@@ -796,7 +1145,7 @@ class Usuarioss(ListView):
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
             if is_ajax(request=request):
-                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+                return HttpResponse(serialize('json', self.get_queryset()), 'application/json')
             else:
                 return render(request, self.template_name, {'usuarios': self.get_queryset()})
         else:
@@ -819,7 +1168,7 @@ class crearUsuario(CreateView):
                 response.status_code = 201
                 return response
             else:
-                mensaje = f'{self.model.__name__} no se ha podido registrar'
+                mensaje = f'{self.model.__name__} no se pudo registrar'
                 error = form.errors
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
@@ -847,7 +1196,7 @@ class EditarUsuario(UpdateView):
                 response.status_code = 201
                 return response
             else:
-                mensaje = f'{self.model.__name__} no se ha podido actualizar'
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
                 error = form.errors
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
