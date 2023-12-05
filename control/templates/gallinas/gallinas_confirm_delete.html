@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-        <form action="{% url 'eliminarGallinas' object.id %}"  method="post">
+        <form action="{% url 'eliminarGallinas' object.id %}"  method="POST">
             <div class="modal-body">
                 {% csrf_token %}
                 <div class="row">

@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form class="formEditar" action="{% url 'editar_galpon' object.id %}" enctype="multipart/form-data" method="post">
+    <form class="formEditar" action="{% url 'editar_galpon' object.id %}" enctype="multipart/form-data" method="POST">
       <div class="modal-header">
         {% load static %}
         <h3 class="modal-title">Editar {{ object }}</h3>

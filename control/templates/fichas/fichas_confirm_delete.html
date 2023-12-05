@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-        <form action="{% url 'eliminarFicha' object.id_ficha %}"  method="post">
+        <form action="{% url 'eliminarFicha' object.id_ficha %}"  method="POST">
             <div class="modal-body">
                 {% csrf_token %}
                 <div class="col">

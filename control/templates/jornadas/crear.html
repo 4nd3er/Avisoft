@@ -5,7 +5,7 @@
             <h3 class="modal-title">Editar jornada</h3>
             <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
         </div>
-        <form class="formCrear" action="{% url 'crear_jornada' %}" enctype="multipart/form-data" method="post">
+        <form class="formCrear" action="{% url 'crear_jornada' %}" enctype="multipart/form-data" method="POST">
             {% include "jornadas/form.html" %}
             <div class="modal-footer text-center">
                 <button class="btn btn-outline-success" type="button" onclick="registrar();">Confirmar</button>

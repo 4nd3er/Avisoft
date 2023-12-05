@@ -1,9 +1,9 @@
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form class="formEditar" action="{% url 'editar_ficha' object.id_ficha %}" enctype="multipart/form-data" method="post">
+    <form class="formEditar" action="{% url 'editar_ficha' object.id_ficha %}" enctype="multipart/form-data" method="POST">
       <div class="modal-header">
         {% load static %}
-        <h3 class="modal-title">Editar ficha {{ object }}</h3>
+        <h3 class="modal-title">Editar ficha {{ object.num_ficha }}</h3>
         <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
       </div>
       {% include "fichas/form.html" %}

@@ -94,9 +94,6 @@ class contrasena(LoginRequiredMixin, ListView):
 def interfaz(request):
     return render(request, 'interfaz/interfaces.html')
 
-def interfaz_admin(request):
-    return render(request, 'interfaz_admin/interfaz_admin.html')
-
 
 # ! Modulo de alimentacion
 class Alimentacionn(ListView):

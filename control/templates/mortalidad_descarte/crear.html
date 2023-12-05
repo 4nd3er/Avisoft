@@ -5,7 +5,7 @@
             <h3 class="modal-title">Crear registro mortalidad y/o descarte</h3>
             <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
         </div>
-        <form class="formCrear" action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="post">
+        <form class="formCrear" action="{% url 'crear_mortalidad' %}" enctype="multipart/form-data" method="POST">
             <div class="modal-body">
                 <div class="galpones">
                     <input type="hidden" value="" id="idGalpon">
