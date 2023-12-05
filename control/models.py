@@ -143,14 +143,14 @@ class DjangoSession(models.Model):
 
 
 class Ficha(models.Model):
-    id_ficha = models.AutoField(primary_key = True)
+    id_ficha = models.AutoField(primary_key=True)
     fecha_regis = models.DateField(auto_now_add = True)
-    num_ficha = models.CharField(max_length = 50)
-    titulacion = models.CharField(max_length = 50)
+    num_ficha = models.CharField(max_length=50)
+    id_nombreficha = models.ForeignKey('Nombreficha', models.DO_NOTHING, db_column='id_nombreFicha')  # Field name made lowercase.
     estado_ficha = models.IntegerField()
 
     def __str__(self):
-        return f'{self.num_ficha}: {self.titulacion}'
+        return f'{self.num_ficha}: {self.id_nombreficha.nombre}'
 
     class Meta:
         managed = False
@@ -275,6 +275,17 @@ class MortalidadDescarte(models.Model):
     class Meta:
         managed = False
         db_table = 'mortalidad_descarte'
+
+
+class Nombreficha(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        managed = False
+        db_table = 'nombreficha'
 
 
 class ProduccionDiaria(models.Model):

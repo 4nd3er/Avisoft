@@ -31,13 +31,13 @@
         </div>
     </div>
   
-    <div class="mb-3 container-fluid" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
+    <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
         <div class="table-responsive">
             <table class="table text-center">
                 <thead>
                     <tr>
-                        <th>Titulacion</th>
                         <th>Numero Ficha</th>
+                        <th>Nombre de la ficha</th>
                         <th>Estado</th>
                         <th>Fecha</th>
                         <th>Acciones</th>
@@ -46,8 +46,8 @@
                 <tbody>
                 {% for dato in fichas %}
                     <tr>
-                        <td>{{dato.titulacion}}</td>
                         <td>{{dato.num_ficha}}</td>
+                        <td>{{dato.id_nombreficha.nombre}}</td>
                         {% if dato.estado_ficha == 1 %}
                             <td>Activo</td>
                         {% else %}

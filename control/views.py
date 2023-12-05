@@ -189,7 +189,7 @@ class Fichass(ListView):
     template_name = 'fichas/fichas.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id_ficha')
 
     def get_context_data(self, **kwargs):
         contexto = {}
