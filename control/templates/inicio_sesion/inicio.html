@@ -46,7 +46,8 @@
                     </div>
                     {% if messages %}
                       {% for message in messages %}
-                        <p class="alert {{ message.tags }} text-center">{{ message }}</p>
+                        <p class="alert {{ message.tags }} alert-dismissible fade show text-center">{{ message }}</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       {% endfor %}
                     {% endif %}
 

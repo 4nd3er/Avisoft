@@ -12,6 +12,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
+from datetime import datetime, timezone
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -299,6 +302,11 @@ class crearGallinas(CreateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
             if form.is_valid():
+                nombreGalpon = form.cleaned_data['id_galpon']
+                galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
+                cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
+                galpon.cant_gall += cant_gallinas_form
+                galpon.save()
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
@@ -754,12 +762,12 @@ class ProduccionDiariaa(ListView):
             query = self.model.objects.filter(
                 Q(id_galpon__nombre_galpon__icontains = busqueda) |
                 Q(id_jornada__jornada__icontains = busqueda) |
-                Q(id_tipo_huevo__tipos_huevos__startswith = busqueda) & ~Q(id_tipo_huevo__tipos_huevos__iendswith = busqueda) |
+                Q(id_tipo_huevo__tipos_huevos = busqueda )|
                 Q(id_usuario__nombre__icontains = busqueda) |
                 Q(fecha__icontains = busqueda)
                 ).distinct().order_by('-id')
         else:
-            query = 0
+            query = self.model.objects.all().order_by('-id')[:3]
         return query
 
     def get_context_data(self, **kwargs):
@@ -1148,6 +1156,79 @@ class Usuarioss(ListView):
                 return render(request, self.template_name, {'usuarios': self.get_queryset()})
         else:
             return redirect('interfaz')
+
+    def post(self, request, *args, **kwargs):
+        query = self.get_queryset()
+        if query == 0:
+            messages.error(request, 'Debes buscar algun dato para poder descargar el reporte')
+            return render(request, self.template_name, {'usuarios': self.get_queryset()})
+        else:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = 'Hoja1'
+
+            ws['B2'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+            ws['B2'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+            ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
+            ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
+            ws['B2'] = f'REPORTE {self.model.__name__.upper()}S'
+
+            ws.merge_cells('B2:K2')
+            listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+            listName = ['Nombre', 'Apellido', 'Tipo de Documento', 'Documento', 'Celular', 'email', 'Ficha', 'Rol', 'Registro', 'Ultima Conexión']
+            countName = 0
+            count = 3
+            ws.row_dimensions[2].height = 25
+            for i in listColumn:
+                ws.column_dimensions[i].width = 35
+                ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+                ws[f'{listColumn[countName]}3'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                            top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                ws[f'{listColumn[countName]}3'].fill = PatternFill(start_color = 'FFCE40', fill_type = 'solid')
+                ws[f'{listColumn[countName]}3'].font = Font(name = 'Arial', size = 11)
+                ws[f'{listColumn[countName]}3'] = listName[countName]
+                count += 1
+                countName += 1
+            
+            # Pintamos los datos en el reporte
+            listName = ['nombre', 'apellido', 'id_tipo_doc', 'documento' , 'celular', 'email', 'id_ficha', 'id_rol', 'registro', 'last_login']
+            countColumn = 2
+            for i in listName:
+                countRow = 4
+                for q in query:
+                    ws.cell(row = countRow, column = countColumn).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                    ws.cell(row = countRow, column = countColumn).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                    top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                    ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                    ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
+                    if i == 'id_tipo_doc':
+                        valueRow = getattr(q.id_tipo_doc, 'tipo_doc', 'tipo_doc')
+                    elif i == 'id_ficha':
+                        numFicha = getattr(q.id_ficha, 'num_ficha', 'num_ficha')
+                        nombreFicha = getattr(q.id_ficha, 'id_nombreficha', 'id_nombreficha')
+                        valueRow = f'{numFicha}: {nombreFicha}'
+                    elif i == 'id_rol':
+                        valueRow = getattr(q.id_rol, 'tipo_rol', 'tipo_rol')
+                    elif i == 'registro':
+                        valueRow = str(getattr(q, i))
+                    elif i == 'last_login':
+                        valueRow = str(getattr(q, i)).split('+')[0]
+                    else:
+                        valueRow = getattr(q, i)
+                    ws.cell(row=countRow, column=countColumn).value = valueRow
+                    countRow += 1
+                countColumn += 1
+
+            # Nombre del archivo
+            nombreArchivo = f'REPORTE {self.model.__name__.upper()}.xlsx'
+            # Definir el tipo de respuesta
+            response = HttpResponse(content_type = 'application/ms-excel')
+            contenido = "attachment; filename = {0}".format(nombreArchivo)
+            response['Content-Disposition'] = contenido
+            wb.save(response)
+            return response
+        return render(request, self.template_name, {'usuarios': self.get_queryset()})
 
 class crearUsuario(CreateView):
     model = Usuario

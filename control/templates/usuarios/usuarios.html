@@ -25,6 +25,15 @@
       </div>
     </div>
   </div>
+  
+  {% if messages %}
+    {% for message in messages %}
+      <p class="alert {{ message.tags }} alert-dismissible fade show text-center mx-auto" style="width: 97%;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </p>
+    {% endfor %}
+  {% endif %}
 
   <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
     <div class="table-responsive">
@@ -81,9 +90,13 @@
     </div>
   </div>
 
+
   <div class="row container-fluid text-end my-4">
     <div class="col-md col-sm">
-      <a class="btn btn-outline-secondary" style="border: 2px solid" href="">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></a>
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
+      </form>
     </div>
   </div>
 
@@ -94,6 +107,4 @@
   <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
   
   <script src="{% static 'Js/formUsuario.js' %}"></script>
-  {% load static %}
-  <script src="{% static 'Js/usuarios/index.js' %}"></script>
 {% endblock %}
