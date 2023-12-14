@@ -9,7 +9,6 @@
     
     <label for="titulacion" class="form-label">Nombre de ficha:</label>
     <select id="id_nombreficha" name="id_nombreficha" required class="form-select rounded mb-3">
-      <option>Selecciona una opción</option>
       {% for option in form.id_nombreficha %}
         {{ option }}
       {% endfor %}
@@ -20,7 +19,6 @@
     
     <label for="select_estado_ficha" class="form-label">Estado de ficha:</label>
     <select id="select_estado_ficha" name="select_estado_ficha" required class="form-select rounded" onchange="stateFicha();">
-      <option>Selecciona una opción</option>
       <option value="1" {% if form.estado_ficha.value == 1 %}selected{% endif %}>Activo</option>
       <option value="0" {% if form.estado_ficha.value == 0 %}selected{% endif %}>Inactivo</option>
     </select>

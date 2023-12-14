@@ -15,8 +15,11 @@ urlpatterns = [
     path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(template_name = 'inicio_sesion/registration/password_reset_confirm.html'), name="password_reset_confirm",),
     path( "reset/done/", auth_views.PasswordResetCompleteView.as_view(template_name = 'inicio_sesion/registration/password_reset_complete.html'), name="password_reset_complete",),
     path('interfaz/', login_required(views.interfaz, login_url = 'inicio'), name="interfaz"),
-    # path('interfaz_admin/', login_required(views.interfaz_admin, login_url = 'inicio'), name="interfaz_admin"),
     # ! Modulo de inicio e interfaces
+
+    # ! Modulo de Registro Diario
+    path('registro_diario/', login_required(views.registroDiario.as_view(), login_url = 'inicio'), name="registro_diario"),
+    # ! Modulo de Registro Diario
 
 
     # ! Modulo de alimentacion

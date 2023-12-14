@@ -6,7 +6,7 @@ from .forms import *
 from django.core.serializers import serialize
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.views.generic import ListView, TemplateView, ListView, UpdateView, CreateView, DeleteView, ListView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -69,6 +69,7 @@ def logout_usuario(request):
     logout(request)
     return redirect('inicio')
 
+
 class contrasena(LoginRequiredMixin, ListView):
     template_name = 'usuarios/cambioPswrd/password.html'
     form_class = cambioPasswordForm
@@ -98,13 +99,118 @@ def interfaz(request):
     return render(request, 'interfaz/interfaces.html')
 
 
+# ! Modulo de registro diario
+class registroDiario(ListView):
+    template_name = 'registro_diario/registro_diario.html'
+    model = ProduccionDiaria
+
+    def get_queryset(self):
+        return self.model.objects.all().order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        contexto = {}
+        contexto['alimentacion'] = Alimentacion.objects.all().order_by('-id')
+        contexto['mortalidadDescarte'] = MortalidadDescarte.objects.all().order_by('-id')
+        contexto['produccionDiaria'] = self.get_queryset()
+        alimentacion_dict = {'alimentacion': contexto['alimentacion']}
+        mortalidad_dict = {'mortalidadDescarte': contexto['mortalidadDescarte']}
+        produccion_dict = {'produccionDiaria': contexto['produccionDiaria']}
+        merged_dict = {}
+        merged_dict.update(alimentacion_dict)
+        merged_dict.update(mortalidad_dict)
+        merged_dict.update(produccion_dict)
+        return merged_dict
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'datos': self.get_context_data()})
+    
+    def post(self, request, *args, **kwargs):
+        query = self.get_context_data()
+        if query == 0:
+            messages.error(request, 'Debes buscar algun dato para generar el reporte')
+            return render(request, self.template_name, {'datos': self.get_queryset()})
+        else:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = 'Hoja1'
+
+            ws['B2'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+            ws['B2'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+            ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
+            ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
+            ws['B2'] = f'REPORTE REGISTRO DIARIO'
+
+            ws.merge_cells('B2:E2')
+            listColumn = ['B', 'C', 'D', 'E']
+            listName = ['Galpon', 'Alimentación', 'Mortalidad y Descarte', 'Produccion Diaria']
+            countName = 0
+            count = 3
+            ws.row_dimensions[2].height = 25
+            for i in listColumn:
+                ws.column_dimensions[i].width = 50
+                ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+                ws[f'{listColumn[countName]}3'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                            top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                ws[f'{listColumn[countName]}3'].fill = PatternFill(start_color = 'FFCE40', fill_type = 'solid')
+                ws[f'{listColumn[countName]}3'].font = Font(name = 'Arial', size = 11)
+                ws[f'{listColumn[countName]}3'] = listName[countName]
+                count += 1
+                countName += 1
+            
+            # Pintamos los datos en el reporte
+            listName = ['alimentacion', 'mortalidadDescarte', 'produccionDiaria']
+            countColumn = 2
+            for i in listName:
+                countRow = 4
+                for q in query[i]:
+                    ws.cell(row = countRow, column = countColumn).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                    ws.cell(row = countRow, column = countColumn).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                    top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                    ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                    ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
+                    if i == 'produccionDiaria':
+                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
+                        ws.cell(row=4, column=2).value = valueRow
+                        ws.cell(row = countRow, column = 5).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                        ws.cell(row = countRow, column = 5).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                        ws.cell(row = countRow, column = 5).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                        ws.cell(row = countRow, column = 5).font = Font(name = 'Arial', size = '11')
+                        ws.cell(row=countRow, column=5).value = str(q)
+                    elif i == 'alimentacion':
+                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
+                        ws.cell(row=4, column=2).value = valueRow
+                        ws.cell(row=countRow, column=3).value = str(q)
+                    elif i == 'mortalidadDescarte':
+                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
+                        ws.cell(row=4, column=2).value = valueRow
+                        ws.cell(row=countRow, column=4).value = str(q)
+                    else:
+                        ws.cell(row=countRow, column=countColumn).value = str(q)
+                    countRow += 1
+                countColumn += 1
+
+            # Nombre del archivo
+            nombreArchivo = f'REPORTE REGISTRO DIARIO.xlsx'
+            # Definir el tipo de respuesta
+            response = HttpResponse(content_type = 'application/ms-excel')
+            contenido = "attachment; filename = {0}".format(nombreArchivo)
+            response['Content-Disposition'] = contenido
+            wb.save(response)
+            return response
+        return render(request, self.template_name, {'datos': self.get_queryset()})
+
+# ! Modulo de registro diario
+
+
 # ! Modulo de alimentacion
 class Alimentacionn(ListView):
     model = Alimentacion
     template_name = 'alimentacion/alimentacion.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -278,7 +384,7 @@ class Gallinass(ListView):
     template_name = 'gallinas/gallinas.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -384,7 +490,7 @@ class Galponess(ListView):
                 Q(cant_nidales__icontains = busqueda)
                 ).distinct()
         else:
-            query = self.model.objects.all()
+            query = self.model.objects.all().order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -470,7 +576,7 @@ class Jornadass(ListView):
     template_name = 'jornadas/jornadas.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -559,7 +665,7 @@ class Lineass(ListView):
     template_name = 'lineas/lineas.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -659,7 +765,7 @@ class Mortalidadd(ListView):
                 Q(saldo__icontains = busqueda)
                 ).distinct()
         else:
-            query = self.model.objects.all()
+            query = self.model.objects.all().order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -860,7 +966,7 @@ class Roll(ListView):
     template_name = 'rol/rol.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -949,7 +1055,7 @@ class TipoDocc(ListView):
     template_name = 'tipo_doc/tipo_doc.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -1037,7 +1143,7 @@ class TiposHuevoss(ListView):
     template_name = 'tipos_huevos/tipos_huevos.html'
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -1160,7 +1266,7 @@ class Usuarioss(ListView):
     def post(self, request, *args, **kwargs):
         query = self.get_queryset()
         if query == 0:
-            messages.error(request, 'Debes buscar algun dato para poder descargar el reporte')
+            messages.error(request, 'Debes buscar algun dato para generar el reporte')
             return render(request, self.template_name, {'usuarios': self.get_queryset()})
         else:
             wb = Workbook()
@@ -1214,6 +1320,8 @@ class Usuarioss(ListView):
                         valueRow = str(getattr(q, i))
                     elif i == 'last_login':
                         valueRow = str(getattr(q, i)).split('+')[0]
+                        if str(valueRow) == 'None':
+                            valueRow = 'No ha ingresado al aplicativo'
                     else:
                         valueRow = getattr(q, i)
                     ws.cell(row=countRow, column=countColumn).value = valueRow

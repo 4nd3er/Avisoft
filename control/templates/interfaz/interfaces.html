@@ -65,7 +65,7 @@
                     </a>
                 </div>
                 <div class="col-md-3 col-lg-2 col-sm-5 modulos">
-                    <a href="">
+                    <a href="{% url "registro_diario" %}">
                         <div class="col">
                             <h5>Registro diario</h5>
                         </div>
@@ -192,6 +192,17 @@
                         </div>
                         <div class="col">
                             <img src="{% static 'images/modulos/usuarios.png' %}"
+                            alt="Imagen Datos Generales">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
+                    <a href="{% url "registro_diario" %}">
+                        <div class="col">
+                            <h5>Registro diario</h5>
+                        </div>
+                        <div class="col">
+                            <img src="{% static 'images/modulos/img_datos.png' %}"
                             alt="Imagen Datos Generales">
                         </div>
                     </a>

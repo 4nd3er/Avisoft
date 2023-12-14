@@ -21,7 +21,7 @@ class Alimentacion(models.Model):
     id_tipo_alimento = models.ForeignKey('TipoAlimento', models.DO_NOTHING, db_column='id_tipo_alimento')
 
     def __str__(self):
-        return f'#{self.id}'
+        return f'{self.kg_total} Kg'
 
     class Meta:
         managed = False
@@ -173,17 +173,13 @@ class Gallinas(models.Model):
         verbose_name="Gallina"
         verbose_name_plural="Gallinas"
 
-    def __str__(self):
-        name = "Gallinas #" + str(self.id)
-        return name
-
 
 class Galpones(models.Model):
     fecha = models.DateField(auto_now_add = True)
     nombre_galpon = models.CharField(max_length = 100)
     ancho = models.IntegerField(
         validators=[
-            MinValueValidator(0, message='El número debe ser mayor o igual a 0.'),
+            MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),
             MaxValueValidator(900, message='El número debe ser menor o igual a 900.'),
             RegexValidator(r'^\d+$', 'Ingrese un número entero válido sin comas, puntos ni signos.')
         ]
@@ -230,7 +226,7 @@ class Galpones(models.Model):
     )
 
     def __str__(self):
-        return self.nombre_galpon
+        return f'{self.nombre_galpon}'
 
     class Meta:
         managed = False
@@ -299,7 +295,7 @@ class ProduccionDiaria(models.Model):
     fecha = models.DateField(auto_now_add = True)
 
     def __str__(self):
-        return f'id_detalle_jornada: {self.id_detalle_jornada} | id_tipo_huevo: {self.id_tipo_huevo} | cantidad: {self.cantidad} | {self.id_usuario}'
+        return f'jornada {self.id_jornada}, id_tipo_huevo: {self.id_tipo_huevo}, cantidad: {self.cantidad}'
 
     class Meta:
         managed = False

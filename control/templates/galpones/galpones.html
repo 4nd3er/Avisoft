@@ -83,11 +83,12 @@
                 </table>
             </div>
         </div>
-        <div class="row container-fluid">
-            <div class="col-md col-sm text-end">
-                <a class="btn btn-outline-secondary" style="border: 2px solid" href="">
-                    EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i>
-                </a>
+        <div class="row container-fluid text-end my-4">
+            <div class="col-md col-sm">
+              <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
+              </form>
             </div>
         </div>
 
