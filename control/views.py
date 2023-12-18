@@ -15,38 +15,13 @@ from django.views.decorators.http import require_http_methods
 from datetime import datetime, timezone
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from localStoragePy import localStoragePy
 
+localStorage = localStoragePy('me.jkelol111.mypythonapp', 'text')
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
-# Create your views here.
-def inicio(request):
-    if request.user.is_authenticated:
-        return redirect('interfaz')
-    else:
-        if request.method == 'POST':
-            documento = request.POST.get('documento')
-            password = request.POST.get('password')
-
-            user = authenticate(request, documento = documento, password = password)
-
-            if documento == "" and password == "":
-                messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
-                return render(request, 'inicio_sesion/inicio.html')
-
-            userFilter = Usuario.objects.filter(documento=documento).values_list('is_active', flat=True)
-            if user is not None:
-                login(request, user)
-                return redirect('interfaz')
-            elif not userFilter:
-                messages.error(request, 'Usuario no registrado en la pagina web, registrate para iniciar sesion')
-            elif not userFilter[0]:
-                messages.error(request, 'Usuario bloqueado, comunicate con el administrador')
-            else:
-                messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
-    return render(request, 'inicio_sesion/inicio.html')
-
-
+# ! Modulo de inicio e interfaces
 def registrarse(request):
     # * rol = request.POST.get('rol
     # * initial={'rol: 'rol}
@@ -60,14 +35,33 @@ def registrarse(request):
             registro.save()
             messages.success(request,'Te has registrado exitosamente')
             return redirect('inicio')
-        
-    return render(request, 'inicio_sesion/registrarse.html', {
-        'form': registro
-    })
+    return render(request, 'inicio_sesion/registrarse.html', { 'form': registro })
 
-def logout_usuario(request):
-    logout(request)
-    return redirect('inicio')
+
+def inicio(request):
+    if request.user.is_authenticated:
+        return redirect('interfaz')
+    else:
+        if request.method == 'POST':
+            documento = request.POST.get('documento')
+            password = request.POST.get('password')
+
+            user = authenticate(request, documento = documento, password = password)
+
+            if documento == "" and password == "":
+                messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
+                return render(request, 'inicio_sesion/inicio.html')
+            userFilter = Usuario.objects.filter(documento=documento).values_list('is_active', flat=True)
+            if user is not None:
+                login(request, user)
+                return redirect('interfaz')
+            elif not userFilter:
+                messages.error(request, 'Usuario no registrado en la pagina web, registrate para iniciar sesion')
+            elif not userFilter[0]:
+                messages.error(request, 'Usuario bloqueado, comunicate con el administrador')
+            else:
+                messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
+    return render(request, 'inicio_sesion/inicio.html')
 
 
 class contrasena(LoginRequiredMixin, ListView):
@@ -93,10 +87,16 @@ class contrasena(LoginRequiredMixin, ListView):
             form = self.form_class(request.POST)
             messages.error(request, 'Las contraseñas no coinciden')
             return render(request, self.template_name, {'form': form})
-            
+
 
 def interfaz(request):
     return render(request, 'interfaz/interfaces.html')
+
+
+def logout_usuario(request):
+    logout(request)
+    return redirect('inicio')
+# ! Modulo de inicio e interfaces
 
 
 # ! Modulo de registro diario
@@ -200,7 +200,6 @@ class registroDiario(ListView):
             wb.save(response)
             return response
         return render(request, self.template_name, {'datos': self.get_queryset()})
-
 # ! Modulo de registro diario
 
 
@@ -222,7 +221,6 @@ class Alimentacionn(ListView):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'alimentacion': self.get_queryset()})
-
 
 class crearAlimentacion(CreateView):
     model = Alimentacion
@@ -312,7 +310,6 @@ class Fichass(ListView):
         else:
             return redirect('interfaz')
 
-
 class crearFicha(CreateView):
     model = Ficha
     template_name = 'fichas/crear.html'
@@ -393,10 +390,9 @@ class Gallinass(ListView):
 
     def get(self, request, *args, **kwargs):
         if is_ajax(request=request):
-                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'gallinas': self.get_queryset()})
-
 
 class crearGallinas(CreateView):
     model = Gallinas
@@ -411,6 +407,7 @@ class crearGallinas(CreateView):
                 nombreGalpon = form.cleaned_data['id_galpon']
                 galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
+                localStorage.setItem('gallinas', cant_gallinas_form)
                 galpon.cant_gall += cant_gallinas_form
                 galpon.save()
                 form.save()
@@ -438,6 +435,19 @@ class editarGallinas(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
+                nombreGalpon = form.cleaned_data['id_galpon']
+                galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
+                cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
+                value = int(localStorage.getItem('gallinas'))
+                if value > cant_gallinas_form:
+                    value -= cant_gallinas_form
+                    galpon.cant_gall -= value
+                    localStorage.setItem('gallinas', value)
+                else:
+                    cant_gallinas_form -= value
+                    galpon.cant_gall += cant_gallinas_form
+                    localStorage.setItem('gallinas', cant_gallinas_form)
+                galpon.save()
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'
                 error = 'no hay error'
@@ -503,7 +513,6 @@ class Galponess(ListView):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'galpones': self.get_queryset()})
-
 
 class crearGalpon(CreateView):
     model = Galpones
@@ -593,7 +602,6 @@ class Jornadass(ListView):
         else:
             return redirect('interfaz')
 
-
 class crearJornada(CreateView):
     model = Jornada
     template_name = 'jornadas/crear.html'
@@ -681,7 +689,6 @@ class Lineass(ListView):
                 return render(request, self.template_name, {'lineas': self.get_queryset()})
         else:
             return redirect('interfaz')
-
 
 class crearLinea(CreateView):
     model = Linea
@@ -779,7 +786,6 @@ class Mortalidadd(ListView):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'mortalidad_descarte': self.get_queryset()})
-
 
 class crearMortalidad(CreateView):
     model = MortalidadDescarte
@@ -887,7 +893,6 @@ class ProduccionDiariaa(ListView):
         else:
             return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
 
-
 class crearProdDiaria(LoginRequiredMixin, CreateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/crear.html'
@@ -982,7 +987,6 @@ class Roll(ListView):
                 return render(request, self.template_name, {'rol': self.get_queryset()})
         else:
             return redirect('interfaz')
-
 
 class crearRol(CreateView):
     model = Rol
@@ -1159,7 +1163,6 @@ class TiposHuevoss(ListView):
                 return render(request, self.template_name, {'tipos_huevos': self.get_queryset()})
         else:
             return redirect('interfaz')
-
 
 class crearTipoHuevo(CreateView):
     model = TiposHuevos
