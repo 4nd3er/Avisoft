@@ -146,8 +146,20 @@ a {
     border-radius: .5rem;
 }
 
-@media (max-width:1000px) {
+@media (max-width:768px) {
     .carrusel {
         display: none;
+    }
+
+    .input-group {
+        width: 18rem;
+    }
+
+    form{
+        padding-inline: 1rem;
+    }
+
+    .form-password {
+        width: auto;
     }
 }
