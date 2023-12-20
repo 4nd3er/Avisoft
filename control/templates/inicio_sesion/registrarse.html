@@ -34,7 +34,9 @@
                 {% if user.errors %}
                   <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
                     {% for error in user.errors %}
-                      {{ error }}
+                      <strong>
+                        {{ error }}
+                      </strong>
                     {% endfor %}
                   </div>
                 {% endif %}
@@ -53,7 +55,9 @@
               {% if user.errors %}
                 <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
                   {% for error in user.errors %}
-                    {{ error }}
+                    <strong>
+                      {{ error }}
+                    </strong>
                   {% endfor %}
                 </div>
               {% endif %}

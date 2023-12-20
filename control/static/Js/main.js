@@ -98,9 +98,6 @@ const registrarProdDiaria = () => {
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
             mostrarErroresCrear(error);
-            setTimeout(() => {
-                mostrarErroresCrear('');
-            }, 5000);
         }
     })
 };
@@ -119,10 +116,7 @@ const EditarProdDiaria = () => {
         },
         error: function (error) {
             notificacionError(error.responseJSON.mensaje);
-            mostrarErroresCrear(error);
-            setTimeout(() => {
-                mostrarErroresCrear('');
-            }, 5000);
+            mostrarErroresEditar(error);
         }
     })
 };
@@ -135,29 +129,31 @@ const selectJornada = () => {
 };
 
 const mostrarErroresCrear = (errores) => {
-    $('#errores').html("");
     let error = "";
     for (let item in errores.responseJSON.error) {
         error = '<div class="m-2" style="font-size: .75rem; width: auto; color: #dc3545"><strong>' + errores.responseJSON.error[item] + '</strong></div>'
         $(`#errores${item}`).html(error);
+        setTimeout(() => {
+            $(`#errores${item}`).html("");
+        }, 5000);
     }
 }
 
 const mostrarErroresEditar = (errores) => {
-    $('#erroresEditar').html("");
     let error = "";
     for (let item in errores.responseJSON.error) {
         error = '<div class="m-2" style="font-size: .75rem; width: auto; color: #dc3545"><strong>' + errores.responseJSON.error[item] + '</strong></div>'
         $(`#errores${item}`).html(error);
+        setTimeout(() => {
+            $(`#errores${item}`).html("");
+        }, 3000);
     }
-    $('#erroresEditar ').append(error);
 }
 
 function notificacionSuccess(mensaje) {
     Swal.fire({
         icon: 'success',
-        title: 'Bien hecho!',
-        text: mensaje,
+        title: mensaje,
         timer: 1500,
         timerProgressBar: true,
         showConfirmButton: false,
@@ -177,3 +173,5 @@ function notificacionError(mensaje) {
         text: mensaje
     })
 }
+
+// ----------------------------AJAX------------------------------------
