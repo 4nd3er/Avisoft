@@ -2,119 +2,116 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-  <title>{% block titulo %} {% endblock titulo %}</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <title>{% block titulo %} {% endblock titulo %}</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS v5.2.1 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    {% load static %}
-    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/sena_logo.png' %}" type="image/x-icon">
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+        {% load static %}
+        
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+        <link rel="shortcut icon" href="{% static 'images/sena_logo.png' %}" type="image/x-icon">
+    </head>
 
-</head>
-
-<body>
-<div class="content">
-    <div class="header">
-        <!--navbar-->
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-            <div class="container-fluid">
-                <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
-                    alt="Logo Sena" style="width: 4rem">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="menu">
-                    <ul class="navbar-nav me-auto d-flex mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'gallinas' %}">Gallinas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'registro_diario' %}">Registro diario</a>
-                        </li>
-                    </ul>
-                    <hr class="d-md-none text-white-50">
-                    <div class=" nav-item text-center perfil">
-                        <i href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if not user.imagen == '' %}
-                            <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
-                                <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+    <body>
+        <div class="content">
+            <div class="header">
+                <!--navbar-->
+                <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+                    <div class="container-fluid">
+                        <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
+                            alt="Logo Sena" style="width: 4rem">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="menu">
+                            <ul class="navbar-nav me-auto d-flex mx-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'gallinas' %}">Gallinas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'registro_diario' %}">Registro diario</a>
+                                </li>
+                            </ul>
+                            <hr class="d-md-none text-white-50">
+                            <div class=" nav-item text-center perfil">
+                                <i href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% if not user.imagen == '' %}
+                                    <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
+                                        <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                                    </div>
+                                    {% else %}
+                                    <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
+                                    {% endif %}
+                                </i>
+                                <span href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% if user %}
+                                        <span>{{user.nombre}}</span>
+                                    {% else %}
+                                        <span>Perfil</span>
+                                    {% endif %}
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                    <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
+                                    <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
+                                    <hr class="dropdown-divider">
+                                    <a class="menu" href="{% url 'logout' %}">Cerrar sesion</a>
+                                </div>
                             </div>
-                            {% else %}
-                            <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
-                            {% endif %}
-                        </i>
-                        <span href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if user %}
-                                <span>{{user.nombre}}</span>
-                            {% else %}
-                                <span>Perfil</span>
-                            {% endif %}
-                        </span>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                            <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
-                            <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
-                            <hr class="dropdown-divider">
-                            <a class="menu" href="{% url 'logout' %}">Cerrar sesion</a>
                         </div>
+                    </div>
+                </nav>
+                <!--navbar-->
+            </div>
+
+            <div class="main">
+                {% block contenido %} {% endblock contenido %}
+            </div>
+
+            <div class="footer">
+                <div class="col-md" style="background-color: var(--colorprin); color: white;">
+                    <div class="col-md pt-3">
+                        <span>Centro Agropecuario Regional Cauca</span>
+                    </div>
+                    <div class="col-md pb-3">
+                        <span>Proyecto Avicola 2023 Vr 3<span>
                     </div>
                 </div>
             </div>
-        </nav>
-        <!--navbar-->
-    </div>
-
-    <div class="main">
-        {% block contenido %} {% endblock contenido %}
-    </div>
-
-    <div class="footer">
-        <div class="col-md" style="background-color: var(--colorprin); color: white;">
-            <div class="col-md pt-3">
-                <span>Centro Agropecuario Regional Cauca</span>
-            </div>
-            <div class="col-md pb-3">
-                <span>Proyecto Avicola 2023 Vr 3<span>
-            </div>
         </div>
-    </div>
-</div>
 
-    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    </div>
+        <!-- Bootstrap JavaScript Libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
 
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-    </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {% load static %}
-    <script src="{% static 'Js/main.js' %}"></script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+            integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        {% load static %}
+        <script src="{% static 'Js/main.js' %}"></script>
+    </body>
 
 </html>

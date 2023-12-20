@@ -49,7 +49,7 @@
     letter-spacing: 2px;
 }
 
-.container-fluid .col-md a span{
+.container-fluid .col-md a span {
     color: #000;
 }
 
@@ -83,7 +83,7 @@ div a {
     box-shadow: 3px 7px 7px 1px gray;
 }
 
-.col-md-3:hover a{
+.col-md-3:hover a {
     width: 100%;
     height: 100%;
     display: flex;

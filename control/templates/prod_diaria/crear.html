@@ -1,16 +1,20 @@
 <div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <div class="modal-header">
-      {% load static %}
-      <h3 class="modal-title">Crear producción diaria</h3>
-      <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+    <div class="modal-content">
+        <div class="modal-header">
+            {% load static %}
+            <h3 class="modal-title">Crear producción diaria</h3>
+            <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+        </div>
+        <form id="formCrearProdDiaria" action="{% url 'crear_prod_diaria' %}" enctype="multipart/form-data" method="POST">
+            {% include "prod_diaria/form.html" %}
+            <div class="modal-footer">
+                <button class="btn btn-outline-success" type="button" onclick="registrarProdDiaria();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">
+                    Cancelar
+                </button>
+            </div>
+        </form>
     </div>
-    <form id="formCrearProdDiaria" action="{% url 'crear_prod_diaria' %}" enctype="multipart/form-data" method="POST">
-      {% include "prod_diaria/form.html" %}
-      <div class="modal-footer">
-        <button class="btn btn-outline-success" type="button" onclick="registrarProdDiaria();">Confirmar</button>
-        <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</button>
-      </div>
-    </form>
-  </div>
 </div>

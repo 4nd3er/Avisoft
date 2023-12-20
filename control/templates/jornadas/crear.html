@@ -8,8 +8,12 @@
         <form class="formCrear" action="{% url 'crear_jornada' %}" enctype="multipart/form-data" method="POST">
             {% include "jornadas/form.html" %}
             <div class="modal-footer text-center">
-                <button class="btn btn-outline-success" type="button" onclick="registrar();">Confirmar</button>
-                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</button>
+                <button class="btn btn-outline-success" type="button" onclick="registrar();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">
+                    Cancelar
+                </button>
             </div>
         </form>
     </div>

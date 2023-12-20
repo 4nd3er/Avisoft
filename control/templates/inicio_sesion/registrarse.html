@@ -7,70 +7,71 @@
 
 {% block contenido %}
 
-  {% load static %}
-  <div class="container mt-2">
-    <form enctype="multipart/form-data" method="POST">
-      {% csrf_token %}
-      <h1 class="titulo">Registrar Datos</h1>
-      <div class="row mx-auto">
-        {% for user in form %}
-        {% if user.name == 'password' or user.name == 'is_staff' or user.name == 'is_active' %}
-          {% if user.name == 'is_active' %}
-            <input class="form-check-input" name="{{user.name}}" type="hidden" value="1" checked>
-          {% endif %}
-        {% else %}
-          <div class="mx-auto col-6 mb-3">
-            <label for="" class="form-label">{{ user.label }}</label>
-            {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
-              {% if user.name == 'id_rol' %}
-                <input type="hidden" name="{{user.name}}" value="2" />
-                <input type="Text" class="form-control" value="Aprendiz" disabled />
-              {% else %}
-                <select class="form-select" name="{{ user.name }}">
-                  {% for select in user %}
-                    {{ select }}
-                  {% endfor %}
-                </select>
-                {% if user.errors %}
-                  <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
-                    {% for error in user.errors %}
-                      <strong>
-                        {{ error }}
-                      </strong>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-              {% endif %}
-            {% else %}
-              <input
-              type="{{ user.field.widget.input_type }}"
-              class="form-control"
-              name="{{ user.name }}"
-              value="{{ user.value | default:''}}"
-              aria-describedby="helpId"
-              placeholder="{{ user.label }}"
-              {% if user.field.widget.input_type == 'file' %}
-                accept=".png, .jpg, .jpeg"
-              {% endif %} />
-              {% if user.errors %}
-                <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
-                  {% for error in user.errors %}
-                    <strong>
-                      {{ error }}
-                    </strong>
-                  {% endfor %}
-                </div>
-              {% endif %}
-              {% endif %}
-          </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-      <div class="text-center mt-3 card-footer text-muted">
-        <input class="btn btn-outline-success" type="submit" href="#" role="button" value="Enviar informacion">
-        <a class="btn btn-outline-danger" href="{% url 'inicio' %}" role="button">Cancelar</a>
-      </div>
-    </form>
-  </div>
+    {% load static %}
+    <div class="container mt-2">
+        <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <h1 class="titulo">Registrar Datos</h1>
+            <div class="row mx-auto">
+                {% for user in form %}
+                    {% if user.name == 'password' or user.name == 'is_staff' or user.name == 'is_active' %}
+                        {% if user.name == 'is_active' %}
+                            <input class="form-check-input" name="{{user.name}}" type="hidden" value="1" checked>
+                        {% endif %}
+                    {% else %}
+                    <div class="mx-auto col-6 mb-3">
+                        <label for="" class="form-label">{{ user.label }}</label>
+                        {% if user.name == 'id_ficha' or user.name == 'id_tipo_doc' or user.name == 'id_rol' %}
+                            {% if user.name == 'id_rol' %}
+                                <input type="hidden" name="{{user.name}}" value="2" />
+                                <input type="Text" class="form-control" value="Aprendiz" disabled />
+                            {% else %}
+                                <select class="form-select" name="{{ user.name }}">
+                                    {% for select in user %}
+                                        {{ select }}
+                                    {% endfor %}
+                                </select>
+                                {% if user.errors %}
+                                    <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
+                                        {% for error in user.errors %}
+                                            <strong>
+                                                {{ error }}
+                                            </strong>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <input
+                                type="{{ user.field.widget.input_type }}"
+                                class="form-control"
+                                name="{{ user.name }}"
+                                value="{{ user.value | default:''}}"
+                                aria-describedby="helpId"
+                                placeholder="{{ user.label }}"
+                                {% if user.field.widget.input_type == 'file' %}
+                                    accept=".png, .jpg, .jpeg"
+                                {% endif %}
+                            />
+                            {% if user.errors %}
+                                <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
+                                    {% for error in user.errors %}
+                                        <strong>
+                                            {{ error }}
+                                        </strong>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="text-center mt-3 card-footer text-muted">
+                <input class="btn btn-outline-success" type="submit" href="#" role="button" value="Enviar informacion">
+                <a class="btn btn-outline-danger" href="{% url 'inicio' %}" role="button">Cancelar</a>
+            </div>
+        </form>
+    </div>
 
 {% endblock contenido %}

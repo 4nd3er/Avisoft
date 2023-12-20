@@ -1,19 +1,22 @@
 <div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <form class="formEditar" action="{% url 'editar_galpon' object.id %}" enctype="multipart/form-data" method="POST">
-      <div class="modal-header">
-        {% load static %}
-        <h3 class="modal-title">Editar {{ object }}</h3>
-        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
-      </div>
-      <div class="modal-body">
-        {% include 'galpones/form.html' %}
-          </div>
-        </div>
-      <div class="modal-footer text-center">
-        <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
-        <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</button>
-      </div>
-    </form>
-  </div>
+    <div class="modal-content">
+        <form class="formEditar" action="{% url 'editar_galpon' object.id %}" enctype="multipart/form-data" method="POST">
+            <div class="modal-header">
+                {% load static %}
+                <h3 class="modal-title">Editar {{ object }}</h3>
+                <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+            </div>
+            <div class="modal-body">
+                {% include 'galpones/form.html' %}
+            </div>
+            <div class="modal-footer text-center">
+                <button class="btn btn-outline-success" type="button" onclick="editar();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

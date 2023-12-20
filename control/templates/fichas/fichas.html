@@ -14,12 +14,10 @@
         <h3>FICHAS</h3>
     </div>
 
-    <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
-  
+    <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">  
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             {% include 'search.html' %}
         </div>
-
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0;">
                 <div class="col-md col-sm">
@@ -44,23 +42,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for dato in fichas %}
-                    <tr>
-                        <td>{{dato.num_ficha}}</td>
-                        <td>{{dato.id_nombreficha.nombre}}</td>
-                        {% if dato.estado_ficha == 1 %}
-                            <td>Activo</td>
-                        {% else %}
-                            <td>Inactivo</td>
-                        {% endif %}
-                        <td>{{dato.fecha_regis}}</td>
-                        <td>
-                            <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_ficha' dato.id_ficha %}')" role="button">Editar</button>
-                            |
-                            <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimFicha' dato.id_ficha %}')" role="button">Eliminar</button>
-                        </td>
-                    </tr>
-                {% endfor %}
+                    {% for dato in fichas %}
+                        <tr>
+                            <td>{{dato.num_ficha}}</td>
+                            <td>{{dato.id_nombreficha.nombre}}</td>
+                            {% if dato.estado_ficha == 1 %}
+                                <td>Activo</td>
+                            {% else %}
+                                <td>Inactivo</td>
+                            {% endif %}
+                            <td>{{dato.fecha_regis}}</td>
+                            <td>
+                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_ficha' dato.id_ficha %}')" role="button">Editar</button>
+                                |
+                                <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimFicha' dato.id_ficha %}')" role="button">Eliminar</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -74,17 +72,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade show" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    </div>
+    <div class="modal fade show" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-
-    </div>
-
-    <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-
-    </div>
+    <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
     <script src="{% static 'Js/formFicha.js' %}"></script>
+
 {% endblock contenido %}

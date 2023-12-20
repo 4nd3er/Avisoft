@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-        <form action="{% url 'eliminarGalpon' object.id %}"  method="POST">
+        <form action="{% url 'eliminarGalpon' object.id %}" method="POST">
             <div class="modal-body">
                 {% csrf_token %}
                 <div class="row">
@@ -8,7 +8,9 @@
                     <h5 class="title">Desea eliminar el registro {{ object }}?</h5>
                     <div class="col text-center">
                         <input type="submit" class="btn btn-outline-danger" value="confirmar">
-                        <a class="btn btn-outline-success" value="cancelar" data-bs-dismiss="modal">Cancelar</a>
+                        <a class="btn btn-outline-success" value="cancelar" data-bs-dismiss="modal">
+                            Cancelar
+                        </a>
                     </div>
                 </div>
             </div>

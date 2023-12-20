@@ -18,7 +18,6 @@
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             {% include 'search.html' %}
         </div>
-
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0;">
                 <div class="col-md col-sm">
@@ -30,30 +29,30 @@
         </div>
     </div>
   
-        <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem; width: 97%;">
-            <div class="table-responsive">
-                <table class="table text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col">Galpón</th>
-                            <th scope="col">Ancho</th>
-                            <th scope="col">Largo</th>
-                            <th scope="col">Área</th>
-                            <th scope="col">Capac. bebederos</th>
-                            <th scope="col">Cant. bebederos</th>
-                            <th scope="col">Capac. comederos</th>
-                            <th scope="col">Cant. comederos</th>
-                            <th scope="col">Capac. gallinas</th>
-                            <th scope="col">Cant. gallinas</th>
-                            <th scope="col">Capac. nidos</th>
-                            <th scope="col">Cant. nidos</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    {% if galpones %}
-                    <tbody>
-                        {% for dato in galpones %}
+    <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem; width: 97%;">
+        <div class="table-responsive">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Galpón</th>
+                        <th scope="col">Ancho</th>
+                        <th scope="col">Largo</th>
+                        <th scope="col">Área</th>
+                        <th scope="col">Capac. bebederos</th>
+                        <th scope="col">Cant. bebederos</th>
+                        <th scope="col">Capac. comederos</th>
+                        <th scope="col">Cant. comederos</th>
+                        <th scope="col">Capac. gallinas</th>
+                        <th scope="col">Cant. gallinas</th>
+                        <th scope="col">Capac. nidos</th>
+                        <th scope="col">Cant. nidos</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                {% if galpones %}
+                <tbody>
+                    {% for dato in galpones %}
                         <tr>
                             <td>{{ dato.nombre_galpon }}</td>
                             <td>{{ dato.ancho }}</td>
@@ -71,38 +70,34 @@
                             <td>
                                 <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_galpon' dato.id %}')" role="button">Editar</button>
                                 {% if user.is_staff %}
-                                <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimGalpon' dato.id %}')" role="button">Eliminar</button>
+                                    <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimGalpon' dato.id %}')" role="button">Eliminar</button>
                                 {% endif %}
                             </td>
                         </tr>
-                        {% endfor %}
-                    </tbody>
-                    {% else %}
-                        <tbody></tbody>
-                    {% endif %}
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                    <tbody></tbody>
+                {% endif %}
+            </table>
         </div>
-        <div class="row container-fluid text-end my-4">
-            <div class="col-md col-sm">
-              <form method="POST">
+    </div>
+
+    <div class="row container-fluid text-end my-4">
+        <div class="col-md col-sm">
+            <form method="POST">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-              </form>
-            </div>
+            </form>
         </div>
+    </div>
 
-        <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade show" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-        </div>
+    <div class="modal fade show" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-        <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-        </div>
-
-        <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-
-        </div>
-        <script src="{% static 'Js/areagalpon.js' %}"></script>
+    <script src="{% static 'Js/areagalpon.js' %}"></script>
     
 {% endblock contenido %}

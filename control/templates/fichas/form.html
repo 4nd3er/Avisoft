@@ -1,30 +1,28 @@
 <div class="modal-body">
-  {% csrf_token %}
-  <div class="form-group mb-3">
-    <label for="num_ficha" class="form-label">Número de ficha:</label>
-    <input type="text" name="num_ficha" value="{{ form.num_ficha.value  | default:''}}" maxlength="50" required class="form-control rounded mb-3">
-    <div id="errores{{ form.num_ficha.name }}">
-      
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="num_ficha" class="form-label">Número de ficha:</label>
+        <input type="text" name="num_ficha" value="{{ form.num_ficha.value  | default:''}}" maxlength="50" required class="form-control rounded mb-3">
+        <div id="errores{{ form.num_ficha.name }}">
+        
+        </div> 
+        <label for="titulacion" class="form-label">Nombre de ficha:</label>
+        <select id="id_nombreficha" name="id_nombreficha" required class="form-select rounded mb-3">
+            {% for option in form.id_nombreficha %}
+                {{ option }}
+            {% endfor %}
+        </select>
+        <div id="errores{{ form.id_nombreficha.name }}">
+        
+        </div>
+        <label for="select_estado_ficha" class="form-label">Estado de ficha:</label>
+        <select id="select_estado_ficha" name="select_estado_ficha" required class="form-select rounded" onchange="stateFicha();">
+            <option value="1" {% if form.estado_ficha.value == 1 %}selected{% endif %}>Activo</option>
+            <option value="0" {% if form.estado_ficha.value == 0 %}selected{% endif %}>Inactivo</option>
+        </select>
+        <input id="estado_ficha" value="{{ form.estado_ficha.value |default:'' }}" type="hidden" name="estado_ficha" onchange="stateFicha();">
+        <div id="errores{{ form.estado_ficha.name }}">
+        
+        </div>
     </div>
-    
-    <label for="titulacion" class="form-label">Nombre de ficha:</label>
-    <select id="id_nombreficha" name="id_nombreficha" required class="form-select rounded mb-3">
-      {% for option in form.id_nombreficha %}
-        {{ option }}
-      {% endfor %}
-    </select>
-    <div id="errores{{ form.id_nombreficha.name }}">
-      
-    </div>
-    
-    <label for="select_estado_ficha" class="form-label">Estado de ficha:</label>
-    <select id="select_estado_ficha" name="select_estado_ficha" required class="form-select rounded" onchange="stateFicha();">
-      <option value="1" {% if form.estado_ficha.value == 1 %}selected{% endif %}>Activo</option>
-      <option value="0" {% if form.estado_ficha.value == 0 %}selected{% endif %}>Inactivo</option>
-    </select>
-    <input id="estado_ficha" value="{{ form.estado_ficha.value |default:'' }}" type="hidden" name="estado_ficha" onchange="stateFicha();">
-    <div id="errores{{ form.estado_ficha.name }}">
-      
-    </div>
-  </div>
 </div>

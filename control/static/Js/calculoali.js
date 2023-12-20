@@ -7,7 +7,6 @@ function calculoAlim() {
     resulatdo1 = Number(total1) * 609;
     round = resulatdo1;
     kg_total.value = Math.round(round);
-    total2 = Number(gr_gallina) /40;
+    total2 = Number(gr_gallina) / 40;
     bultos_total.value = total2;
-
 }

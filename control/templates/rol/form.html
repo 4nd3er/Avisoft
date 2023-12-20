@@ -1,22 +1,22 @@
 <div class="modal-body">
-  {% csrf_token %}
-  <div class="row">
-    {% for rol in form %}
-      <label for="{{rol.name}}" class="col-12 form-label text-center">{{ rol.label }}</label>
-      <div class="col-12 mb-3">
-          <input
-            style="width: 70%"
-            type="{{ rol.field.widget.input_type }}"
-            class="form-control col-12 mx-auto"
-            name="{{ rol.name }}"
-            value="{{ rol.value | default:''}}"
-            aria-describedby="helpId"
-            placeholder="{{ rol.label }}"
-          />
-          <div id="errores{{ rol.name }}">
+    {% csrf_token %}
+    <div class="row">
+        {% for rol in form %}
+            <label for="{{rol.name}}" class="col-12 form-label text-center">{{ rol.label }}</label>
+            <div class="col-12 mb-3">
+                <input
+                    style="width: 70%"
+                    type="{{ rol.field.widget.input_type }}"
+                    class="form-control col-12 mx-auto"
+                    name="{{ rol.name }}"
+                    value="{{ rol.value | default:''}}"
+                    aria-describedby="helpId"
+                    placeholder="{{ rol.label }}"
+                />
+                <div id="errores{{ rol.name }}">
 
-          </div>
-      </div>
-    {% endfor %}
-  </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>

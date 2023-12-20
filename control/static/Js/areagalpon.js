@@ -25,4 +25,3 @@ function onlyNumber(evt) {
         return false;
     }
 }; // ? Funcion que solo permite numeros en el input
-

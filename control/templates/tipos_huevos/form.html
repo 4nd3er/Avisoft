@@ -2,14 +2,14 @@
     {% csrf_token %}
     {% for campo in form %}
         <div class="mb-3 col-10">
-        <label for="{{campo.name}}" class="form-label">{{campo.label}}</label>
-        <input
-            type="text"
-            class="form-control"
-            name="{{campo.name}}"
-            placeholder="{{campo.label}}"
-            value="{{campo.value |default:''}}"
-        />
+            <label for="{{campo.name}}" class="form-label">{{campo.label}}</label>
+            <input
+                type="text"
+                class="form-control"
+                name="{{campo.name}}"
+                placeholder="{{campo.label}}"
+                value="{{campo.value |default:''}}"
+            />
         </div>
         <div id="errores{{campo.name}}">
 

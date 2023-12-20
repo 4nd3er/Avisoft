@@ -1,22 +1,26 @@
 <div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-    <form class="formCrear" action="{% url 'crear_tipo_doc' %}" enctype="multipart/form-data" method="POST">
-      <div class="modal-header">
-        {% load static %}
-        <h3 class="modal-title">Crear tipo de documento</h3>
-        <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
-      </div>
-      <div class="modal-body">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div id="errores{{form.tipo_doc.name}}">
+    <div class="modal-content">
+        <form class="formCrear" action="{% url 'crear_tipo_doc' %}" enctype="multipart/form-data" method="POST">
+            <div class="modal-header">
+                {% load static %}
+                <h3 class="modal-title">Crear tipo de documento</h3>
+                <img class="ml-3" src="{% static 'images/sena_logo.png' %}" alt="Logo Sena" style="width: 4rem">
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div id="errores{{form.tipo_doc.name}}">
 
-        </div>
-      </div>
-      <div class="modal-footer text-center">
-        <button class="btn btn-outline-success" type="button" onclick="registrar();">Confirmar</button>
-        <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">Cancelar</button>
-      </div>
-    </form>
-  </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <button class="btn btn-outline-success" type="button" onclick="registrar();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalCrear();">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

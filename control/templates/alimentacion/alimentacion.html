@@ -15,11 +15,9 @@
     </div>
 
     <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
-  
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             {% include 'search.html' %}
         </div>
-
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0;">
                 <div class="col-md col-sm">
@@ -35,28 +33,28 @@
         <table class="table" style="text-align:center;">
             {% if alimentacion %}
                 <thead>
-                <tr>
-                    <th scope="col">Galpón</th>
-                    <th scope="col">Gr/Gallina/Dia</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Acciones</th>
-                </tr>
+                    <tr>
+                        <th scope="col">Galpón</th>
+                        <th scope="col">Gr/Gallina/Dia</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {% for dato in alimentacion %}
-                    <tr>
-                        <td>{{ dato.id_galpon }}</td>
-                        <td>{{ dato.gr_gallina_dia}} Gr</td>
-                        <td>{{ dato.fecha }}</td>
-                        <td>
-                            <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_alimentacion' dato.id %}')" role="button">Editar</button>
-                            {% if user.is_staff %}
-                                |
-                                <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimAlimentacion' dato.id %}')" role="button">Eliminar</button>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                    {% for dato in alimentacion %}
+                        <tr>
+                            <td>{{ dato.id_galpon }}</td>
+                            <td>{{ dato.gr_gallina_dia}} Gr</td>
+                            <td>{{ dato.fecha }}</td>
+                            <td>
+                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_alimentacion' dato.id %}')" role="button">Editar</button>
+                                {% if user.is_staff %}
+                                    |
+                                    <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimAlimentacion' dato.id %}')" role="button">Eliminar</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             {% else %}
                 <tbody>
@@ -68,24 +66,19 @@
   
     <div class="row container-fluid text-end my-4">
         <div class="col-md col-sm">
-          <form method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-          </form>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
+            </form>
         </div>
-      </div>
-
-    <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-
     </div>
 
-    <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade show" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    </div>
+    <div class="modal fade show" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-    </div>
     {% load static %}
     <script src="{% static 'Js/calculoali.js' %}"></script>
 

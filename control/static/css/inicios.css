@@ -42,19 +42,23 @@ body {
 }
 
 @keyframes tipografia {
-    0%{
+    0% {
         font-family: monospace;
     }
-    25%{
+
+    25% {
         font-family: Courier;
     }
-    50%{
+
+    50% {
         font-family: sans-serif;
     }
-    75%{
+
+    75% {
         font-family: Calibri;
     }
-    100%{
+
+    100% {
         font-family: 'Work Sans', sans-serif;
     }
 }
@@ -155,7 +159,7 @@ a {
         width: 18rem;
     }
 
-    form{
+    form {
         padding-inline: 1rem;
     }
 

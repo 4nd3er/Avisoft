@@ -6,105 +6,104 @@
 {% endblock %}
 
 {% block contenido %}
-  {% load static %}
 
-  <div class="col-md my-4 py-2 text-center title" style="border: 2px solid var(--colorsec2); color: var(--colorsec2);">
-    <h3>USUARIOS</h3>
-  </div>
+    {% load static %}
 
-  <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
-    <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
-      {% include 'search.html' %}
+    <div class="col-md my-4 py-2 text-center title" style="border: 2px solid var(--colorsec2); color: var(--colorsec2);">
+        <h3>USUARIOS</h3>
     </div>
 
-    <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
-      <div class="row text-center" style="margin: 2rem 0;">
-        <div class="col-md col-sm">
-          <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_usuario' %}')" role="button">REGISTRAR <i class="bi bi-plus-circle"></i></button>
+    <div class="row mt-3 mb-3 container-fluid mx-auto" style="gap: 20px;">
+        <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
+            {% include 'search.html' %}
         </div>
-      </div>
+        <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
+            <div class="row text-center" style="margin: 2rem 0;">
+                <div class="col-md col-sm">
+                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_usuario' %}')" role="button">REGISTRAR <i class="bi bi-plus-circle"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
   
-  {% if messages %}
-    {% for message in messages %}
-      <p class="alert {{ message.tags }} alert-dismissible fade show text-center mx-auto" style="width: 97%;">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </p>
-    {% endfor %}
-  {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="alert {{ message.tags }} alert-dismissible fade show text-center mx-auto" style="width: 97%;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </p>
+        {% endfor %}
+    {% endif %}
 
-  <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead class="sticky-top bg-white">
-          <tr class="text-center">
-            <th scope="col">Imagen</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido</th>
-            <th scope="col">Tipo de documento</th>
-            <th scope="col">Documento</th>
-            <th scope="col">Celular</th>
-            <th scope="col">Correo</th>
-            <th scope="col">Ficha</th>
-            <th scope="col">Rol</th>
-            <th scope="col">Registro</th>
-            <th scope="col">Conexion</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        {% if usuarios %}
-          <tbody>
-            {% for dato in usuarios %}
-              <tr class="text-center">
-                {% if dato.imagen != 'null' and dato.imagen.url|length >= 1 %}
-                  <td class="image">
-                    <img src="{{ dato.imagen.url }}" style="width: 5rem; border-radius: .5rem; " />
-                  </td>
+    <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="sticky-top bg-white">
+                    <tr class="text-center">
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Tipo de documento</th>
+                        <th scope="col">Documento</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Ficha</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Registro</th>
+                        <th scope="col">Conexion</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                {% if usuarios %}
+                    <tbody>
+                        {% for dato in usuarios %}
+                            <tr class="text-center">
+                                {% if dato.imagen != 'null' and dato.imagen.url|length >= 1 %}
+                                    <td class="image">
+                                        <img src="{{ dato.imagen.url }}" style="width: 5rem; border-radius: .5rem; " />
+                                    </td>
+                                {% else %}
+                                    <td class="image">No tiene imagen</td>
+                                {% endif %}
+                                <td>{{ dato.nombre }}</td>
+                                <td>{{ dato.apellido }}</td>
+                                <td>{{ dato.id_tipo_doc }}</td>
+                                <td>{{ dato.documento }}</td>
+                                <td>{{ dato.celular }}</td>
+                                <td>{{ dato.email }}</td>
+                                <td>{{ dato.id_ficha }}</td>
+                                <td>{{ dato.id_rol }}</td>
+                                <td>{{ dato.registro }}</td>
+                                <td>{{ dato.last_login }}</td>
+                                <td colspan="2">
+                                    <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_usuario' dato.id %}')" role="button">Editar</button>
+                                    <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimUsuario' dato.id %}')" role="button">Eliminar</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 {% else %}
-                  <td class="image">No tiene imagen</td>
+                    <tbody class="text-center mx-auto"></tbody>
                 {% endif %}
-                <td>{{ dato.nombre }}</td>
-                <td>{{ dato.apellido }}</td>
-                <td>{{ dato.id_tipo_doc }}</td>
-                <td>{{ dato.documento }}</td>
-                <td>{{ dato.celular }}</td>
-                <td>{{ dato.email }}</td>
-                <td>{{ dato.id_ficha }}</td>
-                <td>{{ dato.id_rol }}</td>
-                <td>{{ dato.registro }}</td>
-                <td>{{ dato.last_login }}</td>
-                <td colspan="2">
-                  <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_usuario' dato.id %}')" role="button">Editar</button>
-
-                  <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimUsuario' dato.id %}')" role="button">Eliminar</button>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        {% else %}
-          <tbody class="text-center mx-auto"></tbody>
-        {% endif %}
-      </table>
+            </table>
+        </div>
     </div>
-  </div>
 
-
-  <div class="row container-fluid text-end my-4">
-    <div class="col-md col-sm">
-      <form method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-      </form>
+    <div class="row container-fluid text-end my-4">
+        <div class="col-md col-sm">
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <div class="modal fade show" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+    <div class="modal fade show" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-  <div class="modal fade show" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+    <div class="modal fade show" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
-  <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+    <div class="modal fade show" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
   
-  <script src="{% static 'Js/formUsuario.js' %}"></script>
+    <script src="{% static 'Js/formUsuario.js' %}"></script>
+
 {% endblock %}

@@ -10,7 +10,7 @@
                 <div class="galpones">
                     <input type="hidden" value="" id="idGalpon">
                     {%for galpon in data%}
-                    <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
+                        <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
                     {% endfor %}
                 </div>
                 <div class="row">
@@ -19,8 +19,12 @@
                 <script src="{% static "Js/mortaDescar.js" %}"></script>
             </div>
             <div class="modal-footer text-center">
-            <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
-            <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</button>
+                <button class="btn btn-outline-success" type="button" onclick="editar();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">
+                    Cancelar
+                </button>
             </div>
         </form>
     </div>

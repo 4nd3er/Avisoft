@@ -7,10 +7,14 @@
         </div>
         <form class="formEditar" action="{% url 'editar_gallinas' object.id %}" enctype="multipart/form-data" method="POST">
             {% include "gallinas/form.html" %}
-        <div class="modal-footer text-center">
-          <button class="btn btn-outline-success" type="button" onclick="editar();">Confirmar</button>
-          <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">Cancelar</button>
-        </div>
-      </form>
+            <div class="modal-footer text-center">
+                <button class="btn btn-outline-success" type="button" onclick="editar();">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="cerrarModalEditar();">
+                    Cancelar
+                </button>
+            </div>
+        </form>
     </div>
 </div>

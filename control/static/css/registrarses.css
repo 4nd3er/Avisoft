@@ -103,6 +103,7 @@ fieldset {
 }
 
 @media (max-width:1200px) and (min-width:768px) {
+
     .form-select,
     .form-control {
         width: 80%;

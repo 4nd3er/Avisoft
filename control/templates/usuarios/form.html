@@ -1,52 +1,52 @@
 <div class="modal-body">
-  {% csrf_token %}
-  <div class="row mx-auto">
-    {% for users in form %}
-      {% if users.name == 'password' or users.name == 'is_staff' or users.name == 'is_active' %}
-        {% if users.name == 'password' %}
-          <input class="form-control" type="hidden" name="{{users.name}}" value="{{users.value}}">
-        {% endif %}
-        {% if users.name == 'is_active' %}
-          <input class="form-check-input" name="{{users.name}}" type="hidden" value="1" checked>
-        {% endif %}
-        {% if users.name == 'is_staff' %}
-          <input class="form-check-input" id="{{users.name}}" name="{{users.name}}" type="hidden" value="{{users.value}}" onchange="AdminUser();" {% if form.id_rol.value == 1 %}checked{% endif %}>
-        {% endif %}
-      {% else %}
-        <div class="mx-auto col-6 mb-3">
-          <label class="form-label">{{ users.label }}</label>
-          {% if users.name == 'id_ficha' or users.name == 'id_tipo_doc' or users.name == 'id_rol' %}
-            {% if users.name == 'id_rol' and user.is_staff == 0 %}
-              <input class="form-control" type="input" value="Aprendiz" readonly disabled>
-              <input class="form-control" name="id_rol" type="hidden" value="{{form.id_rol.value}}">
+    {% csrf_token %}
+    <div class="row mx-auto">
+        {% for users in form %}
+            {% if users.name == 'password' or users.name == 'is_staff' or users.name == 'is_active' %}
+                {% if users.name == 'password' %}
+                    <input class="form-control" type="hidden" name="{{users.name}}" value="{{users.value}}">
+                {% endif %}
+                {% if users.name == 'is_active' %}
+                    <input class="form-check-input" name="{{users.name}}" type="hidden" value="1" checked>
+                {% endif %}
+                {% if users.name == 'is_staff' %}
+                    <input class="form-check-input" id="{{users.name}}" name="{{users.name}}" type="hidden" value="{{users.value}}" onchange="AdminUser();" {% if form.id_rol.value == 1 %}checked{% endif %}>
+                {% endif %}
             {% else %}
-            <select class="form-select" name="{{ users.name }}" id="{{users.name}}" onchange="AdminUser();">
-                {% for select in users %}
-                  {{ select }}
-                {% endfor %}
-              {% endif %}
-            </select>
-            <div id="errores{{users.name}}">
+                <div class="mx-auto col-6 mb-3">
+                    <label class="form-label">{{ users.label }}</label>
+                    {% if users.name == 'id_ficha' or users.name == 'id_tipo_doc' or users.name == 'id_rol' %}
+                        {% if users.name == 'id_rol' and user.is_staff == 0 %}
+                            <input class="form-control" type="input" value="Aprendiz" readonly disabled />
+                            <input class="form-control" name="id_rol" type="hidden" value="{{form.id_rol.value}}" />
+                        {% else %}
+                            <select class="form-select" name="{{ users.name }}" id="{{users.name}}" onchange="AdminUser();">
+                                {% for select in users %}
+                                {{ select }}
+                                {% endfor %}
+                            {% endif %}
+                            </select>
+                            <div id="errores{{users.name}}">
 
-            </div>
-            {% else %}
-            <input
-              type="{{ users.field.widget.input_type }}"
-              class="form-control"
-              name="{{ users.name }}"
-              value="{{ users.value | default:''}}"
-              aria-describedby="helpId"
-              placeholder="{{ users.label }}"
-              {% if users.field.widget.input_type == 'file' %}
-                accept=".png, .jpg, .jpeg"
-              {% endif %}
-            />
-          <div id="errores{{users.name}}">
+                            </div>
+                    {% else %}
+                        <input
+                            type="{{ users.field.widget.input_type }}"
+                            class="form-control"
+                            name="{{ users.name }}"
+                            value="{{ users.value | default:''}}"
+                            aria-describedby="helpId"
+                            placeholder="{{ users.label }}"
+                            {% if users.field.widget.input_type == 'file' %}
+                                accept=".png, .jpg, .jpeg"
+                            {% endif %}
+                        />
+                        <div id="errores{{users.name}}">
 
-          </div>
-          {% endif %}
-      </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 </div>
