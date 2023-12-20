@@ -23,21 +23,16 @@
 <div class="content">
     <div class="header">
         <!--navbar-->
-        {% comment %} <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
             <div class="container-fluid">
-                <div class="logo_sena">
-                    <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
-                        alt="Logo Sena" style="width: 4rem">
-                    </a>
-                </div>
-                <div class="menu_prin">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
+                <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
+                    alt="Logo Sena" style="width: 4rem">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav me-auto d-flex mx-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
                         </li>
@@ -57,100 +52,34 @@
                             <a class="nav-link" href="{% url 'registro_diario' %}">Registro diario</a>
                         </li>
                     </ul>
-                </div>
-                <div class="text-center perfil">
-                    <i href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if not user.imagen == '' %}
-                        <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
-                            <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                    <hr class="d-md-none text-white-50">
+                    <div class=" nav-item text-center perfil">
+                        <i href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if not user.imagen == '' %}
+                            <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
+                                <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
+                            </div>
+                            {% else %}
+                            <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
+                            {% endif %}
+                        </i>
+                        <span href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user %}
+                                <span>{{user.nombre}}</span>
+                            {% else %}
+                                <span>Perfil</span>
+                            {% endif %}
+                        </span>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                            <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
+                            <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
+                            <hr class="dropdown-divider">
+                            <a class="menu" href="{% url 'logout' %}">Cerrar sesion</a>
                         </div>
-                        {% else %}
-                        <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
-                        {% endif %}
-                    </i>
-                    <span href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if user %}
-                            <span>{{user.nombre}}</span>
-                        {% else %}
-                            <span>Perfil</span>
-                        {% endif %}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <li><a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a></li>
-                        <li><a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="menu" href="{% url 'logout' %}">Cerrar sesion</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav> {% endcomment %}
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-            <div class="container-fluid">
-            <!-- icono o nombre -->
-    
-            <a class="nav-link" href="{% url 'interfaz' %}"><img src="{% static 'images/navbar/logo_blanco.png' %}"
-                alt="Logo Sena" style="width: 4rem">
-            </a>
-                
-            <!-- boton del menu -->
-    
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-    
-              <!-- elementos del menu colapsable -->
-    
-            <div class="collapse navbar-collapse" id="menu">
-              <ul class="navbar-nav me-auto d-flex">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'gallinas' %}">Gallinas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'registro_diario' %}">Registro diario</a>
-                </li>
-              </ul>
-    
-              <hr class="d-md-none text-white-50">
-                <div class=" nav-item text-center perfil">
-                    <i href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if not user.imagen == '' %}
-                        <div class="mx-auto" style="width: 3rem; height: 3rem; border-radius: 50%; overflow: hidden;">
-                            <img src="{{user.imagen.url}}" style="width: 3rem; height: 3rem; display: flex; justify-content: center;">
-                        </div>
-                        {% else %}
-                        <img src="{% static 'images/navbar/registrar_foto.png' %}" alt="Foto perfil" style="width: 2.5rem;">
-                        {% endif %}
-                    </i>
-                    <span href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if user %}
-                            <span>{{user.nombre}}</span>
-                        {% else %}
-                            <span>Perfil</span>
-                        {% endif %}
-                    </span>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
-                        <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
-                        <hr class="dropdown-divider">
-                        <a class="menu" href="{% url 'logout' %}">Cerrar sesion</a>
                     </div>
                 </div>
             </div>
-         
-            </div>  
-          </nav>
+        </nav>
         <!--navbar-->
     </div>
 

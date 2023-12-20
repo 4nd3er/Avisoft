@@ -165,10 +165,15 @@ function notificacionSuccess(mensaje) {
 }
 
 function notificacionError(mensaje) {
-    Swal.fire({
+    Swal.mixin({
+        toast: true,
+        timer: 1500,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+    }).fire({
         icon: 'error',
         title: 'Error!',
-        text: mensaje,
-        confirmButtonColor: "#C00",
+        text: mensaje
     })
 }
