@@ -389,7 +389,7 @@ class Usuario(AbstractBaseUser):
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.CharField('Numero de documento',max_length = 10, unique = True)
     celular = models.CharField(max_length = 10)
-    email = models.CharField(max_length = 100, db_column = 'correo')
+    email = models.CharField(max_length = 100, db_column = 'correo', unique = True)
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)

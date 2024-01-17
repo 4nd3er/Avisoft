@@ -435,7 +435,7 @@ class editarGallinas(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
-                nombreGalpon = form.cleaned_data['id_galpon']
+                nombreGalpon = form.cleaned_data['id_galpon'] 
                 galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
                 value = int(localStorage.getItem('gallinas'))

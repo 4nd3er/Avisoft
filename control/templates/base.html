@@ -70,6 +70,7 @@
                                     {% endif %}
                                 </span>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                    <a class="menu" href="{% url "interfaz" %}" role="button">Inicio</a>
                                     <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
                                     <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
                                     <hr class="dropdown-divider">
@@ -77,7 +78,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </nav>
                 <!--navbar-->
             </div>
