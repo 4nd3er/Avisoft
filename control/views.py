@@ -892,6 +892,88 @@ class ProduccionDiariaa(ListView):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
+    
+    def post(self, request, *args, **kwargs):
+        # Obtener el queryset usando la función get_queryset
+        query = self.get_queryset()
+
+        wb = Workbook()
+        ws = wb.active
+        #nombre de la hoja de excel
+        ws.title = 'Excel Report'
+
+        #configutación del encabezado
+        ws['B2'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['B2'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                top=Side(border_style='thin'), bottom=Side(border_style='thin'))
+        ws['B2'].fill = PatternFill(start_color='39A900', fill_type='solid')
+        ws['B2'].font = Font(name='Arial', size=15, bold=True, color='FFFFFF')
+        ws['B2'] = f'REPORTE {self.model._meta.model_name.upper()}'
+        
+        ws.merge_cells('B2:I2')
+        listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+        listName = ['Galpón', 'Jornada', 'Tipo de Huevo', 'Cantidad', 'Rotos', 'Descarte', 'Usuario', 'Fecha']
+        countName = 0
+        count = 3
+        ws.row_dimensions[2].height = 25
+
+        
+        for i in listColumn:
+            ws.column_dimensions[i].width = 35
+            ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'{listColumn[countName]}3'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                                            top=Side(border_style='thin'), bottom=Side(border_style='thin'))
+            ws[f'{listColumn[countName]}3'].fill = PatternFill(start_color='FFCE40', fill_type='solid')
+            ws[f'{listColumn[countName]}3'].font = Font(name='Arial', size=11)
+            ws[f'{listColumn[countName]}3'] = listName[countName]
+            count += 1
+            countName += 1
+        # Pintamos los datos en el reporte
+        listName = ['id_galpon', 'id_jornada', 'id_tipo_huevo', 'cantidad', 'rotos', 'descarte', 'id_usuario', 'fecha']
+        countColumn = 2
+        for i in listName:
+            countRow = 4
+            for q in query:
+                ws.cell(row=countRow, column=countColumn).alignment = Alignment(horizontal='center', vertical='center')
+                ws.cell(row=countRow, column=countColumn).border = Border(left=Side(border_style='thin'),
+                                                                        right=Side(border_style='thin'),
+                                                                        top=Side(border_style='thin'),
+                                                                        bottom=Side(border_style='thin'))
+                ws.cell(row=countRow, column=countColumn).fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+                ws.cell(row=countRow, column=countColumn).font = Font(name='Arial', size='11')
+
+                # Obtener el valor de la columna
+            # Obtener el valor de la columna
+                if i == 'id_usuario':
+                    valueRow = getattr(q.id_usuario, 'nombre', 'nombre') if q.id_usuario else ''
+                elif i == 'id_galpon':
+                    valueRow = getattr(q.id_galpon, 'nombre_galpon', 'nombre_galpon') if q.id_galpon else ''
+                elif i == 'id_jornada':
+                    valueRow = getattr(q.id_jornada, 'jornada', 'jornada') if q.id_jornada else ''
+                elif i == 'id_tipo_huevo':
+                    valueRow = getattr(q.id_tipo_huevo, 'tipos_huevos', 'tipos_huevos') if q.id_tipo_huevo else ''
+                elif i == 'fecha':
+                    valueRow = getattr(q, i).strftime('%Y-%m-%d') if getattr(q, i) else ''
+                else:
+                    valueRow = getattr(q, i)
+
+                
+                ws.cell(row=countRow, column=countColumn).value = valueRow
+                countRow += 1
+            countColumn += 1
+
+        # Nombre del archivo
+        nombreArchivo = f'REPORTE {self.model._meta.model_name.upper()}.xlsx'
+        
+        # Definir el tipo de respuesta
+        response = HttpResponse(content_type='application/ms-excel')
+        contenido = "attachment; filename={0}".format(nombreArchivo)
+        response['Content-Disposition'] = contenido
+        wb.save(response)
+        return response
+
+
+
 
 class crearProdDiaria(LoginRequiredMixin, CreateView):
     model = ProduccionDiaria
@@ -925,6 +1007,8 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
         else:
             return redirect('produccion_diaria')
 
+
+    
 class editarProdDiaria(UpdateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/editar.html'
