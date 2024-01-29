@@ -1,29 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --colorprin: #39A900;
-    --colorsec: #000;
-    --colorsec2: #00324D;
-    --colorsec3: #385C57;
-}
-
-.content {
-    justify-content: center;
+.content{
     align-items: center;
-    display: grid;
-    grid-template-rows: 80px 1fr 1fr 1fr 1fr 80px;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.header {
-    grid-column: 1 / span 3;
 }
 
 .container-fluid .nav-item {
@@ -53,20 +29,8 @@
     color: #000;
 }
 
-body {
-    display: grid;
-    flex-direction: column;
-    font-family: 'Work Sans', sans-serif;
-    height: 100vh;
-}
-
 div a {
     text-decoration: none;
-}
-
-.main {
-    grid-row: 2 / 6;
-    grid-column: 1 / span 3;
 }
 
 form {
@@ -124,9 +88,4 @@ form {
 .modulos:hover a img,
 .modulos_admin:hover a img {
     transform: scale(0.9);
-}
-
-.footer {
-    grid-row: 6 / 7;
-    grid-column: 1 / span 3;
 }

@@ -1,16 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap');
-
-:root {
-    --colorprin: #39A900;
-    --colorsec2: #385C57;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .navbar {
     background-color: var(--colorprin);
 }
@@ -45,35 +32,6 @@ a {
 
 .container-fluid .col-md a span {
     color: #000;
-}
-
-body {
-    display: grid;
-    font-family: 'Work Sans', sans-serif;
-    height: 100vh;
-}
-
-.content {
-    justify-content: center;
-    align-items: center;
-    display: grid;
-    grid-template-rows: 80px 1fr 1fr 1fr 1fr 80px;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.header {
-    grid-column: 1 / span 3;
-}
-
-.main {
-    grid-row: 2 / 6;
-    grid-column: 1 / span 3;
-}
-
-.footer {
-    grid-row: 6 / 7;
-    grid-column: 1 / span 3;
 }
 
 .col-md-3:hover a {

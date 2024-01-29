@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --colorprin: #39A900;
+    --blanco: #ffffff;
+    --colorsec2: #00324D;
+    --colorsec3: #385C57;
+}
+
+body {
+    display: grid;
+    flex-direction: column;
+    font-family: 'Work Sans', sans-serif;
+    height: 100vh;
+}
+
+.content {
+    justify-content: center;
+    display: grid;
+    grid-template-rows: 80px 1fr 1fr 1fr 1fr 80px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.header {
+    grid-column: 1 / span 3;
+}
+
+.main {
+    grid-row: 2 / 6;
+    grid-column: 1 / span 3;
+}
+
+.footer {
+    grid-row: 6 / 7;
+    grid-column: 1 / span 3;
+}
+
+.informacion {
+    height: 20rem;
+    border: 1px solid;
+    border-radius: .5rem;
+    width: 97%;
+}
+
+@media (min-width: 1600px) {
+    .informacion {
+        height: 25rem;
+    }
+}
+
+@media (min-width: 1800px) {
+    .informacion {
+        height: 30rem;
+    }
+}
+
+@media (min-width: 2000px) {
+    .informacion {
+        height: 37rem;
+    }
+}
+
+@media (min-width: 2200px) {
+    .informacion {
+        height: 45rem;
+    }
+}
+
+@media (min-width: 2400px) {
+    .informacion {
+        height: 50rem;
+    }
+}
+
+@media (min-width: 2600px) {
+    .informacion {
+        height: 60rem;
+    }
+}
+
+@media (min-width: 2900px) {
+    .informacion {
+        height: 90rem;
+    }
+}
+
+@media (min-width: 3800px) {
+    .informacion {
+        height: 140rem;
+    }
+}
+
+@media (min-width: 4200px) {
+    .informacion {
+        height: 150rem;
+    }
+}
+
+@media (min-width: 5900px) {
+    .informacion {
+        height: 210rem;
+    }
+}

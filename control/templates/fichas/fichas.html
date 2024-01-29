@@ -29,7 +29,7 @@
         </div>
     </div>
   
-    <div class="mb-3 container-fluid card" style="height: 20rem; border: 1px solid; border-radius: .5rem;width: 97%;">
+    <div class="mb-3 container-fluid card informacion">
         <div class="table-responsive">
             <table class="table text-center">
                 <thead>
@@ -41,34 +41,28 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for dato in fichas %}
+                {% if fichas %}
+                    <tbody>
+                        {% for dato in fichas %}
                         <tr>
                             <td>{{dato.num_ficha}}</td>
                             <td>{{dato.id_nombreficha.nombre}}</td>
                             {% if dato.estado_ficha == 1 %}
                                 <td>Activo</td>
-                            {% else %}
+                                {% else %}
                                 <td>Inactivo</td>
-                            {% endif %}
-                            <td>{{dato.fecha_regis}}</td>
-                            <td>
-                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_ficha' dato.id_ficha %}')" role="button">Editar</button>
-                                |
+                                {% endif %}
+                                <td>{{dato.fecha_regis}}</td>
+                                <td>
+                                    <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_ficha' dato.id_ficha %}')" role="button">Editar</button>
+                                    |
                                 <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimFicha' dato.id_ficha %}')" role="button">Eliminar</button>
                             </td>
                         </tr>
-                    {% endfor %}
-                </tbody>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
             </table>
-        </div>
-    </div>
-  
-    <div class="row container-fluid">
-        <div class="col-md col-sm">
-            <a class="btn btn-outline-secondary" style="border: 2px solid" href="">
-                EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i>
-            </a>
         </div>
     </div>
 

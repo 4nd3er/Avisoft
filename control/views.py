@@ -293,7 +293,17 @@ class Fichass(ListView):
     template_name = 'fichas/fichas.html'
 
     def get_queryset(self):
-        return self.model.objects.all().order_by('-id_ficha')
+        busqueda = self.request.GET.get("buscar")
+        if busqueda:
+            query = self.model.objects.filter(
+                Q(fecha_regis__icontains = busqueda) |
+                Q(num_ficha__icontains = busqueda) |
+                Q(id_nombreficha__nombre__icontains = busqueda) |
+                Q(estado_ficha__icontains = busqueda) 
+            )
+        else:
+            query = 0
+        return query
 
     def get_context_data(self, **kwargs):
         contexto = {}
