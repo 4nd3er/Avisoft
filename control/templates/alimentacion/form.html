@@ -3,9 +3,9 @@
     {% csrf_token %}
         {% for campo in form %}
             {% if campo.label == 'Galpon' or campo.label == 'Tipo alimento' %}
-                <div class="col-6">
+                <div class="col-6 mb-3">
                     <label class="form-label">{{ campo.label }}</label>
-                    <select class="form-select" name="{{ campo.name }}" value="{{ campo.value | default:''}}">
+                    <select class="form-select" id="{{campo.name}}" name="{{ campo.name }}" value="{{ campo.value | default:''}}" oninput="galponDataForm();">
                         {% for select in campo %}
                             {{select}}
                         {% endfor %}
@@ -15,17 +15,17 @@
                     </div>
                 </div>
             {% else %}
-                <div class="col-6">
+                <div class="col-6 mb-3">
                     <label class="form-label">{{ campo.label }}</label>
                     <input
-                        onChange="calculoAlim();"
-                        type="text"
+                        type="{{campo.field.widget.input_type}}"
                         id="{{campo.name}}"
-                        class="form-control {{ campo.name }}" 
+                        class="form-control {{ campo.name }} readOnly" 
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
                         placeholder="{{campo.label}}"
                         value="{{ campo.value | default:''}}"
+                        readonly
                     />
                     <div id="errores{{campo.name}}">
 

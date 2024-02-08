@@ -30,15 +30,15 @@
         <div class="table-responsive">
             <table class="table text-center">
                 {% if lineas %}
-                    <thead>
-                        <tr>
+                    <thead class="sticky-top bg-white">
+                        <tr class="text-center">
                             <th scope="col">Línea</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for dato in lineas %}
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ dato.nombre }}</td>
                             <td>
                                 <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_linea' dato.id %}')" role="button">Editar</button>

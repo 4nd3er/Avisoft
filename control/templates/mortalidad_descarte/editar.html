@@ -7,16 +7,9 @@
         </div>
         <form class="formEditar" action="{% url 'editar_mortalidad' object.id %}" enctype="multipart/form-data" method="POST">
             <div class="modal-body">
-                <div class="galpones">
-                    <input type="hidden" value="" id="idGalpon">
-                    {%for galpon in data%}
-                        <input type="hidden" class="galpon" data-id="{{galpon.0}}" value="{{galpon.1}}">
-                    {% endfor %}
-                </div>
                 <div class="row">
                     {% include 'mortalidad_descarte/form.html' %}                    
                 </div>
-                <script src="{% static "Js/mortaDescar.js" %}"></script>
             </div>
             <div class="modal-footer text-center">
                 <button class="btn btn-outline-success" type="button" onclick="editar();">
@@ -26,6 +19,7 @@
                     Cancelar
                 </button>
             </div>
+            <script src="{% static "Js/mortaDescar.js" %}"></script>
         </form>
     </div>
 </div>

@@ -1,9 +1,9 @@
 {% csrf_token %}
 {% for campo in form %}
     {% if campo.label == 'Galpon' or campo.label ==  'Tipo de Descarte'%}
-        <div class="col-6">
+        <div class="col-6 mb-3">
             <label class="form-label">{{ campo.label }}</label>
-            <select class="form-select selectGalpon" name="{{ campo.name }}" id="{{campo.name}}">
+            <select id="{{campo.name}}" class="form-select" name="{{ campo.name }}">
                 {% for select in campo %}
                     {{ select }}
                 {% endfor %}
@@ -13,37 +13,30 @@
             </div>
         </div>
     {% else %}
-        {% if campo.name == 'fecha' %}
-            <div class="col-6">
-                <label class="form-label">{{ campo.label }}</label>
-                <input
-                    type="Date"
-                    class="form-control"
-                    name="{{ campo.name }}" 
-                    aria-describedby="" 
-                    placeholder="{{ campo.label }}"
-                    value="{{campo.value}}"
-                />
-                <div id="errores{{campo.name}}">
+        <div class="col-6 mb-3">
+            <label class="form-label">{{ campo.label }}</label>
+            <input
+                id="{{campo.name}}"
+                type="{% if campo.name == 'fecha' %}date{% else %}{{campo.field.widget.input_type}}{% endif %}"
+                name="{{ campo.name }}"
+                aria-describedby=""
+                placeholder="{{ campo.label }}"
+                value="{% if campo.name == 'fecha' %}{{ campo.value.isoformat |default:'' }}{% else %}{{ campo.value |default:'' }}{% endif %}"
+                {% if campo.name == 'cant_muertas' or campo.name == 'cant_descarte' %}
+                    oninput="opSaldo();"
+                    onkeypress='return onlyNumber(event);'
+                {% endif %}
+                {% if campo.name == 'saldo' %}
+                    class="form-control {{campo.name}} readOnly"
+                    readOnly
+                {% else %}
+                    class="form-control {{campo.name}}"
+                {% endif %}
+                min="0"
+            />
+            <div id="errores{{campo.name}}">
 
-                </div>
             </div>
-        {% else %}
-            <div class="col-6">
-                <label class="form-label">{{ campo.label }}</label>
-                <input
-                    id="{{campo.name}}"
-                    type="{{campo.field.widget.input_type}}"
-                    class="form-control {{campo.name}}" 
-                    name="{{ campo.name }}" 
-                    aria-describedby="" 
-                    placeholder="{{ campo.label }}"
-                    value="{{ campo.value |default:'' }}"
-                />
-                <div id="errores{{campo.name}}">
-
-                </div>
-            </div>
-        {% endif %} 
+        </div>
     {% endif %}
 {% endfor %}

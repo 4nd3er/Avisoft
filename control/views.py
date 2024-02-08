@@ -15,11 +15,29 @@ from django.views.decorators.http import require_http_methods
 from datetime import datetime, timezone
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
-from localStoragePy import localStoragePy
+from django.views.decorators.http import require_http_methods
+import datetime
+import time
 
-localStorage = localStoragePy('me.jkelol111.mypythonapp', 'text')
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+@require_http_methods(['GET'])
+def GalponData(request, id):
+    todays_Date = datetime.date.fromtimestamp(time.time())
+    dateCurrent = todays_Date.isoformat()
+    dataGalpon = Galpones.objects.all().values().get(id=id)
+    dataProd = ProduccionDiaria.objects.filter(id_galpon=id, fecha=dateCurrent).values()
+    totalHuevos = 0
+    for dato in dataProd:
+        totalHuevos += int(dato['cantidad'])
+    response = JsonResponse({'dataGalpon': dataGalpon, 'dataProd': totalHuevos}, safe=False)
+    return response
+
+@require_http_methods(['GET'])
+def GalponDataDes(request, id):
+    dataGalpon = Galpones.objects.all().values().get(id=id)
+    return JsonResponse(dataGalpon, safe=False)
 
 # ! Modulo de inicio e interfaces
 def registrarse(request):
@@ -143,7 +161,7 @@ class registroDiario(ListView):
 
             ws.merge_cells('B2:E2')
             listColumn = ['B', 'C', 'D', 'E']
-            listName = ['Galpon', 'Alimentación', 'Mortalidad y Descarte', 'Produccion Diaria']
+            listName = ['Galpon', 'Produccion Diaria', 'Mortalidad y Descarte', 'Alimentación']
             countName = 0
             count = 3
             ws.row_dimensions[2].height = 25
@@ -164,30 +182,35 @@ class registroDiario(ListView):
             for i in listName:
                 countRow = 4
                 for q in query[i]:
-                    ws.cell(row = countRow, column = countColumn).alignment = Alignment(horizontal = 'center', vertical = 'center')
-                    ws.cell(row = countRow, column = countColumn).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
-                                                    top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
-                    ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
-                    ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
                     if i == 'produccionDiaria':
                         valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
-                        ws.cell(row=4, column=2).value = valueRow
+                        ws.cell(row=countRow, column=2).value = valueRow
+                        ws.cell(row = countRow, column = 2).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                        ws.cell(row = countRow, column = 2).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                        ws.cell(row = countRow, column = 2).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                        ws.cell(row = countRow, column = 2).font = Font(name = 'Arial', size = '11')
+                        # * ---------------------------------------------------------------- * #
+                        ws.cell(row = countRow, column = 3).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                        ws.cell(row = countRow, column = 3).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                        ws.cell(row = countRow, column = 3).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                        ws.cell(row = countRow, column = 3).font = Font(name = 'Arial', size = '11')
+                        ws.cell(row=countRow, column=3).value = str(q)
+                    elif i == 'mortalidadDescarte':
+                        ws.cell(row = countRow, column = 4).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                        ws.cell(row = countRow, column = 4).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                        ws.cell(row = countRow, column = 4).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                        ws.cell(row = countRow, column = 4).font = Font(name = 'Arial', size = '11')
+                        ws.cell(row=countRow, column=4).value = str(q)
+                    else:
                         ws.cell(row = countRow, column = 5).alignment = Alignment(horizontal = 'center', vertical = 'center')
                         ws.cell(row = countRow, column = 5).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
                                                         top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
                         ws.cell(row = countRow, column = 5).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
                         ws.cell(row = countRow, column = 5).font = Font(name = 'Arial', size = '11')
                         ws.cell(row=countRow, column=5).value = str(q)
-                    elif i == 'alimentacion':
-                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
-                        ws.cell(row=4, column=2).value = valueRow
-                        ws.cell(row=countRow, column=3).value = str(q)
-                    elif i == 'mortalidadDescarte':
-                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
-                        ws.cell(row=4, column=2).value = valueRow
-                        ws.cell(row=countRow, column=4).value = str(q)
-                    else:
-                        ws.cell(row=countRow, column=countColumn).value = str(q)
                     countRow += 1
                 countColumn += 1
 
@@ -218,7 +241,7 @@ class Alimentacionn(ListView):
 
     def get(self, request, *args, **kwargs):
         if is_ajax(request=request):
-                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
             return render(request, self.template_name, {'alimentacion': self.get_queryset()})
 
@@ -417,7 +440,6 @@ class crearGallinas(CreateView):
                 nombreGalpon = form.cleaned_data['id_galpon']
                 galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
-                localStorage.setItem('gallinas', cant_gallinas_form)
                 galpon.cant_gall += cant_gallinas_form
                 galpon.save()
                 form.save()
@@ -445,18 +467,16 @@ class editarGallinas(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
-                nombreGalpon = form.cleaned_data['id_galpon'] 
+                nombreGalpon = form.cleaned_data['id_galpon']
                 galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
-                value = int(localStorage.getItem('gallinas'))
-                if value > cant_gallinas_form:
-                    value -= cant_gallinas_form
-                    galpon.cant_gall -= value
-                    localStorage.setItem('gallinas', value)
+                gallinasSaved = Gallinas.objects.get(id=self.get_object().id).cantidad_gallinas
+                if gallinasSaved > cant_gallinas_form:
+                    gallinasSaved -= cant_gallinas_form
+                    galpon.cant_gall -= gallinasSaved
                 else:
-                    cant_gallinas_form -= value
+                    cant_gallinas_form -= gallinasSaved
                     galpon.cant_gall += cant_gallinas_form
-                    localStorage.setItem('gallinas', cant_gallinas_form)
                 galpon.save()
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'
@@ -802,21 +822,16 @@ class crearMortalidad(CreateView):
     template_name = 'mortalidad_descarte/crear.html'
     form_class = MortalidadDescarteForm
     success_url = reverse_lazy('mortalidad_descarte')
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Realizar la consulta a la base de datos
-        consulta_resultados = Galpones.objects.all().values_list("id", "cant_gall")
-
-        context['data'] = consulta_resultados
-
-        return context
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
             if form.is_valid():
+                cantGallinas = form.cleaned_data['saldo']
+                galponForm = form.cleaned_data['id_galpon']
+                galponSaved = Galpones.objects.get(nombre_galpon=galponForm)
+                galponSaved.cant_gall = cantGallinas
+                galponSaved.save()
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
@@ -889,7 +904,9 @@ class ProduccionDiariaa(ListView):
                 Q(fecha__icontains = busqueda)
                 ).distinct().order_by('-id')
         else:
-            query = self.model.objects.all().order_by('-id')[:3]
+            todays_Date = datetime.date.fromtimestamp(time.time())
+            dateCurrent = todays_Date.isoformat()
+            query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -982,9 +999,6 @@ class ProduccionDiariaa(ListView):
         wb.save(response)
         return response
 
-
-
-
 class crearProdDiaria(LoginRequiredMixin, CreateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/crear.html'
@@ -1003,6 +1017,17 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
             if form.is_valid():
                 form.instance.id_usuario = self.request.user
                 form.save()
+                todays_Date = datetime.date.fromtimestamp(time.time())
+                dateCurrent = todays_Date.isoformat()
+                galponForm = form.cleaned_data.get('id_galpon')
+                alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                dataProd = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                if alimentacionSaved:
+                    totalHuevos = 0
+                    for dato in dataProd:
+                        totalHuevos += int(dato['cantidad'])
+                    alimentacionSaved.c_a = float(alimentacionSaved.kg_total) / (totalHuevos / 12)
+                    alimentacionSaved.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
@@ -1017,8 +1042,6 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
         else:
             return redirect('produccion_diaria')
 
-
-    
 class editarProdDiaria(UpdateView):
     model = ProduccionDiaria
     template_name = 'prod_diaria/editar.html'
@@ -1029,6 +1052,25 @@ class editarProdDiaria(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
+                todays_Date = datetime.date.fromtimestamp(time.time())
+                dateCurrent = todays_Date.isoformat()
+                galponForm = form.cleaned_data.get('id_galpon')
+                alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                dataProdSaved = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                cantidadProdSaved = ProduccionDiaria.objects.get(id=self.get_object().id).cantidad
+                cantidadProdForm = form.cleaned_data.get('cantidad')
+                if alimentacionSaved:
+                    totalHuevos = 0
+                    for dato in dataProdSaved:
+                        totalHuevos += int(dato['cantidad'])
+                    if cantidadProdSaved > cantidadProdForm:
+                        cantidadProdSaved -= cantidadProdForm
+                        totalHuevos -= cantidadProdSaved
+                    else:
+                        cantidadProdForm -= cantidadProdSaved
+                        totalHuevos += cantidadProdForm
+                    alimentacionSaved.c_a = float(alimentacionSaved.kg_total) / (totalHuevos / 12)
+                    alimentacionSaved.save()
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'
                 error = 'no hay error'

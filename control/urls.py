@@ -4,6 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+
+    # ! Datos de galpon en AJAX
+    path('galponData/<int:id>', views.GalponData, name='galponData'),
+    path('galponDataDes/<int:id>', views.GalponDataDes, name='galponDataDes'),
+    # ! Datos de galpon en AJAX
+
     # ! Modulo de inicio e interfaces
     path('', views.inicio, name="inicio"),
     path('inicio/', views.inicio, name="inicio"),

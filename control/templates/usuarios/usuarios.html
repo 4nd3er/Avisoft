@@ -22,6 +22,12 @@
                 <div class="col-md col-sm">
                     <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_usuario' %}')" role="button">REGISTRAR <i class="bi bi-plus-circle"></i></button>
                 </div>
+                <div class="col-md col-sm">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">GENERAR REPORTE <i class="bi bi-file-earmark-arrow-down"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -37,7 +43,7 @@
 
     <div class="mb-3 container-fluid card informacion">
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover align-middle">
                 <thead class="sticky-top bg-white">
                     <tr class="text-center">
                         <th scope="col">Imagen</th>
@@ -86,15 +92,6 @@
                     <tbody class="text-center mx-auto"></tbody>
                 {% endif %}
             </table>
-        </div>
-    </div>
-
-    <div class="row container-fluid text-end my-4">
-        <div class="col-md col-sm">
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-            </form>
         </div>
     </div>
 

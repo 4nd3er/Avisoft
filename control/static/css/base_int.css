@@ -33,12 +33,6 @@ div a {
     text-decoration: none;
 }
 
-form {
-    box-shadow: 0px 0px 10px 1px gray;
-    padding: 1rem;
-    border-radius: .5rem;
-}
-
 .modulos {
     margin-bottom: 1rem;
     height: 12rem;

@@ -18,7 +18,6 @@
                 <div class="col-6 mb-3 order-last">
                     <label class="form-label">{{ prod.label }}</label>
                     <input
-                        style="display: flex"
                         type="{% if prod.name == "fecha" %}Date{% else %}{{ prod.field.widget.input_type }}{% endif %}"
                         id="{{ prod.name }}"
                         class="form-control"
@@ -26,6 +25,7 @@
                         value="{{ prod.value | default:'' }}"
                         aria-describedby="helpId"
                         placeholder="{{ prod.label }}"
+                        onkeypress='return onlyNumber(event);'
                     />
                     <div id="errores{{prod.name}}">
                         

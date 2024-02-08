@@ -14,10 +14,10 @@ class Alimentacion(models.Model):
     id = models.AutoField(primary_key = True)
     fecha = models.DateField(auto_now_add = True)
     id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
-    gr_gallina_dia = models.IntegerField(db_column = 'Gr/Gallina/Dia')  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    kg_total = models.IntegerField()
-    bultos_total = models.IntegerField()
-    c_a = models.IntegerField()
+    gr_gallina_dia = models.DecimalField(db_column = 'Gr/Gallina/Dia', max_digits=11, decimal_places=2)
+    kg_total = models.DecimalField(max_digits=11, decimal_places=2)
+    bultos_total = models.DecimalField(max_digits=11, decimal_places=2)
+    c_a = models.DecimalField(max_digits=11, decimal_places=2)
     id_tipo_alimento = models.ForeignKey('TipoAlimento', models.DO_NOTHING, db_column='id_tipo_alimento')
 
     def __str__(self):
@@ -176,7 +176,7 @@ class Gallinas(models.Model):
 
 class Galpones(models.Model):
     fecha = models.DateField(auto_now_add = True)
-    nombre_galpon = models.CharField(max_length = 100)
+    nombre_galpon = models.CharField(max_length = 100, unique=True)
     ancho = models.IntegerField(
         validators=[
             MinValueValidator(1, message='El número debe ser mayor o igual a 0.'),

@@ -1,5 +1,9 @@
 let $ = jQuery.noConflict();
 
+function onlyNumber(evt) {
+    return evt.key >= '0' && evt.key <= '9';
+}; // ? Funcion que solo permite numeros positivos en el input
+
 const abrirModalCrear = (url) => {
     $('#crear').load(url, function () {
         $(this).modal('show');

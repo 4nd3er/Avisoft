@@ -16,12 +16,3 @@ function calcuateArea() {
     capac_nidales.value = Math.round(resultado4);
     capac_comed.value = Math.round(resultado3);
 }; // ? Funcion para calcular el area y demas cosas en vivo
-
-function onlyNumber(evt) {
-    if (evt.charCode >= 48 && evt.charCode <= 57) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}; // ? Funcion que solo permite numeros en el input

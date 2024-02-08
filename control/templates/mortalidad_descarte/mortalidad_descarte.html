@@ -32,32 +32,34 @@
     <div class="mb-3 container-fluid card informacion">
         <div class="table-responsive">
             <table class="table text-center">
-                <thead>
-                    <tr>
+                <thead class="sticky-top bg-white">
+                    <tr class="text-center">
                         <th scope="col">Galpón</th>
                         <th scope="col">Cantidad muertas</th>
                         <th scope="col">Cantidad descarte</th>
                         <th scope="col">Saldo</th>
+                        <th scope="col">Tipo de descarte</th>
                         <th scope="col">Fecha</th>
-                        <th scope="col">Acciones</th>
+                        {% comment %} <th scope="col">Acciones</th> {% endcomment %}
                     </tr>
                 </thead>
                 {% if mortalidad_descarte %}
                     <tbody>
                         {% for dato in mortalidad_descarte %}
-                            <tr>
+                            <tr class="text-center">
                                 <td>{{ dato.id_galpon }}</td>
                                 <td>{{ dato.cant_muertas }}</td>
                                 <td>{{ dato.cant_descarte }}</td>
                                 <td>{{ dato.saldo }}</td>
+                                <td>{{ dato.id_tipo_descarte }}</td>
                                 <td>{{ dato.fecha }}</td>
-                                <td>
+                                {% comment %} <td>
                                     <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_mortalidad' dato.id %}')">Editar</button>
                                     {% if user.is_staff %}
                                         |
                                         <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimMortalidad' dato.id %}')">Eliminar</button>
                                     {% endif %}
-                                </td>
+                                </td> {% endcomment %}
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -65,15 +67,6 @@
                     <tbody></tbody>
                 {% endif %}
             </table>
-        </div>
-    </div>
-
-    <div class="row container-fluid text-end my-4">
-        <div class="col-md col-sm">
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-            </form>
         </div>
     </div>
 

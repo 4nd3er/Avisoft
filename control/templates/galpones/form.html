@@ -6,11 +6,10 @@
                 <label class="form-label">{{ campo.label }} mt2</label>
                 <input
                     type="number"
-                    style="background-color: rgba(0,0,0,0.1)"
-                    onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                    onkeypress='return onlyNumber(event);'
                     type="{{campo.field.widget.input_type}}"
                     id="{{campo.name}}"
-                    class="form-control {{campo.name}}"
+                    class="form-control {{campo.name}} readOnly"
                     name="{{ campo.name }}"
                     aria-describedby="helpId"
                     placeholder="{{ campo.label }}"
@@ -26,15 +25,14 @@
                 <div class="col-6 mb-3">
                     <label class="form-label">{{ campo.label }}</label>
                     <input
-                        style="background-color: rgba(0,0,0,0.1)"
                         type="number"
                         id="{{campo.name}}"
-                        class="form-control {{campo.name}}"
+                        class="form-control {{campo.name}} readOnly"
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
                         placeholder="{{ campo.label }}"
                         value="{{ campo.value | default:''}}"
-                        readonly 
+                        readonly
                     />
                     <div id="errores{{campo.name}}">
                 
@@ -45,7 +43,7 @@
                     <label class="form-label">{{ campo.label }}</label>
                     <input
                         {% if campo.name == "ancho" or campo.name == "largo" %}onInput="calcuateArea();"{% endif %}
-                        type="{% if campo.name == "nombre_galpon" %}text{% else %}number{% endif %}"
+                        type="{{campo.field.widget.input_type}}"
                         id="{{campo.name}}"
                         class="form-control {{campo.name}}"
                         name="{{ campo.name }}"

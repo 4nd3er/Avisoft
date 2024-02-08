@@ -33,15 +33,15 @@
         <div class="table-responsive">
             <table class="table text-center">
                 {% if jornadas %}
-                    <thead>
-                        <tr>
+                    <thead class="sticky-top bg-white">
+                        <tr class="text-center">
                             <th>Jornada</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for dato in jornadas %}
-                            <tr>
+                            <tr class="text-center">
                                 <td>{{dato.jornada}}</td>
                                 <td>
                                     <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_jornada' dato.id %}')" role="button">Editar</button>

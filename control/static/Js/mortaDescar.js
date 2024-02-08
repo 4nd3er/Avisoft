@@ -1,45 +1,48 @@
-//Galpon actual
-const selectGalpon = document.querySelector(".selectGalpon");
-//Id galpon seleccionado
-const idGalpon = document.getElementById("idGalpon")
-//Galpones
-const Galpones = document.querySelectorAll(".galpon")
-let cantGall = 0;
+const selectGalpon = document.getElementById("id_galpon");
+let saldo = $('#saldo');
+let responseGall;
 
-//Cada que cambie de galpon
-selectGalpon.addEventListener("change", function () {
-
-    //Idgalpon es igual al valor del galpon seleccionado
-    idGalpon.value = selectGalpon.value
-
-    //Para cada galpon comparar el idgalpon
-    Galpones.forEach(function (galpon) {
-        const dataId = galpon.getAttribute("data-id");
-
-        //Traer la cant_gall del data-id que coincida con idgalpon
-        if (dataId == idGalpon.value) {
-            cantGall = parseFloat(galpon.value) || 0;
+if (saldo.val() == '') {
+    selectGalpon.addEventListener("input", function (e) {
+        if (e.target.value != '') {
+            $.ajax({
+                url: `/galponDataDes/${e.target.value}`,
+                method: 'GET',
+                success: function (response) {
+                    responseGall = response.cant_gall;
+                    saldo.val(responseGall);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+        else {
+            $('#saldo').val('');
         }
     });
-
-});
-
-//Calcular saldo
-const cantMuertas = document.querySelector(".cant_muertas");
-const cantDesc = document.querySelector(".cant_descarte");
-const Saldo = document.getElementById("saldo");
-
-function actualizarSuma() {
-    var valor1 = parseFloat(cantMuertas.value) || 0;
-    var valor2 = parseFloat(cantDesc.value) || 0;
-    var suma = parseFloat(cantGall) - (valor1 + valor2)
-    if (valor1 > 0 && valor2 > 0) {
-        Saldo.value = suma
+}
+else {
+    const query = () => {
+        const galpon = $('#id_galpon').val();
+        $.ajax({
+            url: `/galponDataDes/${galpon}`,
+            method: 'GET',
+            success: function (response) {
+                responseGall = response.cant_gall;
+                opSaldo();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
     }
+    query();
 }
 
-//Cada que escriba algo el saldo se actualiza
-cantMuertas.addEventListener("input", actualizarSuma);
-cantDesc.addEventListener("input", actualizarSuma)
-
-//Actualizar saldo
+function opSaldo() {
+    let cantMuertas = Number($('#cant_muertas').val()) || 0;
+    let cantDesc = Number($('#cant_descarte').val()) || 0;
+    let nuevoSaldo = responseGall - (cantMuertas + cantDesc);
+    saldo.val(nuevoSaldo);
+}

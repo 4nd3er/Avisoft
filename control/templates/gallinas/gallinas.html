@@ -32,8 +32,8 @@
     <div class="mb-3 container-fluid card informacion">
         <div class="table-responsive">
             <table class="table text-center">
-                <thead>
-                    <tr>
+                <thead class="sticky-top bg-white">
+                    <tr class="text-center">
                         <th scope="col">Galpón</th>
                         <th scope="col">Capacidad</th>
                         <th scope="col">Linea</th>
@@ -48,7 +48,7 @@
                 {% if gallinas %}
                     <tbody>
                         {% for dato in gallinas %}
-                            <tr>
+                            <tr class="text-center">
                                 <td>{{ dato.id_galpon }}</td>
                                 <td>{{ dato.cantidad_gallinas }}</td>
                                 <td>{{ dato.id_linea }}</td>
@@ -70,17 +70,6 @@
                     <tbody></tbody>
                 {% endif %}
             </table>
-        </div>
-    </div>
-
-    <div class="row container-fluid text-end my-4">
-        <div class="col-md col-sm">
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">
-                    EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i>
-                </button>
-            </form>
         </div>
     </div>
 

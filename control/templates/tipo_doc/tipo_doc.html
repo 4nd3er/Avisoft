@@ -49,15 +49,15 @@
     <div class="mb-3 container-fluid card informacion">
         <div class="text-responsive">
             <table class="table text-center">
-                <thead>
-                    <tr>
+                <thead class="sticky-top bg-white">
+                    <tr class="text-center">
                         <th>Tipo Documento</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for dato in tipo_doc %}
-                    <tr>
+                    <tr class="text-center">
                         <td>{{dato.tipo_doc}}</td>
                         <td>
                             <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_tipo_doc' dato.id %}')" role="button">Editar</button>

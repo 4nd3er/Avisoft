@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'control',
     'openpyxl',
-    'localStoragePy',
 ]
 
 MIDDLEWARE = [

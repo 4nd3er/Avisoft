@@ -20,6 +20,17 @@ body {
     height: 100vh;
 }
 
+.readOnly {
+    background-color: rgba(0,0,0,0.1);
+    cursor: default;
+}
+
+.readOnly:active,
+.readOnly:focus {
+    box-shadow: none;
+    background-color: rgba(0,0,0,0.1);
+}
+
 .content {
     justify-content: center;
     display: grid;
