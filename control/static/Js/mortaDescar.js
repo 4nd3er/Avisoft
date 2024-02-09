@@ -23,21 +23,9 @@ if (saldo.val() == '') {
     });
 }
 else {
-    const query = () => {
-        const galpon = $('#id_galpon').val();
-        $.ajax({
-            url: `/galponDataDes/${galpon}`,
-            method: 'GET',
-            success: function (response) {
-                responseGall = response.cant_gall;
-                opSaldo();
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    }
-    query();
+    let cantMuertas = Number($('#cant_muertas').val()) || 0;
+    let cantDesc = Number($('#cant_descarte').val()) || 0;
+    responseGall = Number(saldo.val()) + (cantMuertas + cantDesc);
 }
 
 function opSaldo() {

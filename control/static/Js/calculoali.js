@@ -14,7 +14,7 @@ function galponDataForm() {
                 success: function (response) {
                     gr_gallina_data = response.dataGalpon.cant_gall;
                     function calculoAlim() {
-                        gr_gallina_dia.value = gr_gallina_data * 110;
+                        gr_gallina_dia.value = (gr_gallina_data * 110).toFixed(2);
                         total1 = Number(gr_gallina_data) / 1000;
                         resultado1 = (Number(total1) * 609).toFixed(2);
                         kg_total.value = resultado1;
@@ -37,5 +37,4 @@ function galponDataForm() {
             c_a.value = '';
         }
     })
-    
 }

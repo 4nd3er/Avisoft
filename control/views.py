@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from django.views.decorators.http import require_http_methods
+from django.core.exceptions import ObjectDoesNotExist
 import datetime
 import time
 
@@ -1020,9 +1021,12 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                 todays_Date = datetime.date.fromtimestamp(time.time())
                 dateCurrent = todays_Date.isoformat()
                 galponForm = form.cleaned_data.get('id_galpon')
-                alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
-                dataProd = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                try:
+                    alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                except ObjectDoesNotExist:
+                    alimentacionSaved = 0
                 if alimentacionSaved:
+                    dataProd = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
                     totalHuevos = 0
                     for dato in dataProd:
                         totalHuevos += int(dato['cantidad'])
@@ -1055,11 +1059,14 @@ class editarProdDiaria(UpdateView):
                 todays_Date = datetime.date.fromtimestamp(time.time())
                 dateCurrent = todays_Date.isoformat()
                 galponForm = form.cleaned_data.get('id_galpon')
-                alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
-                dataProdSaved = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
-                cantidadProdSaved = ProduccionDiaria.objects.get(id=self.get_object().id).cantidad
-                cantidadProdForm = form.cleaned_data.get('cantidad')
+                try:
+                    alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                except ObjectDoesNotExist:
+                    alimentacionSaved = 0
                 if alimentacionSaved:
+                    dataProdSaved = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                    cantidadProdSaved = ProduccionDiaria.objects.get(id=self.get_object().id).cantidad
+                    cantidadProdForm = form.cleaned_data.get('cantidad')
                     totalHuevos = 0
                     for dato in dataProdSaved:
                         totalHuevos += int(dato['cantidad'])

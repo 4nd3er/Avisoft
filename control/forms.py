@@ -68,6 +68,12 @@ class AlimentacionForm(forms.ModelForm):
             'c_a' : 'Conversion Alimenticia',
             'bultos_total' : 'Bulto(s) Total(es)'
         }
+        widgets = {
+            'gr_gallina_dia': forms.TextInput(),
+            'kg_total': forms.TextInput(),
+            'bultos_total': forms.TextInput(),
+            'c_a': forms.TextInput()
+        }
 
 class JornadaForm(forms.ModelForm):
     class Meta:

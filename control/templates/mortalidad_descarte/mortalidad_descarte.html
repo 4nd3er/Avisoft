@@ -53,13 +53,13 @@
                                 <td>{{ dato.saldo }}</td>
                                 <td>{{ dato.id_tipo_descarte }}</td>
                                 <td>{{ dato.fecha }}</td>
-                                {% comment %} <td>
+                                <td>
                                     <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_mortalidad' dato.id %}')">Editar</button>
                                     {% if user.is_staff %}
                                         |
                                         <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimMortalidad' dato.id %}')">Eliminar</button>
                                     {% endif %}
-                                </td> {% endcomment %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
