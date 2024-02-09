@@ -20,6 +20,7 @@
                     <input
                         type="{{campo.field.widget.input_type}}e"
                         class=" form-control"
+                        onkeypress='return onlyNumber(event);'
                         name="{{ campo.name }}"
                         aria-describedby="helpId"
                         placeholder="{{ campo.label }}"

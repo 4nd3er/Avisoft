@@ -263,7 +263,7 @@ class MortalidadDescarte(models.Model):
     cant_muertas = models.IntegerField()
     cant_descarte = models.IntegerField()
     id_tipo_descarte = models.ForeignKey('TipoDescarte', models.DO_NOTHING, db_column='id_tipo_descarte')
-    saldo = models.IntegerField()
+    saldo = models.PositiveIntegerField()
 
     def __str__(self):
         return  f"{self.id_tipo_descarte} {str(self.fecha)}"
@@ -387,12 +387,12 @@ class Usuario(AbstractBaseUser):
     nombre = models.CharField(max_length = 100)
     apellido = models.CharField(max_length = 100)
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
-    documento = models.IntegerField('Numero de documento',max_length = 10, unique = True,
+    documento = models.IntegerField('Numero de documento', unique = True,
     validators = [
         MinValueValidator(3400000, "Digite un numero de documento valido")
     ])
-    celular = models.IntegerField(max_length = 10,
-    validators= [
+    celular = models.IntegerField(
+    validators = [
         MinValueValidator(3000000000, "Digite un numero de telefono valido")
     ])
     email = models.EmailField(max_length = 100, db_column = 'correo', unique = True)
