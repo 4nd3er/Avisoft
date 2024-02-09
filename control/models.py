@@ -387,9 +387,15 @@ class Usuario(AbstractBaseUser):
     nombre = models.CharField(max_length = 100)
     apellido = models.CharField(max_length = 100)
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
-    documento = models.CharField('Numero de documento',max_length = 10, unique = True)
-    celular = models.CharField(max_length = 10)
-    email = models.CharField(max_length = 100, db_column = 'correo', unique = True)
+    documento = models.IntegerField('Numero de documento',max_length = 10, unique = True,
+    validators = [
+        MinValueValidator(3400000, "Digite un numero de documento valido")
+    ])
+    celular = models.IntegerField(max_length = 10,
+    validators= [
+        MinValueValidator(3000000000, "Digite un numero de telefono valido")
+    ])
+    email = models.EmailField(max_length = 100, db_column = 'correo', unique = True)
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)
