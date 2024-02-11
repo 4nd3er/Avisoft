@@ -30,42 +30,44 @@
     </div>
   
     <div class="mb-3 container-fluid card informacion">
-        <table class="table">
-            <thead class="sticky-top bg-white">
-                <tr class="text-center">
-                    <th scope="col">Galpón</th>
-                    <th scope="col">Gr/Gallina/Dia</th>
-                    <th scope="col">Kilogramos Total</th>
-                    <th scope="col">Bultos Total</th>
-                    <th scope="col">Conversion Alimenticia</th>
-                    <th scope="col">Tipo de Alimento</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            {% if alimentacion %}
-                <tbody>
-                    {% for dato in alimentacion %}
-                        <tr class="text-center">
-                            <td>{{ dato.id_galpon }}</td>
-                            <td>{{ dato.gr_gallina_dia }} Gr</td>
-                            <td>{{ dato.kg_total }}</td>
-                            <td>{{ dato.bultos_total }}</td>
-                            <td>{{ dato.c_a }}</td>
-                            <td>{{ dato.id_tipo_alimento }}</td>
-                            <td>{{ dato.fecha }}</td>
-                            <td>
-                                <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_alimentacion' dato.id %}')" role="button">Editar</button>
-                                {% if user.is_staff %}
-                                    |
-                                    <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimAlimentacion' dato.id %}')" role="button">Eliminar</button>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            {% endif %}
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="sticky-top bg-white">
+                    <tr class="text-center">
+                        <th scope="col">Galpón</th>
+                        <th scope="col">Gr/Gallina/Dia</th>
+                        <th scope="col">Kilogramos Total</th>
+                        <th scope="col">Bultos Total</th>
+                        <th scope="col">Conversion Alimenticia</th>
+                        <th scope="col">Tipo de Alimento</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                {% if alimentacion %}
+                    <tbody>
+                        {% for dato in alimentacion %}
+                            <tr class="text-center">
+                                <td>{{ dato.id_galpon }}</td>
+                                <td>{{ dato.gr_gallina_dia }} Gr</td>
+                                <td>{{ dato.kg_total }}</td>
+                                <td>{{ dato.bultos_total }}</td>
+                                <td>{{ dato.c_a }}</td>
+                                <td>{{ dato.id_tipo_alimento }}</td>
+                                <td>{{ dato.fecha }}</td>
+                                <td>
+                                    <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_alimentacion' dato.id %}')" role="button">Editar</button>
+                                    {% if user.is_staff %}
+                                        |
+                                        <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimAlimentacion' dato.id %}')" role="button">Eliminar</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                {% endif %}
+            </table>
+        </div>
     </div>
 
     <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>

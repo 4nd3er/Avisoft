@@ -23,10 +23,11 @@ import time
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+todays_Date = datetime.date.fromtimestamp(time.time())
+dateCurrent = todays_Date.isoformat()
+
 @require_http_methods(['GET'])
 def GalponData(request, id):
-    todays_Date = datetime.date.fromtimestamp(time.time())
-    dateCurrent = todays_Date.isoformat()
     dataGalpon = Galpones.objects.all().values().get(id=id)
     dataProd = ProduccionDiaria.objects.filter(id_galpon=id, fecha=dateCurrent).values()
     totalHuevos = 0
@@ -121,33 +122,24 @@ def logout_usuario(request):
 # ! Modulo de registro diario
 class registroDiario(ListView):
     template_name = 'registro_diario/registro_diario.html'
-    model = ProduccionDiaria
+    model = Registrodiario
 
     def get_queryset(self):
         return self.model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
-        contexto['alimentacion'] = Alimentacion.objects.all().order_by('-id')
-        contexto['mortalidadDescarte'] = MortalidadDescarte.objects.all().order_by('-id')
-        contexto['produccionDiaria'] = self.get_queryset()
-        alimentacion_dict = {'alimentacion': contexto['alimentacion']}
-        mortalidad_dict = {'mortalidadDescarte': contexto['mortalidadDescarte']}
-        produccion_dict = {'produccionDiaria': contexto['produccionDiaria']}
-        merged_dict = {}
-        merged_dict.update(alimentacion_dict)
-        merged_dict.update(mortalidad_dict)
-        merged_dict.update(produccion_dict)
-        return merged_dict
+        contexto['registroDiario'] = self.get_queryset()
+        return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'datos': self.get_context_data()})
+        return render(request, self.template_name, {'registroDiario': self.get_queryset()})
     
     def post(self, request, *args, **kwargs):
-        query = self.get_context_data()
+        query = self.get_queryset()
         if query == 0:
             messages.error(request, 'Debes buscar algun dato para generar el reporte')
-            return render(request, self.template_name, {'datos': self.get_queryset()})
+            return render(request, self.template_name, {'registroDiario': self.get_queryset()})
         else:
             wb = Workbook()
             ws = wb.active
@@ -158,16 +150,16 @@ class registroDiario(ListView):
                                         top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
             ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
             ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
-            ws['B2'] = f'REPORTE REGISTRO DIARIO'
+            ws['B2'] = f'REPORTE {self.model.__name__.upper()}S'
 
-            ws.merge_cells('B2:E2')
-            listColumn = ['B', 'C', 'D', 'E']
-            listName = ['Galpon', 'Produccion Diaria', 'Mortalidad y Descarte', 'Alimentación']
+            ws.merge_cells('B2:G2')
+            listColumn = ['B', 'C', 'D', 'E', 'F','G']
+            listName = ['Galpon', 'Lote de Gallinas', 'Alimentación', 'Proucción diaria', 'Mortalidad y descarte', 'Fecha']
             countName = 0
             count = 3
             ws.row_dimensions[2].height = 25
             for i in listColumn:
-                ws.column_dimensions[i].width = 50
+                ws.column_dimensions[i].width = 35
                 ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal = 'center', vertical = 'center')
                 ws[f'{listColumn[countName]}3'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
                                             top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
@@ -178,52 +170,63 @@ class registroDiario(ListView):
                 countName += 1
             
             # Pintamos los datos en el reporte
-            listName = ['alimentacion', 'mortalidadDescarte', 'produccionDiaria']
+            listName = ['id_galpon', 'id_gallinas', 'id_alimentacion', 'id_producciondiaria', 'id_mortades', 'fecha']
             countColumn = 2
             for i in listName:
                 countRow = 4
-                for q in query[i]:
-                    if i == 'produccionDiaria':
-                        valueRow = str(getattr(q, 'id_galpon', 'id_galpon'))
-                        ws.cell(row=countRow, column=2).value = valueRow
-                        ws.cell(row = countRow, column = 2).alignment = Alignment(horizontal = 'center', vertical = 'center')
-                        ws.cell(row = countRow, column = 2).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
-                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
-                        ws.cell(row = countRow, column = 2).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
-                        ws.cell(row = countRow, column = 2).font = Font(name = 'Arial', size = '11')
-                        # * ---------------------------------------------------------------- * #
-                        ws.cell(row = countRow, column = 3).alignment = Alignment(horizontal = 'center', vertical = 'center')
-                        ws.cell(row = countRow, column = 3).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
-                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
-                        ws.cell(row = countRow, column = 3).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
-                        ws.cell(row = countRow, column = 3).font = Font(name = 'Arial', size = '11')
-                        ws.cell(row=countRow, column=3).value = str(q)
-                    elif i == 'mortalidadDescarte':
-                        ws.cell(row = countRow, column = 4).alignment = Alignment(horizontal = 'center', vertical = 'center')
-                        ws.cell(row = countRow, column = 4).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
-                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
-                        ws.cell(row = countRow, column = 4).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
-                        ws.cell(row = countRow, column = 4).font = Font(name = 'Arial', size = '11')
-                        ws.cell(row=countRow, column=4).value = str(q)
+                for q in query:
+                    ws.cell(row = countRow, column = countColumn).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                    ws.cell(row = countRow, column = countColumn).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                    top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                    ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                    ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
+                    if i == 'id_galpon':
+                        if hasattr(q, 'id_galpon'):
+                            valueRow = getattr(q.id_galpon, 'nombre_galpon', 'nombre_galpon')
+                        else:
+                            valueRow = 'No aplica'
+                    elif i == 'id_gallinas':
+                        if hasattr(q, 'id_gallinas'):
+                            valueRow = getattr(q.id_gallinas, 'cantidad_gallinas', 'cantidad_gallinas')
+                        else:
+                            valueRow = 'No aplica'
+                        # numFicha = getattr(q.id_gallinas, 'kg_total', 'kg_total')
+                        # nombreFicha = getattr(q.id_gallinas, 'id_nombreficha', 'id_nombreficha')
+                        # valueRow = f'{numFicha}: {nombreFicha}'
+                    elif i == 'id_alimentacion':
+                        if hasattr(q, 'id_alimentacion'):
+                            valueRow = getattr(q.id_alimentacion, 'kg_total', 'kg_total')
+                        else:
+                            valueRow = 'No aplica'
+                    elif i == 'id_producciondiaria':
+                        if hasattr(q, 'id_producciondiaria'):
+                            valueRow = getattr(q.id_producciondiaria, 'cantidad', 'cantidad')
+                        else:
+                            valueRow = 'No aplica'
+                    elif i == 'id_mortades':
+                        if hasattr(q, 'id_mortades'):
+                            cant_muertas = getattr(q.id_mortades, 'cant_muertas', 'cant_muertas')
+                            cant_descarte = getattr(q.id_mortades, 'cant_descarte', 'cant_descarte')
+                            valueRow = int(cant_muertas) + int(cant_descarte)
+                        else:
+                            valueRow = 'No aplica'
+                    elif i == 'fecha':
+                        valueRow = str(getattr(q, i))
                     else:
-                        ws.cell(row = countRow, column = 5).alignment = Alignment(horizontal = 'center', vertical = 'center')
-                        ws.cell(row = countRow, column = 5).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
-                                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
-                        ws.cell(row = countRow, column = 5).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
-                        ws.cell(row = countRow, column = 5).font = Font(name = 'Arial', size = '11')
-                        ws.cell(row=countRow, column=5).value = str(q)
+                        valueRow = getattr(q, i)
+                    ws.cell(row=countRow, column=countColumn).value = valueRow
                     countRow += 1
                 countColumn += 1
 
             # Nombre del archivo
-            nombreArchivo = f'REPORTE REGISTRO DIARIO.xlsx'
+            nombreArchivo = f'REPORTE {self.model.__name__.upper()}.xlsx'
             # Definir el tipo de respuesta
             response = HttpResponse(content_type = 'application/ms-excel')
             contenido = "attachment; filename = {0}".format(nombreArchivo)
             response['Content-Disposition'] = contenido
             wb.save(response)
             return response
-        return render(request, self.template_name, {'datos': self.get_queryset()})
+        return render(request, self.template_name, {'registroDiario': self.get_queryset()})
 # ! Modulo de registro diario
 
 
@@ -256,7 +259,45 @@ class crearAlimentacion(CreateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
             if form.is_valid():
+                galponForm = form.cleaned_data['id_galpon']
                 form.save()
+                alimentacionSaved = Alimentacion.objects.latest('id')
+                try:
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                except ObjectDoesNotExist:
+                    registroDiarioSaved = 0
+                id_gallinas = None
+                id_producciondiaria = None
+                id_mortades = None
+                if hasattr(registroDiarioSaved, 'id_gallinas'):
+                    id_gallinas = registroDiarioSaved.id_gallinas
+                if hasattr(registroDiarioSaved, 'id_producciondiaria'):
+                    id_producciondiaria = registroDiarioSaved.id_producciondiaria
+                if hasattr(registroDiarioSaved, 'id_mortades'):
+                    id_mortades = registroDiarioSaved.id_mortades
+                if id_gallinas and id_producciondiaria:
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    for registro in registrosDiariosSavedAll:
+                        registro.id_gallinas = registroDiarioSaved.id_gallinas
+                        registro.id_alimentacion = alimentacionSaved
+                        if registroDiarioSaved.id_mortades:
+                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                        registro.save()
+                elif hasattr(registroDiarioSaved, 'id_alimentacion'):
+                    registroDiarioSaved.id_alimentacion = alimentacionSaved
+                    registroDiarioSaved.save()
+                elif registroDiarioSaved:
+                    registro = Registrodiario.objects.create(
+                        id_galpon=registroDiarioSaved.id_galpon,
+                        id_gallinas=id_gallinas,
+                        id_producciondiaria=id_producciondiaria,
+                        id_mortades=id_mortades,
+                        id_alimentacion=alimentacionSaved
+                    )
+                    registro.save()
+                else:
+                    registro = Registrodiario(id_galpon=galponForm ,id_alimentacion=alimentacionSaved)
+                    registro.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
@@ -438,12 +479,49 @@ class crearGallinas(CreateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
             if form.is_valid():
-                nombreGalpon = form.cleaned_data['id_galpon']
-                galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
+                galponForm = form.cleaned_data['id_galpon']
+                galpon = Galpones.objects.get(id=galponForm.id)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
                 galpon.cant_gall += cant_gallinas_form
                 galpon.save()
                 form.save()
+                gallinasSaved = Gallinas.objects.latest('id')
+                try:
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                except ObjectDoesNotExist:
+                    registroDiarioSaved = 0
+                id_alimentacion = None
+                id_producciondiaria = None
+                id_mortades = None
+                if hasattr(registroDiarioSaved, 'id_alimentacion'):
+                    id_alimentacion = registroDiarioSaved.id_alimentacion
+                if hasattr(registroDiarioSaved, 'id_producciondiaria'):
+                    id_producciondiaria = registroDiarioSaved.id_producciondiaria
+                if hasattr(registroDiarioSaved, 'id_mortades'):
+                    id_mortades = registroDiarioSaved.id_mortades
+                if id_alimentacion and id_producciondiaria:
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    for registro in registrosDiariosSavedAll:
+                        registro.id_gallinas = gallinasSaved
+                        registro.id_alimentacion = registroDiarioSaved.id_alimentacion
+                        if registroDiarioSaved.id_mortades:
+                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                        registro.save()
+                elif not hasattr(registroDiarioSaved, 'id_gallinas'):
+                    registroDiarioSaved.id_gallinas = gallinasSaved
+                    registroDiarioSaved.save()
+                elif registroDiarioSaved:
+                    registro = Registrodiario.objects.create(
+                        id_galpon=registroDiarioSaved.id_galpon,
+                        id_gallinas=gallinasSaved,
+                        id_producciondiaria=id_producciondiaria,
+                        id_mortades=id_mortades,
+                        id_alimentacion=id_alimentacion
+                    )
+                    registro.save()
+                else:
+                    registro = Registrodiario(id_galpon=galponForm ,id_gallinas=gallinasSaved)
+                    registro.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
@@ -468,8 +546,8 @@ class editarGallinas(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
-                nombreGalpon = form.cleaned_data['id_galpon']
-                galpon = Galpones.objects.get(nombre_galpon=nombreGalpon)
+                galponForm = form.cleaned_data['id_galpon'].id
+                galpon = Galpones.objects.get(id=galponForm)
                 cant_gallinas_form = form.cleaned_data['cantidad_gallinas']
                 gallinasSaved = Gallinas.objects.get(id=self.get_object().id).cantidad_gallinas
                 if gallinasSaved > cant_gallinas_form:
@@ -830,10 +908,48 @@ class crearMortalidad(CreateView):
             if form.is_valid():
                 cantGallinas = form.cleaned_data['saldo']
                 galponForm = form.cleaned_data['id_galpon']
-                galponSaved = Galpones.objects.get(nombre_galpon=galponForm)
+                galponSaved = Galpones.objects.get(id=galponForm.id)
                 galponSaved.cant_gall = cantGallinas
                 galponSaved.save()
                 form.save()
+                mortaDesSaved = MortalidadDescarte.objects.latest('id')
+                try:
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                except ObjectDoesNotExist:
+                    registroDiarioSaved = 0
+                id_alimentacion = None
+                id_producciondiaria = None
+                id_gallinas = None
+                if hasattr(registroDiarioSaved, 'id_alimentacion'):
+                    id_alimentacion = registroDiarioSaved.id_alimentacion
+                if hasattr(registroDiarioSaved, 'id_producciondiaria'):
+                    id_producciondiaria = registroDiarioSaved.id_producciondiaria
+                if hasattr(registroDiarioSaved, 'id_gallinas'):
+                    id_gallinas = registroDiarioSaved.id_gallinas
+                    id_mortades = registroDiarioSaved.id_mortades
+                if id_alimentacion and id_producciondiaria:
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    for registro in registrosDiariosSavedAll:
+                        registro.id_gallinas = gallinasSaved
+                        registro.id_alimentacion = registroDiarioSaved.id_alimentacion
+                        if registroDiarioSaved.id_mortades:
+                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                        registro.save()
+                elif not hasattr(registroDiarioSaved, 'id_mortades'):
+                    registroDiarioSaved.id_mortades = mortaDesSaved
+                    registroDiarioSaved.save()
+                elif registroDiarioSaved:
+                    registro = Registrodiario.objects.create(
+                        id_galpon=registroDiarioSaved.id_galpon,
+                        id_gallinas=id_gallinas,
+                        id_producciondiaria=id_producciondiaria,
+                        id_mortades=mortaDesSaved,
+                        id_alimentacion=id_alimentacion
+                    )
+                    registro.save()
+                else:
+                    registro = Registrodiario(id_galpon=galponForm ,id_gallinas=mortaDesSaved)
+                    registro.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
                 response = JsonResponse({'mensaje': mensaje, 'error': error})
@@ -905,8 +1021,6 @@ class ProduccionDiariaa(ListView):
                 Q(fecha__icontains = busqueda)
                 ).distinct().order_by('-id')
         else:
-            todays_Date = datetime.date.fromtimestamp(time.time())
-            dateCurrent = todays_Date.isoformat()
             query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
         return query
 
@@ -1017,12 +1131,55 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
             form = self.form_class(request.POST)
             if form.is_valid():
                 form.instance.id_usuario = self.request.user
+                galponForm = form.cleaned_data['id_galpon']
                 form.save()
-                todays_Date = datetime.date.fromtimestamp(time.time())
-                dateCurrent = todays_Date.isoformat()
-                galponForm = form.cleaned_data.get('id_galpon')
+                prodDiariaSaved = ProduccionDiaria.objects.latest('id')
                 try:
-                    alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                except ObjectDoesNotExist:
+                    registroDiarioSaved = 0
+                id_alimentacion = None
+                id_mortades = None
+                id_gallinas = None
+                if hasattr(registroDiarioSaved, 'id_alimentacion'):
+                    id_alimentacion = registroDiarioSaved.id_alimentacion
+                if hasattr(registroDiarioSaved, 'id_mortades'):
+                    id_mortades = registroDiarioSaved.id_mortades
+                if hasattr(registroDiarioSaved, 'id_gallinas'):
+                    id_gallinas = registroDiarioSaved.id_gallinas
+                if id_alimentacion and id_gallinas:
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    registro = Registrodiario.objects.create(
+                        id_galpon=registroDiarioSaved.id_galpon,
+                        id_gallinas=id_gallinas,
+                        id_producciondiaria=prodDiariaSaved,
+                        id_mortades=id_mortades,
+                        id_alimentacion=id_alimentacion
+                    )
+                    registro.save()
+                    for registro in registrosDiariosSavedAll:
+                        registro.id_gallinas = registroDiarioSaved.id_gallinas
+                        registro.id_alimentacion = registroDiarioSaved.id_alimentacion
+                        if hasattr(registroDiarioSaved, 'id_mortades'):
+                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                        registro.save()
+                elif not hasattr(registroDiarioSaved, 'id_producciondiaria'):
+                    registroDiarioSaved.id_producciondiaria = prodDiariaSaved
+                    registroDiarioSaved.save()
+                elif registroDiarioSaved:
+                    registro = Registrodiario.objects.create(
+                        id_galpon=registroDiarioSaved.id_galpon,
+                        id_gallinas=id_gallinas,
+                        id_producciondiaria=prodDiariaSaved,
+                        id_mortades=id_mortades,
+                        id_alimentacion=id_alimentacion
+                    )
+                    registro.save()
+                else:
+                    registro = Registrodiario(id_galpon=galponForm ,id_gallinas=prodDiariaSaved)
+                    registro.save()
+                try:
+                    alimentacionSaved = Alimentacion.objects.filter(id_galpon=galponForm, fecha=dateCurrent).last()
                 except ObjectDoesNotExist:
                     alimentacionSaved = 0
                 if alimentacionSaved:
@@ -1056,9 +1213,7 @@ class editarProdDiaria(UpdateView):
         if is_ajax(request=request):
             form = self.form_class(request.POST, instance = self.get_object())
             if form.is_valid():
-                todays_Date = datetime.date.fromtimestamp(time.time())
-                dateCurrent = todays_Date.isoformat()
-                galponForm = form.cleaned_data.get('id_galpon')
+                galponForm = form.cleaned_data.get('id_galpon').id
                 try:
                     alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
                 except ObjectDoesNotExist:

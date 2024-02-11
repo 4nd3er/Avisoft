@@ -166,12 +166,16 @@ class Gallinas(models.Model):
     peso_promedio = models.PositiveIntegerField()
     edad_sem = models.PositiveIntegerField()
     procedencia = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return f'{self.cantidad_gallinas} gallinas'
     
     class Meta:
         managed = False
         db_table = 'gallinas'
         verbose_name="Gallina"
         verbose_name_plural="Gallinas"
+    
 
 
 class Galpones(models.Model):
@@ -300,6 +304,19 @@ class ProduccionDiaria(models.Model):
     class Meta:
         managed = False
         db_table = 'produccion_diaria'
+
+
+class Registrodiario(models.Model):
+    id_galpon = models.ForeignKey(Galpones, models.DO_NOTHING, db_column='id_galpon')
+    id_gallinas = models.ForeignKey(Gallinas, models.DO_NOTHING, db_column='id_gallinas')
+    id_alimentacion = models.ForeignKey(Alimentacion, models.DO_NOTHING, db_column='id_alimentacion')
+    id_producciondiaria = models.ForeignKey(ProduccionDiaria, models.DO_NOTHING, db_column='id_produccionDiaria')
+    id_mortades = models.ForeignKey(MortalidadDescarte, models.DO_NOTHING, db_column='id_mortaDes')
+    fecha = models.DateField(auto_now_add = True)
+
+    class Meta:
+        managed = False
+        db_table = 'registrodiario'
 
 
 class Rol(models.Model):
