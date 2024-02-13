@@ -14,10 +14,10 @@ class Alimentacion(models.Model):
     id = models.AutoField(primary_key = True)
     fecha = models.DateField(auto_now_add = True)
     id_galpon = models.ForeignKey('Galpones', on_delete = models.CASCADE, db_column = 'id_galpon')
-    gr_gallina_dia = models.DecimalField(db_column = 'Gr/Gallina/Dia', max_digits=11, decimal_places=2)
-    kg_total = models.DecimalField(max_digits=11, decimal_places=2)
-    bultos_total = models.DecimalField(max_digits=11, decimal_places=2)
-    c_a = models.DecimalField(max_digits=11, decimal_places=2)
+    gr_gallina_dia = models.CharField(db_column = 'Gr/Gallina/Dia', max_length=10)
+    kg_total = models.CharField(max_length=10)
+    bultos_total = models.CharField(max_length=10)
+    c_a = models.CharField(max_length=10)
     id_tipo_alimento = models.ForeignKey('TipoAlimento', models.DO_NOTHING, db_column='id_tipo_alimento')
 
     def __str__(self):

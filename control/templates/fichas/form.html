@@ -20,7 +20,7 @@
             <option value="1" {% if form.estado_ficha.value == 1 %}selected{% endif %}>Activo</option>
             <option value="0" {% if form.estado_ficha.value == 0 %}selected{% endif %}>Inactivo</option>
         </select>
-        <input id="estado_ficha" value="{{ form.estado_ficha.value |default:'' }}" type="hidden" name="estado_ficha" onchange="stateFicha();">
+        <input id="estado_ficha" value="{{ form.estado_ficha.value |default:'1' }}" type="hidden" name="estado_ficha" onchange="stateFicha();">
         <div id="errores{{ form.estado_ficha.name }}">
         
         </div>

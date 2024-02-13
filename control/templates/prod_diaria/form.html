@@ -22,7 +22,11 @@
                         id="{{ prod.name }}"
                         class="form-control"
                         name="{{ prod.name }}"
-                        value="{{ prod.value | default:'' }}"
+                        {% if object.id %}
+                            value="{{ prod.value | default:'0' }}"
+                        {% else %}
+                            value="{{ prod.value | default:'' }}"
+                        {% endif %}
                         aria-describedby="helpId"
                         placeholder="{{ prod.label }}"
                         onkeypress='return onlyNumber(event);'
