@@ -125,7 +125,7 @@ class registroDiario(ListView):
     model = Registrodiario
 
     def get_queryset(self):
-        return self.model.objects.all().order_by('-id')
+        return self.model.objects.filter(fecha=dateCurrent).order_by('-id')
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -280,7 +280,7 @@ class crearAlimentacion(CreateView):
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = alimentacionSaved
-                        if registroDiarioSaved.id_mortades:
+                        if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_alimentacion = registroDiarioSaved.id_mortades
                         registro.save()
                 elif hasattr(registroDiarioSaved, 'id_alimentacion'):
@@ -504,7 +504,7 @@ class crearGallinas(CreateView):
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = gallinasSaved
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
-                        if registroDiarioSaved.id_mortades:
+                        if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_alimentacion = registroDiarioSaved.id_mortades
                         registro.save()
                 elif not hasattr(registroDiarioSaved, 'id_gallinas'):
@@ -932,7 +932,7 @@ class crearMortalidad(CreateView):
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = gallinasSaved
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
-                        if registroDiarioSaved.id_mortades:
+                        if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_alimentacion = registroDiarioSaved.id_mortades
                         registro.save()
                 elif not hasattr(registroDiarioSaved, 'id_mortades'):
