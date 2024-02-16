@@ -95,7 +95,7 @@ const registrarProdDiaria = () => {
         url: $('#formCrearProdDiaria').attr('action'),
         type: $('#formCrearProdDiaria').attr('method'),
         success: function (response) {
-            notificacionSuccess(response.mensaje);
+            notificacionSuccessProdDiaria(response.mensaje);
             $('#id_tipo_huevo').val('');
             $('#cantidad').val('');
         },
@@ -160,6 +160,19 @@ function notificacionSuccess(mensaje) {
         title: mensaje,
         timer: 1500,
         timerProgressBar: true,
+        showConfirmButton: false,
+    })
+}
+
+function notificacionSuccessProdDiaria(mensaje) {
+    Swal.mixin({
+        toast: true,
+        position: 'top-start',
+        timer: 1500,
+        timerProgressBar: true,
+    }).fire({
+        icon: 'success',
+        title: mensaje,
         showConfirmButton: false,
     })
 }

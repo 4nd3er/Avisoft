@@ -17,6 +17,16 @@
         <div class="col-md" style="border: 1px solid;border-radius: .5rem;">
             {% include 'search.html' %}
         </div>
+        <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
+            <div class="row text-center" style="margin: 2rem 0;">
+                <div class="col-md col-sm">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">GENERAR REPORTE <i class="bi bi-file-earmark-arrow-down"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
       
     {% if messages %}
@@ -34,6 +44,7 @@
                 <thead class="sticky-top bg-white">
                     <tr class="text-center">
                         <th scope="col">Nombre de galpón</th>
+                        <th scope="col">Cantidad de gallinas del galpón</th>
                         <th scope="col">Lote de gallinas</th>
                         <th scope="col">Alimentación</th>
                         <th scope="col">Producción Diaria</th>
@@ -46,7 +57,12 @@
                         {% for dato in registroDiario %}
                             <tr>
                                 <td>{{ dato.id_galpon }}</td>
-                                <td>{{ dato.id_gallinas }}</td>
+                                <td>{{ dato.id_galpon.cant_gall }}</td>
+                                {% if dato.id_gallinas %}
+                                    <td>{{ dato.id_gallinas }}</td>
+                                {% else %}
+                                    <td>No aplica</td>
+                                {% endif %}
                                 <td>{{ dato.id_alimentacion }}</td>
                                 <td>{{ dato.id_producciondiaria }}</td>
                                 {% if dato.id_mortades %}
@@ -62,15 +78,6 @@
                     <tbody class="text-center mx-auto"></tbody>
                 {% endif %}
             </table>
-        </div>
-    </div>
-    
-    <div class="row container-fluid text-end my-4">
-        <div class="col-md col-sm">
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
-            </form>
         </div>
     </div>
 

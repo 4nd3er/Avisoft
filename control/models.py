@@ -299,7 +299,7 @@ class ProduccionDiaria(models.Model):
     fecha = models.DateField(auto_now_add = True)
 
     def __str__(self):
-        return f'jornada {self.id_jornada}, id_tipo_huevo: {self.id_tipo_huevo}, cantidad: {self.cantidad}'
+        return f'jornada {self.id_jornada}, Tipo de huevo: {self.id_tipo_huevo}, cantidad: {self.cantidad}'
 
     class Meta:
         managed = False

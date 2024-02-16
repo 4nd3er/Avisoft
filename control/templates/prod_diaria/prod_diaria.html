@@ -22,6 +22,12 @@
                         REGISTRAR <i class="bi bi-plus-circle"></i>
                     </button>
                 </div>
+                <div class="col-md col-sm">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">GENERAR REPORTE <i class="bi bi-file-earmark-arrow-down"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -71,14 +77,14 @@
         </div>
     </div>
   
-    <div class="row container-fluid text-end my-4">
+    {% comment %} <div class="row container-fluid text-end my-4">
         <div class="col-md col-sm">
             <form method="POST">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-secondary" style="border: 2px solid">EXPORTAR <i class="bi bi-file-earmark-arrow-down"></i></button>
             </form>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
