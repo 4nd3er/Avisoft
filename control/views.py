@@ -164,7 +164,7 @@ class registroDiario(ListView):
             count = 3
             ws.row_dimensions[2].height = 25
             for i in listColumn:
-                ws.column_dimensions[i].width = 40
+                ws.column_dimensions[i].width = 55
                 ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal = 'center', vertical = 'center')
                 ws[f'{listColumn[countName]}3'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
                                             top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
@@ -283,21 +283,12 @@ class crearAlimentacion(CreateView):
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = alimentacionSaved
                         if not hasattr(registroDiarioSaved, 'id_mortades'):
-                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                            registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
                 elif registroDiarioSaved:
                     if not hasattr(registroDiarioSaved, 'id_alimentacion') or hasattr(registroDiarioSaved, 'id_alimentacion'):
                         registroDiarioSaved.id_alimentacion = alimentacionSaved
                         registroDiarioSaved.save()
-                # elif registroDiarioSaved:
-                #     registro = Registrodiario.objects.create(
-                #         id_galpon=registroDiarioSaved.id_galpon,
-                #         id_gallinas=id_gallinas,
-                #         id_producciondiaria=id_producciondiaria,
-                #         id_mortades=id_mortades,
-                #         id_alimentacion=alimentacionSaved
-                #     )
-                #     registro.save()
                 else:
                     registro = Registrodiario(id_galpon=galponForm ,id_alimentacion=alimentacionSaved)
                     registro.save()
@@ -508,20 +499,11 @@ class crearGallinas(CreateView):
                         registro.id_gallinas = gallinasSaved
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
                         if hasattr(registroDiarioSaved, 'id_mortades'):
-                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                            registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
                 elif not hasattr(registroDiarioSaved, 'id_gallinas') or hasattr(registroDiarioSaved, 'id_gallinas'):
                     registroDiarioSaved.id_gallinas = gallinasSaved
                     registroDiarioSaved.save()
-                # elif registroDiarioSaved:
-                #     registro = Registrodiario.objects.create(
-                #         id_galpon=registroDiarioSaved.id_galpon,
-                #         id_gallinas=gallinasSaved,
-                #         id_producciondiaria=id_producciondiaria,
-                #         id_mortades=id_mortades,
-                #         id_alimentacion=id_alimentacion
-                #     )
-                #     registro.save()
                 else:
                     registro = Registrodiario(id_galpon=galponForm ,id_gallinas=gallinasSaved)
                     registro.save()
@@ -929,14 +911,12 @@ class crearMortalidad(CreateView):
                     id_producciondiaria = registroDiarioSaved.id_producciondiaria
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
-                    id_mortades = registroDiarioSaved.id_mortades
                 if id_alimentacion and id_producciondiaria:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
-                        registro.id_gallinas = gallinasSaved
+                        registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
-                        if hasattr(registroDiarioSaved, 'id_mortades'):
-                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                        registro.id_mortades = mortaDesSaved
                         registro.save()
                 elif not hasattr(registroDiarioSaved, 'id_mortades') or hasattr(registroDiarioSaved, 'id_mortades'):
                     registroDiarioSaved.id_mortades = mortaDesSaved
@@ -1164,7 +1144,7 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
                         if hasattr(registroDiarioSaved, 'id_mortades'):
-                            registro.id_alimentacion = registroDiarioSaved.id_mortades
+                            registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
                 elif not hasattr(registroDiarioSaved, 'id_producciondiaria'):
                     registroDiarioSaved.id_producciondiaria = prodDiariaSaved
@@ -1613,13 +1593,11 @@ class Usuarioss(ListView):
                     ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
                     ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
                     if i == 'id_tipo_doc':
-                        valueRow = getattr(q.id_tipo_doc, 'tipo_doc', 'tipo_doc')
+                        valueRow = q.id_tipo_doc.__str__()
                     elif i == 'id_ficha':
-                        numFicha = getattr(q.id_ficha, 'num_ficha', 'num_ficha')
-                        nombreFicha = getattr(q.id_ficha, 'id_nombreficha', 'id_nombreficha')
-                        valueRow = f'{numFicha}: {nombreFicha}'
+                        valueRow = q.id_ficha.__str__()
                     elif i == 'id_rol':
-                        valueRow = getattr(q.id_rol, 'tipo_rol', 'tipo_rol')
+                        valueRow = q.id_rol.__str__()
                     elif i == 'registro':
                         valueRow = str(getattr(q, i))
                     elif i == 'last_login':
