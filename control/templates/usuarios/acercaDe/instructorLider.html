@@ -1,0 +1,20 @@
+{% load static %}
+<div class="modal fade" id="instructorModal" tabindex="-1" aria-labelledby="informacionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="informacionModalLabel">Instructor Líder</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="cerrarModalInfo();" aria-label="Close"></button>
+          </div>    
+          <div class="modal-body">
+                  <!-- Texto centrado, en negrita y tamaño de fuente grande -->
+            <h5 style="text-align: center; font-weight: bold; font-size: 20px;">Moises Garcia Vargas</h5>
+                  <!-- Imagen con tamaño máximo -->
+             <img src="{% static 'images/acercade/instructor.png' %}" alt="Instructor" style="max-width: 500px; max-height: 900px; display: block; margin: 0 auto;">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="cerrarModalInfo();" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+      </div>
+  </div>
+</div>

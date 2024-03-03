@@ -130,6 +130,7 @@ urlpatterns = [
     # ! Modulo de usuarios
     path('usuarios/', login_required(views.Usuarioss.as_view(), login_url = 'inicio'), name="usuarios"),
     path('crear_usuario/', login_required(views.crearUsuario.as_view(), login_url = 'inicio'), name="crear_usuario"),
+    path('acerca_de', views.acerca_de, name="acerca_de"),
     path('editar_usuario/<int:pk>', login_required(views.EditarUsuario.as_view(), login_url = 'inicio'), name="editar_usuario"),
     path('confirmElimUsuario/<int:pk>', login_required(views.confirmarEliminarUsuario.as_view(), login_url = 'inicio'), name="confirmElimUsuario"),
     path('eliminarUsuario/<int:id>', login_required(views.eliminarUsuario), name="eliminarUsuario"),

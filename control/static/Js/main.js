@@ -35,6 +35,19 @@ const abrirModalEliminar = (url) => {
         $(this).modal('show');
     });
 };
+const abrirModalInfo = (url) => {
+    $('#informacionModal').load(url, function () {
+        $(this).modal('show');
+    });
+};
+
+const cerrarModalInfo = () => {
+    $('#informacionModal').modal('hide');
+    setTimeout(() => {
+        window.location.reload();
+    }, 100);
+};
+
 
 const cerrarModalEliminar = () => {
     $('#editar').modal('hide');

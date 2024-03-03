@@ -1,0 +1,27 @@
+{% load static %}
+<div class="modal fade" id="informacionModal" tabindex="-1" aria-labelledby="informacionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="informacionModalLabel">Información del Aplicativo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="cerrarModalInfo();" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Aplicativo especializado en el manejo y gestión de información de la unidad avícola de la granja Sena del centro agropecuario regional Cauca, para mayor seguridad y confort.
+        <!-- Agrega un enlace para descargar el manual -->
+        <br>
+        <p style="font-weight: bold">
+          Descarga el manual del usuario: 
+          <a href="{% static 'doc/manualdeusuariodocx.pdf' %}" download>
+              <img src="{% static 'images/acercade/imgpdf.svg' %}" alt="Excel" style="vertical-align: middle; width: 30px; height: 30px; margin-right: 5px;">
+              Descargar
+          </a>
+      </p>
+      
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModalInfo();" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

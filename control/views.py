@@ -83,6 +83,9 @@ def inicio(request):
                 messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
     return render(request, 'inicio_sesion/inicio.html')
 
+def acerca_de(request):
+    # Lógica si es necesario
+    return render(request, 'usuarios/acercaDe/acerca_de.html')
 
 class contrasena(LoginRequiredMixin, ListView):
     template_name = 'usuarios/cambioPswrd/password.html'
