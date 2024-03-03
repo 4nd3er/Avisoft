@@ -66,11 +66,11 @@ def inicio(request):
             documento = request.POST.get('documento')
             password = request.POST.get('password')
 
-            user = authenticate(request, documento = documento, password = password)
-
             if documento == "" and password == "":
                 messages.warning(request, 'Digita en los campos correspondientes para el inicio de sesion')
                 return render(request, 'inicio_sesion/inicio.html')
+            user = authenticate(request, documento = documento, password = password)
+
             userFilter = Usuario.objects.filter(documento=documento).values_list('is_active', flat=True)
             if user is not None:
                 login(request, user)
@@ -140,7 +140,6 @@ class registroDiario(ListView):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        print(self.get_queryset())
         return render(request, self.template_name, {'registroDiario': self.get_queryset()})
     
     def post(self, request, *args, **kwargs):
@@ -280,12 +279,13 @@ class crearAlimentacion(CreateView):
                     id_producciondiaria = registroDiarioSaved.id_producciondiaria
                 if hasattr(registroDiarioSaved, 'id_mortades'):
                     id_mortades = registroDiarioSaved.id_mortades
-                if id_gallinas and id_producciondiaria:
+                if id_producciondiaria or id_gallinas:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
-                        registro.id_gallinas = registroDiarioSaved.id_gallinas
+                        if hasattr(registroDiarioSaved, 'id_gallinas'):
+                            registro.id_gallinas = id_gallinas
                         registro.id_alimentacion = alimentacionSaved
-                        if not hasattr(registroDiarioSaved, 'id_mortades'):
+                        if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
                 elif registroDiarioSaved:
@@ -496,7 +496,7 @@ class crearGallinas(CreateView):
                     id_producciondiaria = registroDiarioSaved.id_producciondiaria
                 if hasattr(registroDiarioSaved, 'id_mortades'):
                     id_mortades = registroDiarioSaved.id_mortades
-                if id_alimentacion and id_producciondiaria:
+                if id_alimentacion or id_producciondiaria:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = gallinasSaved
@@ -504,9 +504,10 @@ class crearGallinas(CreateView):
                         if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
-                elif not hasattr(registroDiarioSaved, 'id_gallinas') or hasattr(registroDiarioSaved, 'id_gallinas'):
-                    registroDiarioSaved.id_gallinas = gallinasSaved
-                    registroDiarioSaved.save()
+                elif registroDiarioSaved:
+                    if not hasattr(registroDiarioSaved, 'id_gallinas') or hasattr(registroDiarioSaved, 'id_gallinas'):
+                        registroDiarioSaved.id_gallinas = gallinasSaved
+                        registroDiarioSaved.save()
                 else:
                     registro = Registrodiario(id_galpon=galponForm ,id_gallinas=gallinasSaved)
                     registro.save()
@@ -914,27 +915,19 @@ class crearMortalidad(CreateView):
                     id_producciondiaria = registroDiarioSaved.id_producciondiaria
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
-                if id_alimentacion and id_producciondiaria:
+                if id_alimentacion or id_producciondiaria:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
                         registro.id_mortades = mortaDesSaved
                         registro.save()
-                elif not hasattr(registroDiarioSaved, 'id_mortades') or hasattr(registroDiarioSaved, 'id_mortades'):
-                    registroDiarioSaved.id_mortades = mortaDesSaved
-                    registroDiarioSaved.save()
                 elif registroDiarioSaved:
-                    registro = Registrodiario.objects.create(
-                        id_galpon=registroDiarioSaved.id_galpon,
-                        id_gallinas=id_gallinas,
-                        id_producciondiaria=id_producciondiaria,
-                        id_mortades=mortaDesSaved,
-                        id_alimentacion=id_alimentacion
-                    )
-                    registro.save()
+                    if not hasattr(registroDiarioSaved, 'id_mortades') or hasattr(registroDiarioSaved, 'id_mortades'):
+                        registroDiarioSaved.id_mortades = mortaDesSaved
+                        registroDiarioSaved.save()
                 else:
-                    registro = Registrodiario(id_galpon=galponForm ,id_gallinas=mortaDesSaved)
+                    registro = Registrodiario(id_galpon=galponForm ,id_mortades=mortaDesSaved)
                     registro.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'no hay error'
@@ -1133,7 +1126,7 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                     id_mortades = registroDiarioSaved.id_mortades
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
-                if id_alimentacion and id_gallinas:
+                if id_alimentacion or id_gallinas:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     registro = Registrodiario.objects.create(
                         id_galpon=registroDiarioSaved.id_galpon,
@@ -1149,20 +1142,21 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                         if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
-                elif not hasattr(registroDiarioSaved, 'id_producciondiaria'):
-                    registroDiarioSaved.id_producciondiaria = prodDiariaSaved
-                    registroDiarioSaved.save()
                 elif registroDiarioSaved:
-                    registro = Registrodiario.objects.create(
-                        id_galpon=registroDiarioSaved.id_galpon,
-                        id_gallinas=id_gallinas,
-                        id_producciondiaria=prodDiariaSaved,
-                        id_mortades=id_mortades,
-                        id_alimentacion=id_alimentacion
-                    )
-                    registro.save()
+                    if not hasattr(registroDiarioSaved, 'id_producciondiaria'):
+                        registroDiarioSaved.id_producciondiaria = prodDiariaSaved
+                        registroDiarioSaved.save()
+                    else:
+                        registro = Registrodiario.objects.create(
+                            id_galpon=registroDiarioSaved.id_galpon,
+                            id_gallinas=id_gallinas,
+                            id_producciondiaria=prodDiariaSaved,
+                            id_mortades=id_mortades,
+                            id_alimentacion=id_alimentacion
+                        )
+                        registro.save()
                 else:
-                    registro = Registrodiario(id_galpon=galponForm ,id_gallinas=prodDiariaSaved)
+                    registro = Registrodiario(id_galpon=galponForm ,id_producciondiaria=prodDiariaSaved)
                     registro.save()
                 try:
                     alimentacionSaved = Alimentacion.objects.filter(id_galpon=galponForm, fecha=dateCurrent).last()

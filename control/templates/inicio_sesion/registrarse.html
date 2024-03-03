@@ -52,6 +52,9 @@
                                 {% if user.field.widget.input_type == 'file' %}
                                     accept=".png, .jpg, .jpeg"
                                 {% endif %}
+                                {% if user.field.widget.input_type == 'number' %}
+                                    onkeypress='return onlyNumber(event);'
+                                {% endif %}
                             />
                             {% if user.errors %}
                                 <div class="col-12 mt-2 p-0 list-none" style="font-size: .75rem; width: auto; color: #dc3545">
