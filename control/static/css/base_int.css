@@ -1,4 +1,4 @@
-.content{
+.content {
     align-items: center;
 }
 
@@ -32,6 +32,18 @@
 div a {
     text-decoration: none;
 }
+
+.formPassword {
+    box-shadow: 0px 0px 10px 1px gray;
+    padding: 1rem;
+    border-radius: .5rem;
+}
+
+.divPassword {
+    display: flex;
+    justify-content: center;
+}
+
 
 .modulos {
     margin-bottom: 1rem;
