@@ -282,9 +282,9 @@ class crearAlimentacion(CreateView):
                 if id_producciondiaria or id_gallinas:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
+                        registro.id_alimentacion = alimentacionSaved
                         if hasattr(registroDiarioSaved, 'id_gallinas'):
                             registro.id_gallinas = id_gallinas
-                        registro.id_alimentacion = alimentacionSaved
                         if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
@@ -499,8 +499,8 @@ class crearGallinas(CreateView):
                 if id_alimentacion or id_producciondiaria:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
-                        registro.id_gallinas = gallinasSaved
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
+                        registro.id_gallinas = gallinasSaved
                         if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
@@ -915,7 +915,7 @@ class crearMortalidad(CreateView):
                     id_producciondiaria = registroDiarioSaved.id_producciondiaria
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
-                if id_alimentacion or id_producciondiaria:
+                if id_alimentacion and id_producciondiaria:
                     registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
@@ -1137,8 +1137,9 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                     )
                     registro.save()
                     for registro in registrosDiariosSavedAll:
-                        registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
+                        if hasattr(registroDiarioSaved, 'id_gallinas'):
+                            registro.id_gallinas = id_gallinas
                         if hasattr(registroDiarioSaved, 'id_mortades'):
                             registro.id_mortades = registroDiarioSaved.id_mortades
                         registro.save()
