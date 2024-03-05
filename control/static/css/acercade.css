@@ -1,6 +1,12 @@
-.cards{
+.cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 5rem;
+}
+
+.cards .card .imgUs {
+    max-width: 300px;
+    max-height: 500px;
+    border-radius: 1rem;
 }
