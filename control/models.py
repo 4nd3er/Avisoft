@@ -175,7 +175,6 @@ class Gallinas(models.Model):
         db_table = 'gallinas'
         verbose_name="Gallina"
         verbose_name_plural="Gallinas"
-    
 
 
 class Galpones(models.Model):
@@ -301,6 +300,9 @@ class ProduccionDiaria(models.Model):
     def __str__(self):
         return f'jornada {self.id_jornada}, Tipo de huevo: {self.id_tipo_huevo}, cantidad: {self.cantidad}'
 
+    def nameTitle():
+        return 'Producción Diaria'
+
     class Meta:
         managed = False
         db_table = 'produccion_diaria'
@@ -314,9 +316,13 @@ class Registrodiario(models.Model):
     id_mortades = models.ForeignKey(MortalidadDescarte, models.DO_NOTHING, db_column='id_mortaDes')
     fecha = models.DateField(auto_now_add = True)
 
+
     class Meta:
         managed = False
         db_table = 'registrodiario'
+    
+    def __str__():
+        return 'Registro Diario'
 
 
 class Rol(models.Model):

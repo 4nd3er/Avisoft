@@ -128,10 +128,31 @@ class registroDiario(ListView):
     model = Registrodiario
 
     def get_queryset(self):
-        try:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
+            query = self.model.objects.filter(
+                Q(id_galpon__nombre_galpon__icontains = busqueda) |
+                Q(id_gallinas__id_linea__nombre__icontains = busqueda) |
+                Q(id_gallinas__cantidad_gallinas__icontains = busqueda) |
+                Q(id_gallinas__procedencia__icontains = busqueda) |
+                Q(id_alimentacion__kg_total__icontains = busqueda) |
+                Q(id_alimentacion__gr_gallina_dia__icontains = busqueda) |
+                Q(id_alimentacion__id_tipo_alimento__nombre__icontains = busqueda) |
+                Q(id_producciondiaria__id_jornada__jornada__icontains = busqueda) |
+                Q(id_producciondiaria__id_tipo_huevo__tipos_huevos__icontains = busqueda) |
+                Q(id_producciondiaria__id_usuario__nombre__icontains = busqueda) |
+                Q(id_mortades__id_tipo_descarte__tipo__icontains = busqueda)
+                ).distinct()
+            busquedaDate = ''
+        else:
             query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
-        except ObjectDoesNotExist:
-            query = 0
         return query
 
     def get_context_data(self, **kwargs):
@@ -157,7 +178,7 @@ class registroDiario(ListView):
                                         top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
             ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
             ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
-            ws['B2'] = f'REPORTE {self.model.__name__.upper()}S'
+            ws['B2'] = f'REPORTE {self.model.__str__().upper()}'
 
             ws.merge_cells('B2:G2')
             listColumn = ['B', 'C', 'D', 'E', 'F','G']
@@ -223,7 +244,7 @@ class registroDiario(ListView):
                 countColumn += 1
 
             # Nombre del archivo
-            nombreArchivo = f'REPORTE {self.model.__name__.upper()}.xlsx'
+            nombreArchivo = f'REPORTE {self.model.__str__().upper()}.xlsx'
             # Definir el tipo de respuesta
             response = HttpResponse(content_type = 'application/ms-excel')
             contenido = "attachment; filename = {0}".format(nombreArchivo)
@@ -239,8 +260,30 @@ class Alimentacionn(ListView):
     model = Alimentacion
     template_name = 'alimentacion/alimentacion.html'
 
+    
     def get_queryset(self):
-        return self.model.objects.all().order_by('-id')
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busqueda) |
+                Q(id_galpon__nombre_galpon__icontains = busqueda) |
+                Q(gr_gallina_dia__icontains = busqueda) |
+                Q(kg_total__icontains = busqueda) |
+                Q(bultos_total__icontains = busqueda) |
+                Q(c_a__icontains = busqueda) |
+                Q(id_tipo_alimento__nombre__icontains = busqueda)
+            ).distinct().order_by('-id')
+            busquedaDate = ''
+        else:
+            return self.model.objects.filter(fecha=dateCurrent).order_by('-id')
+        return query
 
     def get_context_data(self, **kwargs):
         contexto = {}
@@ -355,14 +398,22 @@ class Fichass(ListView):
     template_name = 'fichas/fichas.html'
 
     def get_queryset(self):
-        busqueda = self.request.GET.get("buscar")
-        if busqueda:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
             query = self.model.objects.filter(
                 Q(fecha_regis__icontains = busqueda) |
                 Q(num_ficha__icontains = busqueda) |
                 Q(id_nombreficha__nombre__icontains = busqueda) |
                 Q(estado_ficha__icontains = busqueda) 
-            )
+            ).distinct().order_by('-id')
+            busquedaDate = ''
         else:
             query = 0
         return query
@@ -582,9 +633,15 @@ class Galponess(ListView):
     template_name = 'galpones/galpones.html'
 
     def get_queryset(self):
-        busqueda = self.request.GET.get("buscar")
-
-        if busqueda:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
             query = self.model.objects.filter(
                 Q(nombre_galpon__icontains = busqueda) |
                 Q(area__icontains = busqueda) |
@@ -596,7 +653,8 @@ class Galponess(ListView):
                 Q(cant_gall__icontains = busqueda) |
                 Q(capac_nidales__icontains = busqueda) |
                 Q(cant_nidales__icontains = busqueda)
-                ).distinct()
+            ).distinct()
+            busquedaDate = ''
         else:
             query = self.model.objects.all().order_by('-id')
         return query
@@ -859,16 +917,23 @@ class Mortalidadd(ListView):
     template_name = 'mortalidad_descarte/mortalidad_descarte.html'
 
     def get_queryset(self):
-        busqueda = self.request.GET.get("buscar")
-
-        if busqueda:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
             query = self.model.objects.filter(
                 Q(id_galpon__nombre_galpon__icontains = busqueda) |
                 Q(cant_muertas__icontains = busqueda) |
                 Q(cant_descarte__icontains = busqueda) |
                 Q(id_tipo_descarte__tipo__icontains = busqueda) |
                 Q(saldo__icontains = busqueda)
-                ).distinct()
+            ).distinct()
+            busquedaDate = ''
         else:
             query = self.model.objects.all().order_by('-id')
         return query
@@ -989,16 +1054,23 @@ class ProduccionDiariaa(ListView):
     template_name = 'prod_diaria/prod_diaria.html'
 
     def get_queryset(self):
-        busqueda = self.request.GET.get("buscar")
-
-        if busqueda:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
             query = self.model.objects.filter(
                 Q(id_galpon__nombre_galpon__icontains = busqueda) |
                 Q(id_jornada__jornada__icontains = busqueda) |
                 Q(id_tipo_huevo__tipos_huevos = busqueda )|
                 Q(id_usuario__nombre__icontains = busqueda) |
                 Q(fecha__icontains = busqueda)
-                ).distinct().order_by('-id')
+            ).distinct().order_by('-id')
+            busquedaDate = ''
         else:
             query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
         return query
@@ -1017,11 +1089,14 @@ class ProduccionDiariaa(ListView):
     def post(self, request, *args, **kwargs):
         # Obtener el queryset usando la función get_queryset
         query = self.get_queryset()
+        if not query:
+            messages.error(request, 'Debes buscar algun dato para generar el reporte')
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
 
         wb = Workbook()
         ws = wb.active
         #nombre de la hoja de excel
-        ws.title = 'Excel Report'
+        ws.title = f'Reporte de {self.model.nameTitle()}'
 
         #configutación del encabezado
         ws['B2'].alignment = Alignment(horizontal='center', vertical='center')
@@ -1029,7 +1104,7 @@ class ProduccionDiariaa(ListView):
                                 top=Side(border_style='thin'), bottom=Side(border_style='thin'))
         ws['B2'].fill = PatternFill(start_color='39A900', fill_type='solid')
         ws['B2'].font = Font(name='Arial', size=15, bold=True, color='FFFFFF')
-        ws['B2'] = f'REPORTE {self.model._meta.model_name.upper()}'
+        ws['B2'] = f'REPORTE {self.model._meta.verbose_name.upper()}'
         
         ws.merge_cells('B2:I2')
         listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
@@ -1084,8 +1159,7 @@ class ProduccionDiariaa(ListView):
             countColumn += 1
 
         # Nombre del archivo
-        nombreArchivo = f'REPORTE {self.model._meta.model_name.upper()}.xlsx'
-        
+        nombreArchivo = f'REPORTE {self.model.nameTitle().upper()}.xlsx'
         # Definir el tipo de respuesta
         response = HttpResponse(content_type='application/ms-excel')
         contenido = "attachment; filename={0}".format(nombreArchivo)
@@ -1514,8 +1588,15 @@ class Usuarioss(ListView):
     template_name = 'usuarios/usuarios.html'
 
     def get_queryset(self):
-        busqueda = self.request.GET.get("buscar")
-        if busqueda:
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(registro__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
             query = self.model.objects.filter(
                 Q(nombre__icontains = busqueda) |
                 Q(apellido__icontains = busqueda) |
@@ -1525,7 +1606,8 @@ class Usuarioss(ListView):
                 Q(id_ficha__num_ficha__icontains = busqueda) |
                 Q(id_rol__tipo_rol__icontains = busqueda) |
                 Q(email__icontains = busqueda)
-                ).distinct().order_by('-id')
+            ).distinct().order_by('-id')
+            busquedaDate = ''
         else:
             query = 0
         return query
@@ -1560,7 +1642,7 @@ class Usuarioss(ListView):
                                         top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
             ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
             ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
-            ws['B2'] = f'REPORTE {self.model.__name__.upper()}S'
+            ws['B2'] = f'REPORTE {self.model.__name__.upper()}'
 
             ws.merge_cells('B2:K2')
             listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']

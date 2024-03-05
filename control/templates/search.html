@@ -2,7 +2,23 @@
     <form method="GET">
         <div class="row text-center" style="margin: 2rem 0; align-items: center;">
             <div class="col-md col-sm">
-                <input class="form-control" type="text" name="buscar" placeholder="Digite para buscar" value="{{ request.GET.buscar }}" />
+                <select id="search" name="search" class="form-select" style="transition: .3s all; margin-bottom: 0;" oninput="searchSelect(event.target.value);">
+                    <option>Buscar por</option>
+                    {% if request.GET.search == 'date' %}
+                        <option value="date" selected>Fecha</option>
+                        <option value="input">Texto</option>
+                    {% else %}
+                        {% if request.GET.search == 'input' %}
+                            <option value="date">Fecha</option>
+                            <option value="input" selected>Texto</option>
+                        {% else %}
+                            <option value="date">Fecha</option>
+                            <option value="input">Texto</option>
+                        {% endif %}
+                    {% endif %}
+                </select>
+                <input id="inputSearch" name="buscar" class="form-control mt-3" style="display: none; opacity: 0; transition: .3s all;" type="text" placeholder="Digite para buscar" value="{{ request.GET.buscar }}" />
+                <input id="dateSearch" name="buscarDate" class="form-control mt-3" style="display: none; opacity: 0; transition: .3s all;" type="date" value="{{ request.GET.buscarDate }}" />
             </div>
             <div class="col-md-3 col-sm-3">
                 <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">
@@ -10,5 +26,7 @@
                 </button>
             </div>
         </div>
+        {% load static %}
+        <script src="{% static "Js/search.js" %}"></script>
     </form>
 {% endblock searchInput %}
