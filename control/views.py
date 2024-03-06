@@ -1074,8 +1074,7 @@ class ProduccionDiariaa(ListView):
                 Q(id_galpon__nombre_galpon__icontains = busqueda) |
                 Q(id_jornada__jornada__icontains = busqueda) |
                 Q(id_tipo_huevo__tipos_huevos = busqueda )|
-                Q(id_usuario__nombre__icontains = busqueda) |
-                Q(fecha__icontains = busqueda)
+                Q(id_usuario__nombre__icontains = busqueda)
             ).distinct().order_by('-id')
             busquedaDate = ''
         else:
@@ -1626,12 +1625,13 @@ class Usuarioss(ListView):
         return contexto
 
     def get(self, request, *args, **kwargs):
+        searchUser = True
         user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
         if user[0] == True:
             if is_ajax(request=request):
                 return HttpResponse(serialize('json', self.get_queryset()), 'application/json')
             else:
-                return render(request, self.template_name, {'usuarios': self.get_queryset()})
+                return render(request, self.template_name, {'usuarios': self.get_queryset(), 'searchUser': searchUser})
         else:
             return redirect('interfaz')
 

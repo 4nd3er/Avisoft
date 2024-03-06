@@ -5,14 +5,26 @@
                 <select id="search" name="search" class="form-select" style="transition: .3s all; margin-bottom: 0;" oninput="searchSelect(event.target.value);">
                     <option>Buscar por</option>
                     {% if request.GET.search == 'date' %}
-                        <option value="date" selected>Fecha</option>
+                        {% if searchUser %}
+                            <option value="date" selected>Fecha de Registro</option>
+                        {% else %}
+                            <option value="date" selected>Fecha</option>
+                        {% endif %}
                         <option value="input">Texto</option>
                     {% else %}
                         {% if request.GET.search == 'input' %}
-                            <option value="date">Fecha</option>
+                            {% if searchUser %}
+                                <option value="date">Fecha de Registro</option>
+                            {% else %}
+                                <option value="date">Fecha</option>
+                            {% endif %}
                             <option value="input" selected>Texto</option>
                         {% else %}
-                            <option value="date">Fecha</option>
+                            {% if searchUser %}
+                                <option value="date">Fecha de Registro</option>
+                            {% else %}
+                                <option value="date">Fecha</option>
+                            {% endif %}
                             <option value="input">Texto</option>
                         {% endif %}
                     {% endif %}
