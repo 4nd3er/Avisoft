@@ -85,7 +85,8 @@ def inicio(request):
 
 def acerca_de(request):
     # Lógica si es necesario
-    return render(request, 'usuarios/acercaDe/acerca_de.html')
+    acercaDe = True
+    return render(request, 'usuarios/acercaDe/acerca_de.html', { 'acercaDe': acercaDe })
 
 class contrasena(LoginRequiredMixin, ListView):
     template_name = 'usuarios/cambioPswrd/password.html'
@@ -161,13 +162,15 @@ class registroDiario(ListView):
         return contexto
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'registroDiario': self.get_queryset()})
+        registroDiarioMenu = True
+        return render(request, self.template_name, {'registroDiario': self.get_queryset(), 'registroDiarioMenu': registroDiarioMenu})
     
     def post(self, request, *args, **kwargs):
+        registroDiarioMenu = True
         query = self.get_queryset()
         if not query:
             messages.error(request, 'Debes buscar algun dato o registrar en los modulos correspondientes para generar el reporte')
-            return render(request, self.template_name, {'registroDiario': self.get_queryset()})
+            return render(request, self.template_name, {'registroDiario': self.get_queryset(), 'registroDiarioMenu': registroDiarioMenu})
         else:
             wb = Workbook()
             ws = wb.active
@@ -251,7 +254,7 @@ class registroDiario(ListView):
             response['Content-Disposition'] = contenido
             wb.save(response)
             return response
-        return render(request, self.template_name, {'registroDiario': self.get_queryset()})
+        return render(request, self.template_name, {'registroDiario': self.get_queryset(), 'registroDiarioMenu': registroDiarioMenu})
 # ! Modulo de registro diario
 
 
@@ -291,10 +294,11 @@ class Alimentacionn(ListView):
         return contexto
 
     def get(self, request, *args, **kwargs):
+        aliMenu = True
         if is_ajax(request=request):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'alimentacion': self.get_queryset()})
+            return render(request, self.template_name, {'alimentacion': self.get_queryset(), 'aliMenu': aliMenu})
 
 class crearAlimentacion(CreateView):
     model = Alimentacion
@@ -512,10 +516,11 @@ class Gallinass(ListView):
         return contexto
 
     def get(self, request, *args, **kwargs):
+        gallinasMenu = True
         if is_ajax(request=request):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'gallinas': self.get_queryset()})
+            return render(request, self.template_name, {'gallinas': self.get_queryset(), 'gallinasMenu': gallinasMenu })
 
 class crearGallinas(CreateView):
     model = Gallinas
@@ -665,10 +670,11 @@ class Galponess(ListView):
         return contexto
     
     def get(self, request, *args, **kwargs):
+        galponMenu = True
         if is_ajax(request=request):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'galpones': self.get_queryset()})
+            return render(request, self.template_name, {'galpones': self.get_queryset(), 'galponMenu': galponMenu})
 
 class crearGalpon(CreateView):
     model = Galpones
@@ -945,10 +951,11 @@ class Mortalidadd(ListView):
         return contexto
     
     def get(self, request, *args, **kwargs):
+        mortaDesMenu = True
         if is_ajax(request=request):
                 return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'mortalidad_descarte': self.get_queryset()})
+            return render(request, self.template_name, {'mortalidad_descarte': self.get_queryset(), 'mortaDesMenu': mortaDesMenu})
 
 class crearMortalidad(CreateView):
     model = MortalidadDescarte
@@ -1081,17 +1088,18 @@ class ProduccionDiariaa(ListView):
         return contexto
     
     def get(self, request, *args, **kwargs):
+        prodDiariaMenu = True
         if is_ajax(request=request):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu})
     
     def post(self, request, *args, **kwargs):
         # Obtener el queryset usando la función get_queryset
         query = self.get_queryset()
         if not query:
             messages.error(request, 'Debes buscar algun dato para generar el reporte')
-            return render(request, self.template_name, {'produccion_diaria': self.get_queryset()})
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu})
 
         wb = Workbook()
         ws = wb.active

@@ -100,38 +100,6 @@
                         </div>
                     </a>
                 </div>
-                {% comment %} <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'tipo_doc' %}">
-                        <div class="col">
-                            <h5>Tipo de documentos</h5>
-                        </div>
-                        <div class="col">
-                            <img src="{% static 'images/modulos/tipo_doc.png' %}" alt="Imagen Huevos">
-                        </div>
-                    </a>
-                </div> {% endcomment %}
-                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'fichas' %}">
-                        <div class="col">
-                            <h5>Fichas</h5>
-                        </div>
-                        <div class="col">
-                            <img src="{% static 'images/modulos/ficha.png' %}" alt="Imagen Huevos">
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'lineas' %}">
-                        <div class="col">
-                            <h5>Lineas</h5>
-                        </div>
-                        <div class="col">
-                            <img src="{% static 'images/modulos/linea.png' %}" alt="Imagen Alimentación">
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="row justify-content-evenly">
                 <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
                     <a href="{% url 'alimentacion' %}">
                         <div class="col">
@@ -139,6 +107,17 @@
                         </div>
                         <div class="col">
                             <img src="{% static 'images/modulos/img_alimentacion.png' %}" alt="Imagen Alimentación">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
+                    <a href="{% url 'produccion_diaria' %}">
+                        <div class="col">
+                            <h5>Producción diaria</h5>
+                        </div>
+                        <div class="col">
+                            <img src="{% static 'images/modulos/img_huevos.png' %}"
+                            alt="Imagen Datos Generales">
                         </div>
                     </a>
                 </div>
@@ -153,14 +132,15 @@
                         </div>
                     </a>
                 </div>
+            </div>
+            <div class="row justify-content-evenly">
                 <div class="col-md-3 col-lg-2 col-sm-5 my-4 modulos_admin">
-                    <a href="{% url 'produccion_diaria' %}">
+                    <a href="{% url 'lineas' %}">
                         <div class="col">
-                            <h5>Producción diaria</h5>
+                            <h5>Lineas</h5>
                         </div>
                         <div class="col">
-                            <img src="{% static 'images/modulos/img_huevos.png' %}"
-                            alt="Imagen Datos Generales">
+                            <img src="{% static 'images/modulos/linea.png' %}" alt="Imagen Alimentación">
                         </div>
                     </a>
                 </div>

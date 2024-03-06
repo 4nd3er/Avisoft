@@ -34,22 +34,22 @@
                         <div class="collapse navbar-collapse" id="menu">
                             <ul class="navbar-nav me-auto d-flex mx-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'galpones' %}">Galpones</a>
+                                    <a class="nav-link" style="{% if galponMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'galpones' %}">Galpones</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'gallinas' %}">Lote de gallinas</a>
+                                    <a class="nav-link" style="{% if gallinasMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'gallinas' %}">Lote de gallinas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'produccion_diaria' %}">Producción diaria</a>
+                                    <a class="nav-link" style="{% if prodDiariaMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'produccion_diaria' %}">Producción diaria</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'alimentacion' %}">Alimentacion</a>
+                                    <a class="nav-link" style="{% if aliMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'alimentacion' %}">Alimentacion</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
+                                    <a class="nav-link" style="{% if mortaDesMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'mortalidad_descarte' %}">Mortalidad y descarte</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'registro_diario' %}">Registro diario</a>
+                                    <a class="nav-link" style="{% if registroDiarioMenu %}font-weight: bold; color: var(--colorsec3){% endif %}" href="{% url 'registro_diario' %}">Registro diario</a>
                                 </li>
                             </ul>
                             <hr class="d-md-none text-white-50">
@@ -71,7 +71,7 @@
                                     {% endif %}
                                 </span>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                    <a class="menu" href="{% url "interfaz" %}" role="button">Inicio</a>
+                                    <a class="menu" href="{% url 'interfaz' %}" role="button">Inicio</a>
                                     <a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a>
                                     <a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a>
                                     <hr class="dropdown-divider">
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </nav>
                 <!--navbar-->
             </div>

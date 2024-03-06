@@ -51,7 +51,11 @@
                                     {% endif %}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="menu" href="{% url 'acerca_de' %}">Acerca de</a></li>
+                                    {% if acercaDe %}
+                                        <li><a class="menu" href="{% url 'interfaz' %}" role="button">Inicio</a></li>
+                                    {% else %}
+                                        <li><a class="menu" href="{% url 'acerca_de' %}">Acerca de</a></li>
+                                    {% endif %}
                                     <li><a class="menu" onclick="abrirModalEditar('{% url 'editar_usuario' user.id %}')" role="button">Editar perfil</a></li>
                                     <li><a class="menu" href="{% url 'cambio_contraseña' %}">Cambiar contraseña</a></li>
                                     <li><hr class="dropdown-divider"></li>
