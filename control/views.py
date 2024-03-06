@@ -1095,6 +1095,7 @@ class ProduccionDiariaa(ListView):
     
     def post(self, request, *args, **kwargs):
         # Obtener el queryset usando la función get_queryset
+        prodDiariaMenu = True
         query = self.get_queryset()
         if not query:
             messages.error(request, 'Debes buscar algun dato para generar el reporte')
@@ -1637,7 +1638,7 @@ class Usuarioss(ListView):
 
     def post(self, request, *args, **kwargs):
         query = self.get_queryset()
-        if query == 0:
+        if not query:
             messages.error(request, 'Debes buscar algun dato para generar el reporte')
             return render(request, self.template_name, {'usuarios': self.get_queryset()})
         else:
