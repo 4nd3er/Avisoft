@@ -407,25 +407,28 @@ class UsuarioManager(BaseUserManager):
         return usuario
 
 class Usuario(AbstractBaseUser):
+    from django.core.validators import validate_email
     nombre = models.CharField(max_length = 100)
     apellido = models.CharField(max_length = 100)
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.IntegerField('Numero de documento', unique = True,
     validators = [
-        MinValueValidator(3400000, "Digite un numero de documento valido")
+        MinValueValidator(3400000, 'Digite un numero de documento valido')
     ])
-    celular = models.IntegerField(
+    celular = models.PositiveIntegerField(
+    unique = True,
     validators = [
-        MinValueValidator(3000000000, "Digite un numero de telefono valido")
+        MinValueValidator(3000000000, 'Digite un numero de telefono valido'),
+        MaxValueValidator(3599999999, 'Digite un numero de telefono valido'),
     ])
-    email = models.EmailField(max_length = 100, db_column = 'correo', unique = True)
+    email = models.EmailField(max_length = 100, db_column = 'correo', unique = True, validators=[validate_email])
     id_ficha = models.ForeignKey(Ficha, on_delete = models.CASCADE, db_column = 'id_ficha', null = True, blank = True)
     id_rol = models.ForeignKey(Rol, on_delete = models.CASCADE, db_column = 'id_rol', null = True, blank = True)
     password = models.CharField(max_length = 255, null = True, blank = True)
     imagen = models.ImageField(upload_to = 'imagen_usuario', db_column = 'imagen', null = True, blank = True)
     registro = models.DateField(auto_now_add = True)
     last_login = models.DateTimeField(auto_now = True, null = True, blank = True)
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default = False)
     is_staff = models.BooleanField(default = False)
     objects = UsuarioManager()
 

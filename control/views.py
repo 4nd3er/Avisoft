@@ -51,7 +51,7 @@ def registrarse(request):
         registro = UsuarioForm(request.POST, request.FILES)
         
         if registro.is_valid():
-            registro.is_active = 1 # TODO comprobar si sirve
+            registro.is_active = False
             registro.save()
             messages.success(request,'Te has registrado exitosamente')
             return redirect('inicio')
@@ -75,10 +75,11 @@ def inicio(request):
             if user is not None:
                 login(request, user)
                 return redirect('interfaz')
-            elif not userFilter:
-                messages.error(request, 'Usuario no registrado en la pagina web, registrate para iniciar sesion')
-            elif not userFilter[0]:
-                messages.error(request, 'Usuario bloqueado, comunicate con el administrador')
+            elif userFilter:
+                if not userFilter[0]:
+                    messages.error(request, 'Usuario no activado, comunicate con el administrador para más información')
+                else:
+                    messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
             else:
                 messages.error(request, 'Numero de documento y/o contraseña incorrectos, vuelve a intentarlo')
     return render(request, 'inicio_sesion/inicio.html')
@@ -416,7 +417,7 @@ class Fichass(ListView):
                 Q(num_ficha__icontains = busqueda) |
                 Q(id_nombreficha__nombre__icontains = busqueda) |
                 Q(estado_ficha__icontains = busqueda) 
-            ).distinct().order_by('-id')
+            ).distinct().order_by('-id_ficha')
             busquedaDate = ''
         else:
             query = 0
@@ -1717,7 +1718,7 @@ class crearUsuario(CreateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, request.FILES or None)
+            form = self.form_class(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
@@ -1745,7 +1746,7 @@ class EditarUsuario(UpdateView):
 
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
-            form = self.form_class(request.POST, instance = self.get_object())
+            form = self.form_class(request.POST, request.FILES, instance = self.get_object())
             if form.is_valid():
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'

@@ -48,10 +48,6 @@ fieldset {
     justify-content: center;
 }
 
-.select {
-    padding-right: 5rem;
-}
-
 .alinear-centro {
     display: flex;
     justify-content: center;
@@ -63,4 +59,5 @@ fieldset {
     .form-control {
         width: 80%;
     }
+
 }

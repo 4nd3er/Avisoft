@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, UserChangeForm
 from django.contrib import messages
 
 class GallinasForm(forms.ModelForm):
