@@ -503,6 +503,109 @@ def eliminarFicha(request, id_ficha):
 # ! Modulo de fichas
 
 
+# ! Modulo de nombre de fichas
+class FichaNombres(ListView):
+    model = Nombreficha
+    template_name = 'nombre_fichas/nombre_fichas.html'
+
+    def get_queryset(self):
+        select = self.request.GET.get('search')
+        busqueda = self.request.GET.get('buscar')
+        busquedaDate = self.request.GET.get('buscarDate')
+        if select == 'date':
+            query = self.model.objects.filter(
+                Q(fecha__icontains = busquedaDate)
+                ).distinct().order_by('-id')
+            busqueda = ''
+        elif select == 'input':
+            query = self.model.objects.filter(
+                Q(nombre__icontains = busqueda)
+            ).distinct().order_by('-id')
+            busquedaDate = ''
+        else:
+            query = 0
+        return query
+
+    def get_context_data(self, **kwargs):
+        contexto = {}
+        contexto["fichas"] = self.get_queryset()
+        return contexto
+
+    def get(self, request, *args, **kwargs):
+        user = Usuario.objects.filter(id = request.user.id).values_list('is_staff', flat = True)
+        if user[0] == True:
+            if is_ajax(request=request):
+                return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
+            else:
+                return render(request, self.template_name, {'fichas': self.get_queryset()})
+        else:
+            return redirect('interfaz')
+
+class crearFichaNombre(CreateView):
+    model = Nombreficha
+    template_name = 'nombre_fichas/crear.html'
+    form_class = NombreFichaForm
+    success_url = reverse_lazy('fichasNombres')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo registrar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect('fichasNombres')
+
+class editarFichaNombre(UpdateView):
+    model = Nombreficha
+    template_name = 'nombre_fichas/editar.html'
+    form_class = NombreFichaForm
+    success_url = reverse_lazy('fichasNombres')
+
+    def post(self, request, *args, **kwargs):
+        if is_ajax(request=request):
+            form = self.form_class(request.POST, instance = self.get_object())
+            if form.is_valid():
+                form.save()
+                mensaje = f'{self.model.__name__} actualizado correctamente!'
+                error = 'no hay error'
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se pudo actualizar'
+                error = form.errors
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
+                response.status_code = 400
+                return response
+        else:
+            redirect('fichasNombres')
+
+class confirmarEliminarFichaNombre(DeleteView):
+    model = Nombreficha
+    template_name = 'nombre_fichas/nombre_fichas_confirm_delete.html'
+    success_url = reverse_lazy('fichasNombres')
+
+    def post(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+def eliminarFichaNombre(request, id):
+    eliminar = Nombreficha.objects.get(id = id)
+    eliminar.delete()
+    return redirect('fichasNombres')
+# ! Modulo de nombre de fichas
+
+
 # ! Modulo de gallinas
 class Gallinass(ListView):
     model = Gallinas

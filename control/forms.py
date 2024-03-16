@@ -56,6 +56,11 @@ class FichaForm(forms.ModelForm):
         model = Ficha
         fields = '__all__'
 
+class NombreFichaForm(forms.ModelForm):
+    class Meta:
+        model = Nombreficha
+        fields = '__all__'
+
 class AlimentacionForm(forms.ModelForm):
     class Meta:
         model = Alimentacion

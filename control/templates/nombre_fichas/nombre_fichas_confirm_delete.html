@@ -1,0 +1,19 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <form action="{% url 'eliminarFichaNombre' object.id %}"  method="POST">
+            <div class="modal-body">
+                {% csrf_token %}
+                <div class="col">
+                    {% csrf_token %}
+                    <h5 class="title text-center">Desea eliminar la programacion {{object.nombre}}?</h5>
+                    <div class="col text-center">
+                        <input type="submit" class="btn btn-outline-danger" value="confirmar">
+                        <a class="btn btn-outline-success" value="cancelar" data-bs-dismiss="modal">
+                            Cancelar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

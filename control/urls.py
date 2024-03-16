@@ -46,6 +46,15 @@ urlpatterns = [
     # ! Modulo de Fichas
 
 
+    # ! Modulo de Nombre de Fichas
+    path('fichasNombres/', login_required(views.FichaNombres.as_view(), login_url = 'inicio'), name="fichasNombres"),
+    path('crear_fichaNombre/', login_required(views.crearFichaNombre.as_view(), login_url = 'inicio'), name="crear_fichaNombre"),
+    path('editar_fichaNombre/<int:pk>', login_required(views.editarFichaNombre.as_view(), login_url = 'inicio'), name="editar_fichaNombre"),
+    path('confirmElimFichaNombre/<int:pk>', login_required(views.confirmarEliminarFichaNombre.as_view(), login_url = 'inicio'), name="confirmElimFichaNombre"),
+    path('eliminarFichaNombre/<int:id>', login_required(views.eliminarFichaNombre), name="eliminarFichaNombre"),
+    # ! Modulo de Nombre de Fichas
+
+
     # ! Modulo de gallinas
     path('gallinas/', login_required(views.Gallinass.as_view(), login_url = 'inicio'), name="gallinas"),
     path('crear_gallinas/', login_required(views.crearGallinas.as_view(), login_url = 'inicio'), name="crear_gallinas"),
@@ -130,8 +139,8 @@ urlpatterns = [
     # ! Modulo de usuarios
     path('usuarios/', login_required(views.Usuarioss.as_view(), login_url = 'inicio'), name="usuarios"),
     path('crear_usuario/', login_required(views.crearUsuario.as_view(), login_url = 'inicio'), name="crear_usuario"),
-    path('acerca_de', views.acerca_de, name="acerca_de"),
-    path('activarUsuario/<int:id>', views.activarUsuario, name="activarUsuario"),
+    path('acerca_de', login_required(views.acerca_de, login_url = 'inicio'), name="acerca_de"),
+    path('activarUsuario/<int:id>', login_required(views.activarUsuario, login_url = 'inicio'), name="activarUsuario"),
     path('editar_usuario/<int:pk>', login_required(views.EditarUsuario.as_view(), login_url = 'inicio'), name="editar_usuario"),
     path('confirmElimUsuario/<int:pk>', login_required(views.confirmarEliminarUsuario.as_view(), login_url = 'inicio'), name="confirmElimUsuario"),
     path('eliminarUsuario/<int:id>', login_required(views.eliminarUsuario), name="eliminarUsuario"),

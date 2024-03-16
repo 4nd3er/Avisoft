@@ -1,0 +1,12 @@
+<div class="modal-body">
+    {% csrf_token %}
+    <div class="form-group mb-3 row">
+        <div class="col-md-12">
+            <label for="nombre" class="form-label">Nombre del programa:</label>
+            <input type="text" name="nombre" value="{{ form.nombre.value  | default:''}}" maxlength="50" class="form-control rounded mb-3">
+            <div id="errores{{ form.nombre.name }}">
+                
+            </div> 
+        </div>
+    </div>
+</div>
