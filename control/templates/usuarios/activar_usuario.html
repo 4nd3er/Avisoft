@@ -1,0 +1,22 @@
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <form action="{% url 'activarUsuario' object.id %}" method="POST">
+            <div class="modal-body text-center mx-auto">
+                {% csrf_token %}
+                <div class="col">
+                    {% csrf_token %}
+                    <h3 class="title text-center">Desea {% if object.is_active %}desactivar{% else %}activar{% endif %} el usuario {{object.nombre}}?</h5>
+                    <div class="m-3 mx-auto">
+                        <img src="{{object.imagen.url}}" class="border rounded" style="width:50%; height: auto;"  />
+                    </div>
+                    <div class=" modal-footer col text-center">
+                        <input type="submit" class="btn btn-outline-success" value="confirmar">
+                        <a class="btn btn-outline-danger" value="cancelar" data-bs-dismiss="modal">
+                            Cancelar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

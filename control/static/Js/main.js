@@ -23,6 +23,12 @@ const abrirModalEditar = (url) => {
     });
 };
 
+const abrirModalActivarUsuario = (url) => {
+    $('#activar').load(url, function () {
+        $(this).modal('show');
+    });
+};
+
 const cerrarModalEditar = () => {
     $('#editar').modal('hide');
     setTimeout(() => {

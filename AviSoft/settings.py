@@ -119,7 +119,7 @@ AUTH_USER_MODEL = 'control.Usuario'
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'es-co'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'America/Bogota'
 
@@ -135,7 +135,7 @@ STATIC_URL = '/static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-MEDIA_URL = '/imagenes/'
+MEDIA_URL = "/imagenes/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "imagenes")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

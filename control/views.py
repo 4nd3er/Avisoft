@@ -1763,6 +1763,18 @@ class EditarUsuario(UpdateView):
         else:
             redirect('usuarios')
 
+def activarUsuario(request, id):
+    usuarioFiltrado = Usuario.objects.get(id=id)
+    if request.POST:
+        if usuarioFiltrado.is_active:
+            usuarioFiltrado.is_active = False
+            messages.warning(request, 'Se desactivó el usuario correctamente')
+        else:
+            usuarioFiltrado.is_active = True
+            messages.success(request, 'Se activó el usuario correctamente!')
+        usuarioFiltrado.save()
+        return redirect('usuarios')
+    return render(request, 'usuarios/activar_usuario.html', {'object': usuarioFiltrado})
 
 class confirmarEliminarUsuario(DeleteView):
     model = Usuario

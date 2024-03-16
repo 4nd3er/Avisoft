@@ -82,6 +82,11 @@
                                 <td>{{ dato.registro }}</td>
                                 <td>{{ dato.last_login }}</td>
                                 <td colspan="2">
+                                    {% if not dato.is_active %}
+                                        <button class="btn btn-outline-success my-1" onclick="abrirModalActivarUsuario('{% url 'activarUsuario' dato.id %}')" role="button">Activar usuario</button>
+                                    {% else %}
+                                        <button class="btn btn-outline-success my-1" onclick="abrirModalActivarUsuario('{% url 'activarUsuario' dato.id %}')" role="button">Desactivar usuario</button>
+                                    {% endif %}
                                     <button class="btn btn-outline-success my-1" onclick="abrirModalEditar('{% url 'editar_usuario' dato.id %}')" role="button">Editar</button>
                                     <button class="btn btn-outline-danger my-1" onclick="abrirModalEliminar('{% url 'confirmElimUsuario' dato.id %}')" role="button">Eliminar</button>
                                 </td>
@@ -98,6 +103,8 @@
     <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
     <div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
+
+    <div class="modal fade" id="activar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
 
     <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>
   

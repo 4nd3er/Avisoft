@@ -50,7 +50,7 @@
                                 aria-describedby="helpId"
                                 placeholder="{{ user.label }}"
                                 {% if user.field.widget.input_type == 'file' %}
-                                    accept=".png, .jpg, .jpeg"
+                                    accept=".png, .jpeg"
                                 {% endif %}
                                 {% if user.field.widget.input_type == 'number' %}
                                     onkeypress='return onlyNumber(event);'
