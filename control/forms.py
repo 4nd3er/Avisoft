@@ -146,7 +146,7 @@ class UsuarioForm2(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = '__all__'
+        exclude = ['password1, password2']
         labels = {
             'nombre': 'Nombre',
             'apellido': 'Apellido',

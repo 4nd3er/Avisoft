@@ -43,17 +43,13 @@ def GalponDataDes(request, id):
 
 # ! Modulo de inicio e interfaces
 def registrarse(request):
-    # * rol = request.POST.get('rol
-    # * initial={'rol: 'rol}
-    registro = UsuarioForm()# *initial=initial
+    registro = UsuarioForm()
     if request.method == 'POST':
-        # * contraseña = request.POST.get("contraseña")
         registro = UsuarioForm(request.POST, request.FILES)
-        
         if registro.is_valid():
             registro.is_active = False
             registro.save()
-            messages.success(request,'Te has registrado exitosamente')
+            messages.success(request, f'Te has registrado exitosamente {registro.nombre}')
             return redirect('inicio')
     return render(request, 'inicio_sesion/registrarse.html', { 'form': registro })
 
