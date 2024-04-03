@@ -413,7 +413,8 @@ class Usuario(AbstractBaseUser):
     id_tipo_doc = models.ForeignKey(TipoDoc, on_delete = models.CASCADE, db_column = 'id_tipo_doc', null = True, blank = True)
     documento = models.IntegerField('Numero de documento', unique = True,
     validators = [
-        MinValueValidator(3400000, 'Digite un numero de documento valido')
+        MinValueValidator(3400000, 'Digite un numero de documento valido'),
+        MaxValueValidator(1999999999, 'Digite un numero de documento valido')
     ])
     celular = models.PositiveIntegerField(
     unique = True,

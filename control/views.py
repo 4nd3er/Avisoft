@@ -303,6 +303,13 @@ class crearAlimentacion(CreateView):
     form_class = AlimentacionForm
     success_url = reverse_lazy('alimentacion')
 
+    def get(self, request, *args, **kwargs):
+        try:
+            mortaDes = MortalidadDescarte.objects.filter(fecha=dateCurrent)
+        except:
+            mortaDes = 0
+        return render(request, self.template_name, {'form': self.form_class(), 'mortaDes': mortaDes})
+
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
@@ -1188,10 +1195,18 @@ class ProduccionDiariaa(ListView):
     
     def get(self, request, *args, **kwargs):
         prodDiariaMenu = True
+        dataProd = ProduccionDiaria.objects.filter(fecha=dateCurrent).values()
+        totalHuevos = 0
+        totalRotos = 0
+        totalDescarte = 0
+        for dato in dataProd:
+            totalHuevos += int(dato['cantidad'])
+            totalRotos += int(dato['rotos'])
+            totalDescarte += int(dato['descarte'])
         if is_ajax(request=request):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu})
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu, 'totalHuevos': totalHuevos, 'totalRotos': totalRotos, 'totalDescarte': totalDescarte})
     
     def post(self, request, *args, **kwargs):
         # Obtener el queryset usando la función get_queryset
@@ -1265,6 +1280,51 @@ class ProduccionDiariaa(ListView):
                 ws.cell(row=countRow, column=countColumn).value = valueRow
                 countRow += 1
             countColumn += 1
+        
+        dataProd = ProduccionDiaria.objects.filter(fecha=dateCurrent).values()
+        totalHuevos = 0
+        totalRotos = 0
+        totalDescarte = 0
+        for dato in dataProd:
+            totalHuevos += int(dato['cantidad'])
+            totalRotos += int(dato['rotos'])
+            totalDescarte += int(dato['descarte'])
+        
+        ws[f'B{countRow}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'B{countRow}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                                        top=Side(border_style='thin'), bottom=Side(border_style='thin'))
+        ws[f'B{countRow}'].fill = PatternFill(start_color='FFCE40', fill_type='solid')
+        ws[f'B{countRow}'].font = Font(name='Arial', size=11)
+        ws.cell(row=countRow, column=2).value = 'Total de huevos buenos, rotos y descarte en el día'
+        ws.merge_cells(f'B{countRow}:D{countRow}')
+
+        ws[f'E{countRow}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'E{countRow}'].border = Border(left=Side(border_style='thin'),
+                                                                right=Side(border_style='thin'),
+                                                                top=Side(border_style='thin'),
+                                                                bottom=Side(border_style='thin'))
+        ws[f'E{countRow}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+        ws[f'E{countRow}'].font = Font(name='Arial', size='11')
+        ws.cell(row=countRow, column=5).value = totalHuevos
+
+        ws[f'F{countRow}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'F{countRow}'].border = Border(left=Side(border_style='thin'),
+                                                                right=Side(border_style='thin'),
+                                                                top=Side(border_style='thin'),
+                                                                bottom=Side(border_style='thin'))
+        ws[f'F{countRow}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+        ws[f'F{countRow}'].font = Font(name='Arial', size='11')
+        ws.cell(row=countRow, column=6).value = totalRotos
+
+        ws[f'G{countRow}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'G{countRow}'].border = Border(left=Side(border_style='thin'),
+                                                                right=Side(border_style='thin'),
+                                                                top=Side(border_style='thin'),
+                                                                bottom=Side(border_style='thin'))
+        ws[f'G{countRow}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+        ws[f'G{countRow}'].font = Font(name='Arial', size='11')
+        ws.cell(row=countRow, column=7).value = totalDescarte
+        
 
         # Nombre del archivo
         nombreArchivo = f'REPORTE {self.model.nameTitle().upper()}.xlsx'
