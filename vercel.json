@@ -1,19 +1,18 @@
 {
-    "version": 2,
     "builds": [
         {
-            "src": "control/",
-            "use": "@vercel/python"
+            "src": "AviSoft/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
         }
     ],
     "routes": [
         {
-            "src": "/control/(.*)",
-            "dest": "control/"
-        },
-        {
             "src": "/(.*)",
-            "dest": "control/"
+            "dest": "AviSoft/wsgi.py"
         }
     ]
 }
