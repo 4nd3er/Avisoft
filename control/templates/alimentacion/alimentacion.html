@@ -21,13 +21,26 @@
         <div class="col-md" style="border: 1px solid; border-top-right-radius: .5rem; border-radius: .5rem;">
             <div class="row text-center" style="margin: 2rem 0;">
                 <div class="col-md col-sm">
-                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_alimentacion' %}')" role="button">
-                        REGISTRAR <i class="bi bi-plus-circle"></i>
-                    </button>
+                    <button class="btn btn-outline-secondary my-3" style="border: 2px solid" onclick="abrirModalCrear('{% url 'crear_usuario' %}')" role="button">REGISTRAR <i class="bi bi-plus-circle"></i></button>
+                </div>
+                <div class="col-md col-sm">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary my-3" style="border: 2px solid">GENERAR REPORTE <i class="bi bi-file-earmark-arrow-down"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="alert {{ message.tags }} alert-dismissible fade show text-center mx-auto" style="width: 97%;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </p>
+        {% endfor %}
+    {% endif %}
   
     <div class="mb-3 container-fluid card informacion">
         <div class="table-responsive">

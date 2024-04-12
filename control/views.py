@@ -18,18 +18,21 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
+from datetime import timedelta
 import time
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
-todays_Date = datetime.date.fromtimestamp(time.time())
-dateCurrent = todays_Date.isoformat()
+def fechaActual():
+    todays_Date = datetime.date.fromtimestamp(time.time())
+    dateCurrent = todays_Date.isoformat()
+    return dateCurrent
 
 @require_http_methods(['GET'])
 def GalponData(request, id):
     dataGalpon = Galpones.objects.all().values().get(id=id)
-    dataProd = ProduccionDiaria.objects.filter(id_galpon=id, fecha=dateCurrent).values()
+    dataProd = ProduccionDiaria.objects.filter(id_galpon=id, fecha=fechaActual()).values()
     totalHuevos = 0
     for dato in dataProd:
         totalHuevos += int(dato['cantidad'])
@@ -150,7 +153,7 @@ class registroDiario(ListView):
                 ).distinct()
             busquedaDate = ''
         else:
-            query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
+            query = self.model.objects.filter(fecha=fechaActual()).order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -259,7 +262,6 @@ class registroDiario(ListView):
 class Alimentacionn(ListView):
     model = Alimentacion
     template_name = 'alimentacion/alimentacion.html'
-
     
     def get_queryset(self):
         select = self.request.GET.get('search')
@@ -282,7 +284,7 @@ class Alimentacionn(ListView):
             ).distinct().order_by('-id')
             busquedaDate = ''
         else:
-            return self.model.objects.filter(fecha=dateCurrent).order_by('-id')
+            return self.model.objects.filter(fecha=fechaActual()).order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -297,6 +299,75 @@ class Alimentacionn(ListView):
         else:
             return render(request, self.template_name, {'alimentacion': self.get_queryset(), 'aliMenu': aliMenu})
 
+    def post(self, request, *args, **kwargs):
+        query = self.get_queryset()
+        if not query:
+            messages.error(request, 'Debes buscar algun dato para generar el reporte')
+            return render(request, self.template_name, {'alimentacion': self.get_queryset()})
+        else:
+            wb = Workbook()
+            ws = wb.active
+            ws.title = 'Hoja1'
+
+            ws['B2'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+            ws['B2'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                        top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+            ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
+            ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
+            ws['B2'] = f'REPORTE {self.model.__name__.upper()}'
+
+            ws.merge_cells('B2:H2')
+            listColumn = ['B', 'C', 'D', 'E', 'F','G', 'H']
+            listName = ['Galpon', 'Gr/Gallina/Día', 'Kg Total', 'Bultos Total', 'Conversion Alimenticia', 'Tipo de alimento' ,'Fecha']
+            countName = 0
+            count = 3
+            ws.row_dimensions[2].height = 25
+            for i in listColumn:
+                ws.column_dimensions[i].width = 55
+                ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal = 'center', vertical = 'center')
+                ws[f'{listColumn[countName]}3'].border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                            top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                ws[f'{listColumn[countName]}3'].fill = PatternFill(start_color = 'FFCE40', fill_type = 'solid')
+                ws[f'{listColumn[countName]}3'].font = Font(name = 'Arial', size = 11)
+                ws[f'{listColumn[countName]}3'] = listName[countName]
+                count += 1
+                countName += 1
+            
+            # Pintamos los datos en el reporte
+            listName = ['id_galpon', 'gr_gallina_dia', 'kg_total', 'bultos_total', 'c_a', 'id_tipo_alimento' ,'fecha']
+            countColumn = 2
+            for i in listName:
+                countRow = 4
+                for q in query:
+                    ws.cell(row = countRow, column = countColumn).alignment = Alignment(horizontal = 'center', vertical = 'center')
+                    ws.cell(row = countRow, column = countColumn).border = Border(left = Side(border_style = 'thin'), right = Side(border_style = 'thin'),
+                                                    top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
+                    ws.cell(row = countRow, column = countColumn).fill = PatternFill(start_color = 'FBFBE2', fill_type = 'solid')
+                    ws.cell(row = countRow, column = countColumn).font = Font(name = 'Arial', size = '11')
+                    if i == 'id_galpon':
+                        if hasattr(q, 'id_galpon'):
+                            valueRow = q.id_galpon.__str__()
+                    elif i == 'id_tipo_alimento':
+                        if hasattr(q, 'id_tipo_alimento'):
+                            valueRow = q.id_tipo_alimento.__str__()
+                    elif i == 'fecha':
+                        valueRow = str(getattr(q, i))
+                    else:
+                        valueRow = getattr(q, i)
+                    ws.cell(row=countRow, column=countColumn).value = valueRow
+                    countRow += 1
+                countColumn += 1
+
+            # Nombre del archivo
+            nombreArchivo = f'REPORTE {self.model.__name__.upper()}.xlsx'
+            # Definir el tipo de respuesta
+            response = HttpResponse(content_type = 'application/ms-excel')
+            contenido = "attachment; filename = {0}".format(nombreArchivo)
+            response['Content-Disposition'] = contenido
+            wb.save(response)
+            return response
+        return render(request, self.template_name, {'alimentacion': self.get_queryset()})
+
 class crearAlimentacion(CreateView):
     model = Alimentacion
     template_name = 'alimentacion/crear.html'
@@ -305,7 +376,7 @@ class crearAlimentacion(CreateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            mortaDes = MortalidadDescarte.objects.filter(fecha=dateCurrent)
+            mortaDes = MortalidadDescarte.objects.filter(fecha=fechaActual())
         except:
             mortaDes = 0
         return render(request, self.template_name, {'form': self.form_class(), 'mortaDes': mortaDes})
@@ -318,7 +389,7 @@ class crearAlimentacion(CreateView):
                 form.save()
                 alimentacionSaved = Alimentacion.objects.latest('id')
                 try:
-                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=fechaActual(), id_galpon=galponForm).last()
                 except ObjectDoesNotExist:
                     registroDiarioSaved = 0
                 id_gallinas = None
@@ -331,7 +402,7 @@ class crearAlimentacion(CreateView):
                 if hasattr(registroDiarioSaved, 'id_mortades'):
                     id_mortades = registroDiarioSaved.id_mortades
                 if id_producciondiaria or id_gallinas:
-                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=fechaActual())
                     for registro in registrosDiariosSavedAll:
                         registro.id_alimentacion = alimentacionSaved
                         if hasattr(registroDiarioSaved, 'id_gallinas'):
@@ -647,7 +718,7 @@ class crearGallinas(CreateView):
                 form.save()
                 gallinasSaved = Gallinas.objects.latest('id')
                 try:
-                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=fechaActual(), id_galpon=galponForm).last()
                 except ObjectDoesNotExist:
                     registroDiarioSaved = 0
                 id_alimentacion = None
@@ -660,7 +731,7 @@ class crearGallinas(CreateView):
                 if hasattr(registroDiarioSaved, 'id_mortades'):
                     id_mortades = registroDiarioSaved.id_mortades
                 if id_alimentacion or id_producciondiaria:
-                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=fechaActual())
                     for registro in registrosDiariosSavedAll:
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
                         registro.id_gallinas = gallinasSaved
@@ -1082,7 +1153,7 @@ class crearMortalidad(CreateView):
                 form.save()
                 mortaDesSaved = MortalidadDescarte.objects.latest('id')
                 try:
-                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=fechaActual(), id_galpon=galponForm).last()
                 except ObjectDoesNotExist:
                     registroDiarioSaved = 0
                 id_alimentacion = None
@@ -1095,7 +1166,7 @@ class crearMortalidad(CreateView):
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
                 if id_alimentacion and id_producciondiaria:
-                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=fechaActual())
                     for registro in registrosDiariosSavedAll:
                         registro.id_gallinas = registroDiarioSaved.id_gallinas
                         registro.id_alimentacion = registroDiarioSaved.id_alimentacion
@@ -1185,7 +1256,7 @@ class ProduccionDiariaa(ListView):
             ).distinct().order_by('-id')
             busquedaDate = ''
         else:
-            query = self.model.objects.filter(fecha=dateCurrent).order_by('-id')
+            query = self.model.objects.filter(fecha=fechaActual()).order_by('-id')
         return query
 
     def get_context_data(self, **kwargs):
@@ -1195,7 +1266,7 @@ class ProduccionDiariaa(ListView):
     
     def get(self, request, *args, **kwargs):
         prodDiariaMenu = True
-        dataProd = ProduccionDiaria.objects.filter(fecha=dateCurrent).values()
+        dataProd = ProduccionDiaria.objects.filter(fecha=fechaActual()).values()
         totalHuevos = 0
         totalRotos = 0
         totalDescarte = 0
@@ -1203,13 +1274,46 @@ class ProduccionDiariaa(ListView):
             totalHuevos += int(dato['cantidad'])
             totalRotos += int(dato['rotos'])
             totalDescarte += int(dato['descarte'])
+
+        # ? Por dia        
+        # totalTiposHuevos = TiposHuevos.objects.all()
+        # for tipoHuevo in totalTiposHuevos:
+        #     tipoHuevo.cantidad = 0
+        #     tipoHuevo.percent = 0
+        #     for dato in self.get_queryset():
+        #         if dato.id_tipo_huevo == tipoHuevo:
+        #             tipoHuevo.cantidad += dato.cantidad
+        #     tipoHuevo.porc = round((tipoHuevo.cantidad * 100) / totalHuevos, 2)
+        
+        # ? Por semana
+        prodSemana = []
+        d = datetime.datetime.now()
+        d -= timedelta(days=d.weekday())
+        totalHSemana = 0
+        for x in range(0, 7):
+            prodDiariaDate = ProduccionDiaria.objects.filter(fecha=d)
+            if prodDiariaDate:
+                for dato in prodDiariaDate:
+                    prodSemana.append(dato)
+                    totalHSemana += dato.cantidad
+            d += timedelta(days=1)
+
+        totalTiposHuevos = TiposHuevos.objects.all()
+        for tipoHuevo in totalTiposHuevos:
+            tipoHuevo.cantidad = 0
+            tipoHuevo.percent = 0
+            for dato in prodSemana:
+                if dato.id_tipo_huevo == tipoHuevo:
+                    tipoHuevo.cantidad += dato.cantidad
+            tipoHuevo.porc = round((tipoHuevo.cantidad * 100) / totalHSemana, 2)
+            d += timedelta(days=1)
+        
         if is_ajax(request=request):
             return HttpResponse(serialize('json', self.get_context_data()), 'application/json')
         else:
-            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu, 'totalHuevos': totalHuevos, 'totalRotos': totalRotos, 'totalDescarte': totalDescarte})
+            return render(request, self.template_name, {'produccion_diaria': self.get_queryset(), 'prodDiariaMenu': prodDiariaMenu, 'totalHuevos': totalHuevos, 'totalRotos': totalRotos, 'totalDescarte': totalDescarte, 'totalTiposHuevos': totalTiposHuevos})
     
     def post(self, request, *args, **kwargs):
-        # Obtener el queryset usando la función get_queryset
         prodDiariaMenu = True
         query = self.get_queryset()
         if not query:
@@ -1281,7 +1385,7 @@ class ProduccionDiariaa(ListView):
                 countRow += 1
             countColumn += 1
         
-        dataProd = ProduccionDiaria.objects.filter(fecha=dateCurrent).values()
+        dataProd = ProduccionDiaria.objects.filter(fecha=fechaActual()).values()
         totalHuevos = 0
         totalRotos = 0
         totalDescarte = 0
@@ -1356,7 +1460,7 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                 form.save()
                 prodDiariaSaved = ProduccionDiaria.objects.latest('id')
                 try:
-                    registroDiarioSaved = Registrodiario.objects.filter(fecha=dateCurrent, id_galpon=galponForm).last()
+                    registroDiarioSaved = Registrodiario.objects.filter(fecha=fechaActual(), id_galpon=galponForm).last()
                 except ObjectDoesNotExist:
                     registroDiarioSaved = 0
                 id_alimentacion = None
@@ -1369,7 +1473,7 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                 if hasattr(registroDiarioSaved, 'id_gallinas'):
                     id_gallinas = registroDiarioSaved.id_gallinas
                 if id_alimentacion or id_gallinas:
-                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=dateCurrent)
+                    registrosDiariosSavedAll = Registrodiario.objects.filter(id_galpon=galponForm, fecha=fechaActual())
                     registro = Registrodiario.objects.create(
                         id_galpon=registroDiarioSaved.id_galpon,
                         id_gallinas=id_gallinas,
@@ -1402,11 +1506,11 @@ class crearProdDiaria(LoginRequiredMixin, CreateView):
                     registro = Registrodiario(id_galpon=galponForm ,id_producciondiaria=prodDiariaSaved)
                     registro.save()
                 try:
-                    alimentacionSaved = Alimentacion.objects.filter(id_galpon=galponForm, fecha=dateCurrent).last()
+                    alimentacionSaved = Alimentacion.objects.filter(id_galpon=galponForm, fecha=fechaActual()).last()
                 except ObjectDoesNotExist:
                     alimentacionSaved = 0
                 if alimentacionSaved:
-                    dataProd = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                    dataProd = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=fechaActual()).values()
                     totalHuevos = 0
                     for dato in dataProd:
                         totalHuevos += int(dato['cantidad'])
@@ -1438,11 +1542,11 @@ class editarProdDiaria(UpdateView):
             if form.is_valid():
                 galponForm = form.cleaned_data.get('id_galpon').id
                 try:
-                    alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=dateCurrent)
+                    alimentacionSaved = Alimentacion.objects.get(id_galpon=galponForm, fecha=fechaActual())
                 except ObjectDoesNotExist:
                     alimentacionSaved = 0
                 if alimentacionSaved:
-                    dataProdSaved = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=dateCurrent).values()
+                    dataProdSaved = ProduccionDiaria.objects.filter(id_galpon=galponForm, fecha=fechaActual()).values()
                     cantidadProdSaved = ProduccionDiaria.objects.get(id=self.get_object().id).cantidad
                     cantidadProdForm = form.cleaned_data.get('cantidad')
                     totalHuevos = 0

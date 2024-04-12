@@ -112,6 +112,22 @@
                 </tbody>
             </div>
         </table>
+        <table class="table table-bordered">
+            <tbody>
+                <tr class="text-center table-success">
+                    <td colspan="2">Tipo de huevo</td>
+                    <td colspan="2">Cantidad Total</td>
+                    <td colspan="2">Porcentaje</td>
+                </tr>
+                {% for dato in totalTiposHuevos %}
+                <tr class="text-center">
+                    <td colspan="2">{{ dato.tipos_huevos }}</td>
+                    <td colspan="2">{{ dato.cantidad }}</td>
+                    <td colspan="2">{{ dato.porc }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"></div>

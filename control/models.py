@@ -146,7 +146,7 @@ class Ficha(models.Model):
     id_ficha = models.AutoField(primary_key=True)
     fecha_regis = models.DateField(auto_now_add = True)
     num_ficha = models.CharField(max_length=50)
-    id_nombreficha = models.ForeignKey('Nombreficha', models.DO_NOTHING, db_column='id_nombreFicha')  # Field name made lowercase.
+    id_nombreficha = models.ForeignKey('Nombreficha', models.DO_NOTHING, db_column='id_nombreFicha')
     estado_ficha = models.IntegerField()
 
     def __str__(self):
@@ -456,9 +456,9 @@ class Usuario(AbstractBaseUser):
 
 
 class Vacunas(models.Model):
-    idvacunas = models.AutoField(db_column='Idvacunas', primary_key=True)  # Field name made lowercase.
-    nombrev = models.CharField(db_column='Nombrev', max_length=60)  # Field name made lowercase.
-    presentacion = models.CharField(db_column='Presentacion', max_length=60)  # Field name made lowercase.
+    idvacunas = models.AutoField(db_column='Idvacunas', primary_key=True)
+    nombrev = models.CharField(db_column='Nombrev', max_length=60)
+    presentacion = models.CharField(db_column='Presentacion', max_length=60)
 
     class Meta:
         managed = False
