@@ -706,6 +706,10 @@ class crearGallinas(CreateView):
     form_class = GallinasForm
     success_url = reverse_lazy('gallinas')
 
+    def get(self, request, *args, **kwargs):
+        lastId = int(Gallinas.objects.all().values_list('id', flat=True).last()) + 1
+        return render(request, self.template_name, {'form': self.form_class, 'lastId': lastId})
+
     def post(self, request, *args, **kwargs):
         if is_ajax(request=request):
             form = self.form_class(request.POST)
