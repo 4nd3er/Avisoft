@@ -14,6 +14,10 @@
         {
             "src": "/(.*)",
             "dest": "/control/"
+        },
+        {
+            "src": "/control/views.py",
+            "dest": "/control/"
         }
     ]
 }
