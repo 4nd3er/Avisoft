@@ -1351,7 +1351,7 @@ class ProduccionDiariaa(ListView):
             ws[f'{listColumn[countName]}3'] = listName[countName]
             count += 1
             countName += 1
-        # Pintamos los datos en el reporte
+            # Pintamos los datos en el reporte
         listName = ['id_galpon', 'id_jornada', 'id_tipo_huevo', 'cantidad', 'rotos', 'descarte', 'id_usuario', 'fecha']
         countColumn = 2
         for i in listName:
@@ -1364,9 +1364,9 @@ class ProduccionDiariaa(ListView):
                                                                         bottom=Side(border_style='thin'))
                 ws.cell(row=countRow, column=countColumn).fill = PatternFill(start_color='FBFBE2', fill_type='solid')
                 ws.cell(row=countRow, column=countColumn).font = Font(name='Arial', size='11')
+                # Obtener el valor de la columna
 
                 # Obtener el valor de la columna
-            # Obtener el valor de la columna
                 if i == 'id_usuario':
                     valueRow = getattr(q.id_usuario, 'nombre', 'nombre') if q.id_usuario else ''
                 elif i == 'id_galpon':
@@ -1428,7 +1428,69 @@ class ProduccionDiariaa(ListView):
         ws[f'G{countRow}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
         ws[f'G{countRow}'].font = Font(name='Arial', size='11')
         ws.cell(row=countRow, column=7).value = totalDescarte
-        
+
+        # ? Por semana
+        prodSemana = []
+        d = datetime.datetime.now()
+        d -= timedelta(days=d.weekday())
+        totalHSemana = 0
+        for x in range(0, 7):
+            prodDiariaDate = ProduccionDiaria.objects.filter(fecha=d)
+            if prodDiariaDate:
+                for dato in prodDiariaDate:
+                    prodSemana.append(dato)
+                    totalHSemana += dato.cantidad
+            d += timedelta(days=1)
+
+        totalTiposHuevos = TiposHuevos.objects.all()
+        for tipoHuevo in totalTiposHuevos:
+            tipoHuevo.cantidad = 0
+            tipoHuevo.percent = 0
+            for dato in prodSemana:
+                if dato.id_tipo_huevo == tipoHuevo:
+                    tipoHuevo.cantidad += dato.cantidad
+            tipoHuevo.porc = round((tipoHuevo.cantidad * 100) / totalHSemana, 2)
+            d += timedelta(days=1)
+
+        listTitle = ['Tipo de Huevo', 'Total de Huevos', 'Porcentaje semanal']
+        listColumn = ['B', 'D', 'G']
+        counter = 0
+        for i in listTitle:
+            countRowValue = countRow
+            ws[f'{listColumn[counter]}{countRow + 2}'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'{listColumn[counter]}{countRow + 2}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                                            top=Side(border_style='thin'), bottom=Side(border_style='thin'))
+            ws[f'{listColumn[counter]}{countRow + 2}'].fill = PatternFill(start_color='FFCE40', fill_type='solid')
+            ws[f'{listColumn[counter]}{countRow + 2}'].font = Font(name='Arial', size=11)
+
+            if i == 'Tipo de Huevo':
+                ws.cell(row=countRow + 2, column=2).value = i
+                ws.merge_cells(f'B{countRow + 2}:C{countRow + 2}')
+            elif i == 'Total de Huevos':
+                ws.cell(row=countRow + 2, column=4).value = i
+                ws.merge_cells(f'D{countRow + 2}:F{countRow + 2}')
+            else:
+                ws.cell(row=countRow + 2, column=7).value = i
+                ws.merge_cells(f'G{countRow + 2}:I{countRow + 2}')
+
+            for j in totalTiposHuevos:
+                ws[f'{listColumn[counter]}{countRowValue + 3}'].alignment = Alignment(horizontal='center', vertical='center')
+                ws[f'{listColumn[counter]}{countRowValue + 3}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                                    top=Side(border_style='thin'),
+                                                    bottom=Side(border_style='thin'))
+                ws[f'{listColumn[counter]}{countRowValue + 3}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+                ws[f'{listColumn[counter]}{countRowValue + 3}'].font = Font(name='Arial', size='11')
+                if i == 'Tipo de Huevo':
+                    ws.cell(row=countRowValue + 3, column=2).value = j.tipos_huevos
+                    ws.merge_cells(f'B{countRowValue + 3}:C{countRowValue + 3}')
+                elif i == 'Total de Huevos':
+                    ws.cell(row=countRowValue + 3, column=4).value = j.cantidad
+                    ws.merge_cells(f'D{countRowValue + 3}:F{countRowValue + 3}')
+                else:
+                    ws.cell(row=countRowValue + 3, column=7).value = f'{j.porc}%'
+                    ws.merge_cells(f'G{countRowValue + 3}:I{countRowValue + 3}')
+                countRowValue += 1
+            counter += 1
 
         # Nombre del archivo
         nombreArchivo = f'REPORTE {self.model.nameTitle().upper()}.xlsx'
