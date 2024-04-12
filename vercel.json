@@ -2,18 +2,18 @@
     "version": 2,
     "builds": [
         {
-            "src": "control/",
+            "src": "/control/",
             "use": "@vercel/python"
         }
     ],
     "routes": [
         {
             "src": "/control/(.*)",
-            "dest": "control/"
+            "dest": "/control/"
         },
         {
             "src": "/(.*)",
-            "dest": "control/"
+            "dest": "/control/"
         }
     ]
 }
