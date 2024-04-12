@@ -314,7 +314,7 @@ class Alimentacionn(ListView):
                                         top = Side(border_style = 'thin'), bottom = Side(border_style = 'thin'))
             ws['B2'].fill = PatternFill(start_color = '39A900', fill_type = 'solid')
             ws['B2'].font = Font(name = 'Arial', size = 15, bold = True, color = 'FFFFFF')
-            ws['B2'] = f'REPORTE {self.model.__name__.upper()}'
+            ws['B2'] = f'REPORTE {self.model.nameTitle().upper()}'
 
             ws.merge_cells('B2:H2')
             listColumn = ['B', 'C', 'D', 'E', 'F','G', 'H']
@@ -359,7 +359,7 @@ class Alimentacionn(ListView):
                 countColumn += 1
 
             # Nombre del archivo
-            nombreArchivo = f'REPORTE {self.model.__name__.upper()}.xlsx'
+            nombreArchivo = f'REPORTE {self.model.nameTitle().upper()}.xlsx'
             # Definir el tipo de respuesta
             response = HttpResponse(content_type = 'application/ms-excel')
             contenido = "attachment; filename = {0}".format(nombreArchivo)
@@ -1331,7 +1331,7 @@ class ProduccionDiariaa(ListView):
                                 top=Side(border_style='thin'), bottom=Side(border_style='thin'))
         ws['B2'].fill = PatternFill(start_color='39A900', fill_type='solid')
         ws['B2'].font = Font(name='Arial', size=15, bold=True, color='FFFFFF')
-        ws['B2'] = f'REPORTE {self.model._meta.verbose_name.upper()}'
+        ws['B2'] = f'REPORTE {self.model.nameTitle()}'
         ws.merge_cells('B2:I2')
 
         listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']

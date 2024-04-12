@@ -23,6 +23,9 @@ class Alimentacion(models.Model):
     def __str__(self):
         return f'{self.kg_total} Kg'
 
+    def nameTitle():
+        return 'Alimentación'
+
     class Meta:
         managed = False
         db_table = 'alimentacion'
