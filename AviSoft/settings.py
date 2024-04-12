@@ -86,12 +86,14 @@ WSGI_APPLICATION = 'AviSoft.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'avisoft',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'avisoft',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'avisoft.sqlite3',
     }
 }
 
