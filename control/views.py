@@ -1332,8 +1332,8 @@ class ProduccionDiariaa(ListView):
         ws['B2'].fill = PatternFill(start_color='39A900', fill_type='solid')
         ws['B2'].font = Font(name='Arial', size=15, bold=True, color='FFFFFF')
         ws['B2'] = f'REPORTE {self.model._meta.verbose_name.upper()}'
-        
         ws.merge_cells('B2:I2')
+
         listColumn = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
         listName = ['Galpón', 'Jornada', 'Tipo de Huevo', 'Cantidad', 'Rotos', 'Descarte', 'Usuario', 'Fecha']
         countName = 0
@@ -1342,7 +1342,7 @@ class ProduccionDiariaa(ListView):
 
         
         for i in listColumn:
-            ws.column_dimensions[i].width = 35
+            ws.column_dimensions[i].width = 20
             ws[f'{listColumn[countName]}3'].alignment = Alignment(horizontal='center', vertical='center')
             ws[f'{listColumn[countName]}3'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
                                                             top=Side(border_style='thin'), bottom=Side(border_style='thin'))
@@ -1429,6 +1429,8 @@ class ProduccionDiariaa(ListView):
         ws[f'G{countRow}'].font = Font(name='Arial', size='11')
         ws.cell(row=countRow, column=7).value = totalDescarte
 
+
+        # */-----------------------------REPORTE TIPO DE HUEVO SEMANAL-----------------------------------/*
         # ? Por semana
         prodSemana = []
         d = datetime.datetime.now()
@@ -1452,43 +1454,52 @@ class ProduccionDiariaa(ListView):
             tipoHuevo.porc = round((tipoHuevo.cantidad * 100) / totalHSemana, 2)
             d += timedelta(days=1)
 
+        #configutación del encabezado
+        ws[f'B{countRow + 2}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'B{countRow + 2}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                                top=Side(border_style='thin'), bottom=Side(border_style='thin'))
+        ws[f'B{countRow + 2}'].fill = PatternFill(start_color='39A900', fill_type='solid')
+        ws[f'B{countRow + 2}'].font = Font(name='Arial', size=15, bold=True, color='FFFFFF')
+        ws[f'B{countRow + 2}'] = f'PRODUCCIÓN POR TIPO DE HUEVO SEMANAL'
+        ws.merge_cells(f'B{countRow + 2}:I{countRow + 2}')
+
         listTitle = ['Tipo de Huevo', 'Total de Huevos', 'Porcentaje semanal']
         listColumn = ['B', 'D', 'G']
         counter = 0
         for i in listTitle:
             countRowValue = countRow
-            ws[f'{listColumn[counter]}{countRow + 2}'].alignment = Alignment(horizontal='center', vertical='center')
-            ws[f'{listColumn[counter]}{countRow + 2}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+            ws[f'{listColumn[counter]}{countRow + 3}'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'{listColumn[counter]}{countRow + 3}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
                                                             top=Side(border_style='thin'), bottom=Side(border_style='thin'))
-            ws[f'{listColumn[counter]}{countRow + 2}'].fill = PatternFill(start_color='FFCE40', fill_type='solid')
-            ws[f'{listColumn[counter]}{countRow + 2}'].font = Font(name='Arial', size=11)
+            ws[f'{listColumn[counter]}{countRow + 3}'].fill = PatternFill(start_color='FFCE40', fill_type='solid')
+            ws[f'{listColumn[counter]}{countRow + 3}'].font = Font(name='Arial', size=11)
 
             if i == 'Tipo de Huevo':
-                ws.cell(row=countRow + 2, column=2).value = i
-                ws.merge_cells(f'B{countRow + 2}:C{countRow + 2}')
+                ws.cell(row=countRow + 3, column=2).value = i
+                ws.merge_cells(f'B{countRow + 3}:C{countRow + 3}')
             elif i == 'Total de Huevos':
-                ws.cell(row=countRow + 2, column=4).value = i
-                ws.merge_cells(f'D{countRow + 2}:F{countRow + 2}')
+                ws.cell(row=countRow + 3, column=4).value = i
+                ws.merge_cells(f'D{countRow + 3}:F{countRow + 3}')
             else:
-                ws.cell(row=countRow + 2, column=7).value = i
-                ws.merge_cells(f'G{countRow + 2}:I{countRow + 2}')
+                ws.cell(row=countRow + 3, column=7).value = i
+                ws.merge_cells(f'G{countRow + 3}:I{countRow + 3}')
 
             for j in totalTiposHuevos:
-                ws[f'{listColumn[counter]}{countRowValue + 3}'].alignment = Alignment(horizontal='center', vertical='center')
-                ws[f'{listColumn[counter]}{countRowValue + 3}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
+                ws[f'{listColumn[counter]}{countRowValue + 4}'].alignment = Alignment(horizontal='center', vertical='center')
+                ws[f'{listColumn[counter]}{countRowValue + 4}'].border = Border(left=Side(border_style='thin'), right=Side(border_style='thin'),
                                                     top=Side(border_style='thin'),
                                                     bottom=Side(border_style='thin'))
-                ws[f'{listColumn[counter]}{countRowValue + 3}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
-                ws[f'{listColumn[counter]}{countRowValue + 3}'].font = Font(name='Arial', size='11')
+                ws[f'{listColumn[counter]}{countRowValue + 4}'].fill = PatternFill(start_color='FBFBE2', fill_type='solid')
+                ws[f'{listColumn[counter]}{countRowValue + 4}'].font = Font(name='Arial', size='11')
                 if i == 'Tipo de Huevo':
-                    ws.cell(row=countRowValue + 3, column=2).value = j.tipos_huevos
-                    ws.merge_cells(f'B{countRowValue + 3}:C{countRowValue + 3}')
+                    ws.cell(row=countRowValue + 4, column=2).value = j.tipos_huevos
+                    ws.merge_cells(f'B{countRowValue + 4}:C{countRowValue + 4}')
                 elif i == 'Total de Huevos':
-                    ws.cell(row=countRowValue + 3, column=4).value = j.cantidad
-                    ws.merge_cells(f'D{countRowValue + 3}:F{countRowValue + 3}')
+                    ws.cell(row=countRowValue + 4, column=4).value = j.cantidad
+                    ws.merge_cells(f'D{countRowValue + 4}:F{countRowValue + 4}')
                 else:
-                    ws.cell(row=countRowValue + 3, column=7).value = f'{j.porc}%'
-                    ws.merge_cells(f'G{countRowValue + 3}:I{countRowValue + 3}')
+                    ws.cell(row=countRowValue + 4, column=7).value = f'{j.porc}%'
+                    ws.merge_cells(f'G{countRowValue + 4}:I{countRowValue + 4}')
                 countRowValue += 1
             counter += 1
 
